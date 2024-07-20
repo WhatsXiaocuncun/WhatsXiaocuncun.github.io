@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>西门子PLC的大端模式</title>
+    <link href="/2024/07/21/%E8%A5%BF%E9%97%A8%E5%AD%90PLC%E7%9A%84%E5%A4%A7%E7%AB%AF%E6%A8%A1%E5%BC%8F/"/>
+    <url>/2024/07/21/%E8%A5%BF%E9%97%A8%E5%AD%90PLC%E7%9A%84%E5%A4%A7%E7%AB%AF%E6%A8%A1%E5%BC%8F/</url>
+    
+    <content type="html"><![CDATA[<h2 id="1-大端模式和小端模式"><a href="#1-大端模式和小端模式" class="headerlink" title="1. 大端模式和小端模式"></a>1. 大端模式和小端模式</h2><ul><li>大端模式：高位字节地址在内存的低位地址端，低位字节地址在内存的高位地址端。</li><li>小端模式：高位字节地址在内存的低高地址端，低位字节地址在内存的低位地址端。</li></ul><h2 id="2-西门子PLC中一个word的表示"><a href="#2-西门子PLC中一个word的表示" class="headerlink" title="2. 西门子PLC中一个word的表示"></a>2. 西门子PLC中一个word的表示</h2><ul><li>如图：<code>IW17 = IB17 + IB18</code></li><li>其中IB17在高位地址端，IB18在低位地址端<br><img src="/img/3427087-20240708163743451-558953701.png"></li></ul><h2 id="3-高字节低字位和低字节高字位"><a href="#3-高字节低字位和低字节高字位" class="headerlink" title="3. 高字节低字位和低字节高字位"></a>3. 高字节低字位和低字节高字位</h2><ul><li>最高有效位（MSB）：byte的最高位，一个byte内西门子的最高位通常在二进制的最左边</li><li>最低有效位（LSB）：byte的最低位，一个byte内西门子的最低位通常在二进制的最右边</li></ul><h2 id="4-WORD和DWORD展开"><a href="#4-WORD和DWORD展开" class="headerlink" title="4. WORD和DWORD展开"></a>4. WORD和DWORD展开</h2><ul><li>如果现在有MD100：<ul><li>MD100 &#x3D; MW100 + MW102</li><li>MD100 &#x3D; MB100 + MB101 + MB102 + MB103</li><li>MD100 &#x3D; <u>M100.7 … M100.0</u> + <u>M101.7 … M101.0</u> + <u>M102.7 … M102.0</u> + <u>M103.7 … M103.0</u></li><li>注意每个byte中的MSB,LSB顺序不变。</li></ul></li></ul><h2 id="5-1500PLC的模式转换指令"><a href="#5-1500PLC的模式转换指令" class="headerlink" title="5. 1500PLC的模式转换指令"></a>5. 1500PLC的模式转换指令</h2><ul><li><p>如图：<br><img src="/img/3427087-20240708163807181-1092661898.png"><br><img src="/img/3427087-20240708163832175-1887297527.png"></p></li><li><p>在西门子的HMI侧,应该是用的小端模式，报警字对齐的时候需要注意</p></li><li><p>非西门子的PLC，有些品牌会用小端模式。</p></li></ul>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Hello World</title>
     <link href="/2024/07/19/hello-world/"/>
     <url>/2024/07/19/hello-world/</url>
