@@ -1,0 +1,765 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiao cuncun">
+  <meta name="keywords" content="blog">
+  
+    <meta name="description" content="1. 背景 最近用一个300PLC做S7通信的时候，因为交互的数据量有1024个bytes.这才意识到put get在数据量上的限制。以及S7大数据传输用到的BSEND&#x2F;BRCV。  2. S7支持的指令 在PLC里，能基于S7协议用于数据交换的指令如下（S7 300&#x2F;400下描述）： 其中值得注意的有几点： put&#x2F;get无需通信伙伴用户程序中的任何其它通信函数，意">
+<meta property="og:type" content="article">
+<meta property="og:title" content="S7指令中的PUTGET或者BSENDBRCV的选择（BSENDBRCV仅支持3004001500）">
+<meta property="og:url" content="http://example.com/2024/07/21/S7%E6%8C%87%E4%BB%A4%E4%B8%AD%E7%9A%84PUTGET%E6%88%96%E8%80%85BSENDBRCV%E7%9A%84%E9%80%89%E6%8B%A9%EF%BC%88BSENDBRCV%E4%BB%85%E6%94%AF%E6%8C%813004001500%EF%BC%89/index.html">
+<meta property="og:site_name" content="Whatsxiaocuncun Personal website">
+<meta property="og:description" content="1. 背景 最近用一个300PLC做S7通信的时候，因为交互的数据量有1024个bytes.这才意识到put get在数据量上的限制。以及S7大数据传输用到的BSEND&#x2F;BRCV。  2. S7支持的指令 在PLC里，能基于S7协议用于数据交换的指令如下（S7 300&#x2F;400下描述）： 其中值得注意的有几点： put&#x2F;get无需通信伙伴用户程序中的任何其它通信函数，意">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618162443966-1218796734.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618162539140-1628513499.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618163024542-117945748.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618163046872-775168357.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618163135785-450546041.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618163156652-363107615.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618163336498-451015540.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618163359588-1468885102.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618224903943-1629202033.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618224930631-1220161937.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618224956061-1279260939.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618164730763-101316379.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618164755139-185481845.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618164825154-782251201.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618165603524-1204597525.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618165641839-417681987.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618165658952-1290354656.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618165929545-410493773.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240618225938724-472069426.png">
+<meta property="article:published_time" content="2024-07-21T06:44:39.217Z">
+<meta property="article:modified_time" content="2024-07-21T06:59:01.603Z">
+<meta property="article:author" content="xiao cuncun">
+<meta property="article:tag" content="PLC part">
+<meta property="article:tag" content="industrial control">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/blog_page/3427087-20240618162443966-1218796734.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>S7指令中的PUTGET或者BSENDBRCV的选择（BSENDBRCV仅支持3004001500） - Whatsxiaocuncun Personal website</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>一位不愿透露姓名的小村村同学的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="S7指令中的PUTGET或者BSENDBRCV的选择（BSENDBRCV仅支持3004001500）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-21 14:44" pubdate>
+          2024年7月21日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          642 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          6 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">S7指令中的PUTGET或者BSENDBRCV的选择（BSENDBRCV仅支持3004001500）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><ul>
+<li>最近用一个300PLC做S7通信的时候，因为交互的数据量有1024个bytes.这才意识到put get在数据量上的限制。以及S7大数据传输用到的BSEND&#x2F;BRCV。</li>
+</ul>
+<h2 id="2-S7支持的指令"><a href="#2-S7支持的指令" class="headerlink" title="2. S7支持的指令"></a>2. S7支持的指令</h2><ul>
+<li>在PLC里，能基于S7协议用于数据交换的指令如下（S7 300&#x2F;400下描述）：<br><img src="/img/blog_page/3427087-20240618162443966-1218796734.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240618162539140-1628513499.png" srcset="/img/loading.gif" lazyload></li>
+<li>其中值得注意的有几点：<ul>
+<li>put&#x2F;get无需通信伙伴用户程序中的任何其它通信函数，意思是使用putget单边通信的时候，另一边设置只需要打开使能开关就行，不用配置（连远程ID都可以不用填写）</li>
+<li>BSEND&#x2F;BRCV：互为交互对象，需要相互交接，也需要远程设备信息</li>
+<li>PLC的start stop等可以通过S7协议做远程控制。</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-PUT-GET的应用"><a href="#3-PUT-GET的应用" class="headerlink" title="3. PUT&#x2F;GET的应用"></a>3. PUT&#x2F;GET的应用</h2><ul>
+<li>GET<br><img src="/img/blog_page/3427087-20240618163024542-117945748.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240618163046872-775168357.png" srcset="/img/loading.gif" lazyload></li>
+<li>PUT<br><img src="/img/blog_page/3427087-20240618163135785-450546041.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240618163156652-363107615.png" srcset="/img/loading.gif" lazyload></li>
+<li>当写完put&#x2F;get程序之后，<code>连接</code>处会自动生成一条连接：<br><img src="/img/blog_page/3427087-20240618163336498-451015540.png" srcset="/img/loading.gif" lazyload><blockquote>
+<p>.<code>03</code>标记为黄色的含义是表示默认为主动连接，用<code>03.01</code>是可以通信成功的。若不需要可以换成其他的TSAP号。</p>
+</blockquote>
+</li>
+</ul>
+<p><img src="/img/blog_page/3427087-20240618163359588-1468885102.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>注意点<ul>
+<li>伙伴IP是需要填入的</li>
+<li>如果<code>子网</code>栏报错，请去<code>添加新连接</code>新建一条子网</li>
+<li>伙伴TSAP可以填的内容有：<ul>
+<li>S7-300集成PN或CP，填03.02</li>
+<li>S7-400集成PN或CP，填03.XX， XX为400PLC插槽号</li>
+<li>S7-1200集成PN口，填03.00或者03.01</li>
+<li>S7-1500集成网口或者CP，填03.01</li>
+</ul>
+</li>
+<li>本地ID，不要和其他连接重复就行</li>
+<li>PUT&#x2F;GET 触发管脚用脉冲</li>
+<li>交互DB非优化</li>
+<li>PUT GET 设置打开</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-put-get-bsend-brcv-能支持的最大数据量"><a href="#4-put-get-bsend-brcv-能支持的最大数据量" class="headerlink" title="4. put&#x2F;get bsend&#x2F;brcv 能支持的最大数据量"></a>4. put&#x2F;get bsend&#x2F;brcv 能支持的最大数据量</h2><ul>
+<li>以及BSEND&#x2F;BRCV支持的PLC类型，<font color=red>1200不支持USEND&#x2F;URCV&#x2F;BSEND&#x2F;BRCV</font><br><img src="/img/blog_page/3427087-20240618224903943-1629202033.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240618224930631-1220161937.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240618224956061-1279260939.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+<h2 id="5-S7相关指令中的几个重要参数"><a href="#5-S7相关指令中的几个重要参数" class="headerlink" title="5. S7相关指令中的几个重要参数"></a>5. S7相关指令中的几个重要参数</h2><p><img src="/img/blog_page/3427087-20240618164730763-101316379.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240618164755139-185481845.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240618164825154-782251201.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>对于bsend和brcv。它们属于<code>双端组态通信</code>指令</li>
+</ul>
+<h2 id="6-bsend-brcv应用"><a href="#6-bsend-brcv应用" class="headerlink" title="6. bsend&#x2F;brcv应用"></a>6. bsend&#x2F;brcv应用</h2><ul>
+<li><font color=red><strong>更新：对于1200系列PLC而言，是没有办法做到大数据量的双边S7通信的，它仅支持最大不超过160Bytes*4的用户数据，以下图片中的1200相关的内容请忽略或者替换成1500系列PLC。如果实在需要在1200上做数据量偏大的传输，可以试试用TCP&#x2F;IP协议（TSEND&#x2F;TRCV）</strong></font></li>
+<li>连接ID如图：<br><img src="/img/blog_page/3427087-20240618165603524-1204597525.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240618165641839-417681987.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240618165658952-1290354656.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240618165929545-410493773.png" srcset="/img/loading.gif" lazyload></li>
+<li><font color=red><strong><del>在1200端仍然需要建立一套BSEND&#x2F;BRCV程序和数据DB。</del></strong></font></li>
+<li><font color=red><strong>1200不支持双边的S7通信（BSEND&#x2F;BRCV），只有300&#x2F;400&#x2F;1500系列PLC才支持。</strong></font></li>
+<li>上述在300PLC上建立了一套BSEND&#x2F;BRCV指令，同样的，在另一个PLC上，比如1500上也需要建立一套相应的指令，并填入相应的管脚：<br><img src="/img/blog_page/3427087-20240618225938724-472069426.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/PLC-related/" class="category-chain-item">PLC related</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/PLC-related/1200-1500PLC/" class="category-chain-item">1200/1500PLC</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/PLC-part/" class="print-no-link">#PLC part</a>
+      
+        <a href="/tags/industrial-control/" class="print-no-link">#industrial control</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>S7指令中的PUTGET或者BSENDBRCV的选择（BSENDBRCV仅支持3004001500）</div>
+      <div>http://example.com/2024/07/21/S7指令中的PUTGET或者BSENDBRCV的选择（BSENDBRCV仅支持3004001500）/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiao cuncun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年7月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/07/21/PLC%E7%9A%84%E5%BC%80%E6%94%BE%E5%BC%8F%E7%94%A8%E6%88%B7%E5%8D%8F%E8%AE%AE%EF%BC%8CTSAP%EF%BC%88%E5%90%ABS7300%E5%92%8CS71200TCP%E8%BF%9E%E6%8E%A5%E5%AE%9E%E4%BE%8B%EF%BC%89/" title="PLC的开放式用户协议，TSAP（含S7300和S71200TCP连接实例）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">PLC的开放式用户协议，TSAP（含S7300和S71200TCP连接实例）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/07/21/git%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0/" title="git基础笔记">
+                        <span class="hidden-mobile">git基础笔记</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

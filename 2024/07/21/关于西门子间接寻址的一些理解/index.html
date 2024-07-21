@@ -1,0 +1,788 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiao cuncun">
+  <meta name="keywords" content="blog">
+  
+    <meta name="description" content="今天不研究高大上的，研究一个接近底层的东西，叫间接寻址。它很基础，基础到我们无时无刻都在用，但是同时它也很难理解，因为其实寄存器的概念已经被渐渐隐藏了。 1. 地址的概念 我们通常提到的物理输入输出印象区P，印象输入区I，印象输出区Q，位存储区M，定时器T，计数器C，数据区DB，背景数据区DI，本地数据区L。 每个区域（除T&#x2F;C）都可以用BIT,BYTE,WORD,DWORD来指定它们的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于西门子间接寻址的一些理解">
+<meta property="og:url" content="http://example.com/2024/07/21/%E5%85%B3%E4%BA%8E%E8%A5%BF%E9%97%A8%E5%AD%90%E9%97%B4%E6%8E%A5%E5%AF%BB%E5%9D%80%E7%9A%84%E4%B8%80%E4%BA%9B%E7%90%86%E8%A7%A3/index.html">
+<meta property="og:site_name" content="Whatsxiaocuncun Personal website">
+<meta property="og:description" content="今天不研究高大上的，研究一个接近底层的东西，叫间接寻址。它很基础，基础到我们无时无刻都在用，但是同时它也很难理解，因为其实寄存器的概念已经被渐渐隐藏了。 1. 地址的概念 我们通常提到的物理输入输出印象区P，印象输入区I，印象输出区Q，位存储区M，定时器T，计数器C，数据区DB，背景数据区DI，本地数据区L。 每个区域（除T&#x2F;C）都可以用BIT,BYTE,WORD,DWORD来指定它们的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-07-21T06:44:39.233Z">
+<meta property="article:modified_time" content="2024-07-21T09:18:33.740Z">
+<meta property="article:author" content="xiao cuncun">
+<meta property="article:tag" content="PLC part">
+<meta property="article:tag" content="industrial control">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>关于西门子间接寻址的一些理解 - Whatsxiaocuncun Personal website</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>一位不愿透露姓名的小村村同学的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="关于西门子间接寻址的一些理解"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-21 14:44" pubdate>
+          2024年7月21日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          23 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">关于西门子间接寻址的一些理解</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>今天不研究高大上的，研究一个接近底层的东西，叫<code>间接寻址</code>。它很基础，基础到我们无时无刻都在用，但是同时它也很难理解，因为其实寄存器的概念已经被渐渐隐藏了。</p>
+<h2 id="1-地址的概念"><a href="#1-地址的概念" class="headerlink" title="1. 地址的概念"></a>1. 地址的概念</h2><p> 我们通常提到的物理输入输出印象区P，印象输入区I，印象输出区Q，位存储区M，定时器T，计数器C，数据区DB，<font color=red>背景数据区DI</font>，本地数据区L。<br> 每个区域（除T&#x2F;C）都可以用BIT,BYTE,WORD,DWORD来指定它们的大小。<br> <code>区域+区域位置和长度</code>，其实构成了我们描述一个地址的必要条件。</p>
+<ul>
+<li>存储的区域</li>
+<li>这个区域中具体的位置</li>
+</ul>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs abnf">//例子： A Q2.<span class="hljs-number">0</span><br><span class="hljs-attribute">A</span> <span class="hljs-operator">=</span> 指令符；<br><span class="hljs-attribute">Q</span> <span class="hljs-operator">=</span> 输出印象区；<br><span class="hljs-number">2.0</span> <span class="hljs-operator">=</span> 输出印象区的第二个字节的第<span class="hljs-number">0</span>位；<br><br>//例子： DBX200.<span class="hljs-number">0</span><br><span class="hljs-attribute">DB</span> <span class="hljs-operator">=</span> 数据区；<br><span class="hljs-attribute">X</span> <span class="hljs-operator">=</span> 位；<br><span class="hljs-number">200</span> <span class="hljs-operator">=</span> 具体位置<br><span class="hljs-number">0</span> <span class="hljs-operator">=</span> 具体的位位置<br></code></pre></td></tr></table></figure>
+<p> 所以一个地址的确切构成应该是<code>&lt;存储区符号&gt;&lt;存储区尺寸符号&gt;&lt;尺寸数值&gt;.&lt;位数值&gt;</code>。把&lt;存储区符号&gt;&lt;存储区尺寸符号&gt;统一看作&lt;地址标志符&gt;，那么地址组成又可以写成**<code>&lt;地址标志符&gt;&lt;数值单元&gt;</code>**。</p>
+<h2 id="2-间接寻址"><a href="#2-间接寻址" class="headerlink" title="2. 间接寻址"></a>2. 间接寻址</h2><ul>
+<li>间接寻址对应的是直接寻址，那什么是直接寻址？<br> <strong><code>直接给出指令的确切操作数就叫直接寻址。</code></strong><br> <strong><code>地址的最小单元是BIT。</code></strong></li>
+</ul>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-comment">//直接操作Q20.0的地址，直接寻址</span><br><span class="hljs-selector-tag">A</span> <span class="hljs-selector-tag">Q20</span><span class="hljs-selector-class">.0</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>对应的，间接给出的寻址方式。就是间接寻址。<br><strong><code>用[ ]标明的内容，间接指代地址</code></strong><br><strong><code>其中MD100和DBW100被称为指针Pointer,它指向它们包含的数值所代表的地址</code></strong><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-comment">//间接访问地址，间接寻址</span><br><span class="hljs-selector-tag">A</span> <span class="hljs-selector-tag">Q</span><span class="hljs-selector-attr">[MD100]</span><br><span class="hljs-selector-tag">A</span> <span class="hljs-selector-tag">T</span><span class="hljs-selector-attr">[DBW100]</span><br></code></pre></td></tr></table></figure></li>
+<li>指针格式（<strong>存储器间接寻址</strong>）<ol>
+<li><em><u>存储器间接寻址具有<code>两个指针格式：单字和双字</code>。单字指针是一个16bit的结构，从0-15bit，指示一个从0-65535的数值，这个<font color=red>数值就是被寻址的存储区域的编号</font>。双字指针是一个32bit的结构，从0-2bit，共三位，按照8进制指示被寻址的位编号，也就是0-7；而从3-18bit，共16位，指示一个从0-65535的数值，<font color=red>这个数值就是被寻址的字节编号。*<em>这句话说明相比于单字指针，双字指针可以多表达0-7bit的位编号</em></em></font></u>*</li>
+<li><em><u>指针可以存放在M、DI、DB和L区域中，也就是说，可以用这些区域的内容来做指针。</u></em><figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs excel">//<br>L DW#<span class="hljs-number">16</span>#<span class="hljs-number">35</span> //将<span class="hljs-number">32</span>位<span class="hljs-number">16</span>进制数<span class="hljs-number">35</span>存入ACC1<br><span class="hljs-built_in">T</span> <span class="hljs-symbol">MD2</span> //这个值再存入<span class="hljs-symbol">MD2</span>，这是个<span class="hljs-number">32</span>位的位存储区域<br>L +<span class="hljs-number">10</span> //将<span class="hljs-number">16</span>位整数<span class="hljs-number">10</span>存入ACC1，<span class="hljs-number">32</span>位<span class="hljs-number">16</span>进制数<span class="hljs-number">35</span>自动移动到ACC2<br><span class="hljs-built_in">T</span> <span class="hljs-symbol">MW100</span> //这个值再存入<span class="hljs-symbol">MW100</span>，这是个<span class="hljs-number">16</span>位的位存储区域<br>OPN DBW[<span class="hljs-symbol">MW100</span>] //打开DBW10。这里的[<span class="hljs-symbol">MW100</span>]就是个单字指针，存放指针的区域是M区，<span class="hljs-symbol">MW100</span>中的值<span class="hljs-number">10</span>，就是指针间接指定的地址，它是个<span class="hljs-number">16</span>位的值！<br>//<br>L L#+<span class="hljs-number">10</span> //以<span class="hljs-number">32</span>位形式，把<span class="hljs-number">10</span>放入ACC1，此时，ACC2中的内容为：<span class="hljs-number">16</span>位整数<span class="hljs-number">10</span><br><span class="hljs-built_in">T</span> <span class="hljs-symbol">MD104</span> //这个值再存入<span class="hljs-symbol">MD104</span>，这是个<span class="hljs-number">32</span>位的位存储区域<br>A I[<span class="hljs-symbol">MD104</span>] //对<span class="hljs-symbol">I1</span>.<span class="hljs-number">2</span>进行与逻辑操作！<br>=DIX[<span class="hljs-symbol">MD2</span>] //赋值背景数据位DIX6.<span class="hljs-number">5</span>！<br>//<br>A <span class="hljs-built_in">DB</span>[<span class="hljs-symbol">MW100</span>].DBX[<span class="hljs-symbol">MD2</span>] //读入<span class="hljs-symbol">DB10</span>.DBX6.<span class="hljs-number">5</span>数据位状态<br>=Q[<span class="hljs-symbol">MD2</span>] //赋值给<span class="hljs-symbol">Q6</span>.<span class="hljs-number">5</span><br>//<br>A <span class="hljs-built_in">DB</span>[<span class="hljs-symbol">MW100</span>].DBX[<span class="hljs-symbol">MD2</span>] //读入<span class="hljs-symbol">DB10</span>.DBX6.<span class="hljs-number">5</span>数据位状态<br>=<span class="hljs-symbol">Q10</span> //错误！！没有<span class="hljs-symbol">Q10</span>这个元件<br></code></pre></td></tr></table></figure>
+通过上面发现：双字指针描述byte.bit的这种结构，单字指针只能描述存储区域。<br><strong><u><font color=red>换句话说，单字指针不能描述P,I,Q,L这些区域，因为描述它们要精确到bit。</font></u></strong><br><strong><u><font color=red>对双字指针而言，似乎一切都好，但是也有一个限制，对于非位区域寻址的时候，它的描述必须要保全其0-2bit都是0，也就是说对于非位区域，它的的精度到不了位</font></u></strong><br><strong><u><font color=red>也正是由于双字指针是一个具有位的指针，因此，当对字节、字或者双字存储区地址进行寻址时，必须确保双字指针的内容是8或者8的倍数</font></u></strong></li>
+</ol>
+</li>
+</ul>
+<p>上诉例子中有段代码是</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">A</span> <span class="hljs-selector-tag">I</span><span class="hljs-selector-attr">[MD104]</span> <span class="hljs-comment">//对I1.2进行与逻辑操作！</span><br></code></pre></td></tr></table></figure>
+<p>那么，为什么是I1.2呢？</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs arduino">原因：<br>通过L L#<span class="hljs-number">+10</span>，MD104应该是等于十进制的<span class="hljs-number">10</span>，转换为<span class="hljs-number">32</span>位二进制数如下：<br>MD104 = <span class="hljs-number">2</span>#<span class="hljs-number">0000</span> <span class="hljs-number">0000</span> <span class="hljs-number">0000</span> <span class="hljs-number">0000</span> <span class="hljs-number">0000</span> <span class="hljs-number">0000</span> <span class="hljs-number">0000</span> <span class="hljs-number">1010</span>；<br>按照双字指针的概念，<span class="hljs-number">3</span><span class="hljs-number">-18</span>bit指定<span class="hljs-type">byte</span>,<span class="hljs-number">0</span><span class="hljs-number">-2</span>bit指定最终要操作的位，那么计算出来的结果就应该是<span class="hljs-number">1.2</span>！<br>按照双字指针的概念，<span class="hljs-number">3</span><span class="hljs-number">-18</span>bit指定<span class="hljs-type">byte</span>,<span class="hljs-number">0</span><span class="hljs-number">-2</span>bit指定最终要操作的位，那么计算出来的结果就应该是<span class="hljs-number">1.2</span>！<br>按照双字指针的概念，<span class="hljs-number">3</span><span class="hljs-number">-18</span>bit指定<span class="hljs-type">byte</span>,<span class="hljs-number">0</span><span class="hljs-number">-2</span>bit指定最终要操作的位，那么计算出来的结果就应该是<span class="hljs-number">1.2</span>！<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>指针格式（<strong>寄存器间接寻址</strong>）<ol>
+<li><p><code>存储器间接寻址</code>和<code>寄存器间接寻址</code>有什么不一样：<br> <strong><u><font color=red>在先前所说的存储器间接寻址中，间接指针用M、DB、DI和L直接指定，就是说，指针指向的存储区内容就是指令要执    行的确切地址数值单元。但在寄存器间接寻址中，指令要执行的确切地址数值单元，并非寄存器指向的存储区内容，也就是说，寄存器本身也是间接的指向真正的地址数值单元。</font></u></strong></p>
+</li>
+<li><p>寄存器间接寻址的途径</p>
+<ul>
+<li>区域内寄存器间接寻址</li>
+<li>区域间寄存器间接寻址</li>
+</ul>
+</li>
+<li><p>寄存器间接寻址的格式</p>
+<ul>
+<li><code>&lt;地址标志符&gt;&lt;寄存器，P#byte.bit&gt;</code></li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs scss"><span class="hljs-comment">//举个例子</span><br>DIX<span class="hljs-selector-attr">[AR1,P#1.5]</span> <span class="hljs-comment">//要寻址的地址区域事先已经确定(DI)，AR1可以改变的只是这个区域内的确切地址数值单元，所以我们称之为区域内寄存器间接寻址方式，相应的，这里的[AR1,P#1.5] 就叫做区域内寻址指针。</span><br><span class="hljs-attribute">X</span><span class="hljs-selector-attr">[AR1,P#1.5]</span> <span class="hljs-comment">//要寻址的地址区域和确切的地址数值单元，都未事先确定，只是确定了存储大小，这就是意味着我们可以在不同的区域间的不同地址数值单元以给定的区域大小进行寻址，所以称之为：区域间寄存器间接寻址方式，相应的，这里的[AR1,P#1.5] 就叫做区域间寻址指针。</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>AR的格式<br> <code>地址寄存器</code>AR是专门用于寻址的一个特殊指针区域，西门子的地址寄存器一共2个，<code>AR1和AR2，每个32位</code>。<ul>
+<li><strong><u><font color=red>区域内寻址寄存器里面，AR的内容只是指代数值单元，因为其他的已经确认，所以这种情况的的AR等同于存储寄存器中的双字指针，也就是0-2指代bit,3-18指代byte字节，其中第31位固定为0。</font></u></strong></li>
+<li><strong><u><font color=red>区域间寻址寄存器31位固定为1，24-26bit可以被定义用于指定存储区域，它其实是一种我们常见的区域划分标志（如B#16#84表示DB区的概念就来自于此）。</font></u></strong></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment"># 比较区域内寻址寄存器和区域间寻址寄存器的格式差别</span><br>区域内寻址寄存器：<br><span class="hljs-symbol">AR:</span><span class="hljs-number">0000</span> <span class="hljs-number">0000</span> <span class="hljs-number">0000</span> <span class="hljs-number">0</span>BBB <span class="hljs-keyword">BBBB </span><span class="hljs-keyword">BBBB </span><span class="hljs-keyword">BBBB </span><span class="hljs-keyword">BXXX</span><br><span class="hljs-keyword"></span><br>区域间寻址寄存器：<br><span class="hljs-symbol">AR:</span><span class="hljs-number">1000</span> <span class="hljs-number">0</span>YYY <span class="hljs-number">0000</span> <span class="hljs-number">0</span>BBB <span class="hljs-keyword">BBBB </span><span class="hljs-keyword">BBBB </span><span class="hljs-keyword">BBBB </span><span class="hljs-keyword">BXXX</span><br><span class="hljs-keyword"></span><br><span class="hljs-comment"># 差别1：区域间的第31位固定为1了。</span><br><span class="hljs-comment"># 差别2：区域间的第24-26位可以被定义和修改了。</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>区域标志符（区域间寻址寄存器24-26位）<ul>
+<li><p>我们一定不会陌生的知识如下：</p>
+<ol>
+<li>数据区P，B#16#80（2#000）</li>
+<li>数据区I，B#16#81（2#001）</li>
+<li>数据区Q，B#16#82（2#010）</li>
+<li>数据区M，B#16#83（2#011）</li>
+<li>数据区DB，B#16#84（2#100）</li>
+<li>数据区DI，B#16#85（2#101），表示背景DB</li>
+<li>数据区L，B#16#86（2#111）</li>
+</ol>
+</li>
+<li><p>当我们把这些AR的内容全部表达出来：</p>
+<ol>
+<li>数据区P，B#16#800xxxxx</li>
+<li>数据区I，B#16#810xxxxx</li>
+<li>数据区Q，B#16#820xxxxx</li>
+<li>数据区M，B#16#830xxxxx</li>
+<li>数据区DB，B#16#840xxxxx</li>
+<li>数据区DI，B#16#850xxxxx</li>
+<li>数据区L，B#16#860xxxxxx</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong><u><font color=red>我们从上面能得到一个初步结论：果AR中的内容是8开头，那么就一定是区域间寻址。</font></u></strong></p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><span class="hljs-comment">//举个例子</span><br>AR <span class="hljs-punctuation">=</span> <span class="hljs-number">16</span><span class="hljs-meta">#840000D4</span><br><span class="hljs-comment">//我们可以转换位二进制显示</span><br>AR <span class="hljs-punctuation">=</span> <span class="hljs-number">2</span><span class="hljs-meta"># 1000 0100 0000 0000 0000 0000 1101 0100</span><br> <span class="hljs-comment">// bit31=1,表示区域间寄存器寻址</span><br><span class="hljs-comment">// bit24-26=100,表示DB</span><br><span class="hljs-comment">// bit3-18=26,表示区域位置是26</span><br><span class="hljs-comment">// bit0-2=100，表示4</span><br><span class="hljs-comment">//合计如下</span><br>AR表达的地址是DBX26.<span class="hljs-number">4</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>P#指针是什么<br>P#中的P是Pointer，是个32位的直接指针。所谓的直接，是指P#中的#后面所跟的数值或者存储单元，是P直接给定的。<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs less"><br><span class="hljs-selector-tag">L</span> <span class="hljs-selector-tag">P</span><span class="hljs-selector-id">#Q1</span><span class="hljs-selector-class">.0</span> <span class="hljs-comment">//把Q1.0这个指针存入ACC1，此时ACC1的内容=82000008（hex）=Q1.0</span><br><span class="hljs-selector-tag">L</span> <span class="hljs-selector-tag">P</span><span class="hljs-selector-id">#1</span><span class="hljs-selector-class">.0</span> <span class="hljs-comment">//把1.0这个指针存入ACC1，此时ACC1的内容=00000008（hex）=1.0（这是个区域内寄存器寻址指针，如X[AR1,P#1.5]）</span><br><span class="hljs-selector-tag">L</span> <span class="hljs-selector-tag">P</span><span class="hljs-selector-id">#MB100</span> <span class="hljs-comment">//错误！必须按照byte.bit结构给定指针。</span><br><span class="hljs-selector-tag">L</span> <span class="hljs-selector-tag">P</span><span class="hljs-selector-id">#M100</span><span class="hljs-selector-class">.0</span> <span class="hljs-comment">//把M100.0这个指针存入ACC1，此时ACC1的内容=83000320（hex）=M100.0</span><br><span class="hljs-selector-tag">L</span> <span class="hljs-selector-tag">P</span><span class="hljs-selector-id">#DB100</span><span class="hljs-selector-class">.DBX26</span><span class="hljs-selector-class">.4</span> <span class="hljs-comment">//错误！DBX已经提供了存储区域，不能重复指定</span><br><span class="hljs-selector-tag">L</span> <span class="hljs-selector-tag">P</span><span class="hljs-selector-id">#DBX26</span><span class="hljs-selector-class">.4</span> <span class="hljs-comment">//把DBX26.4这个指针存入ACC1，此时ACC1的内容=840000D4（hex）=DBX26.4</span><br><span class="hljs-comment">//对P#指定带有存储区域时，累加器中的内容和区域间寻址指针内容完全相同。事实上，把什么样的值传给AR，就决定了是以什么样的方式来进行寄存器间接寻址。</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<p><strong><u><font color=red>在寄存器寻址中，P#XXX作为寄存器AR指针的偏移量，用来和AR指针进行相加运算，运算的结果，才是指令真正要操作的确切地址数值单元！</font></u></strong></p>
+<ul>
+<li><p>P#的运算规则</p>
+<figure class="highlight leaf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs leaf">//运算的法则是：AR1和P<span class="hljs-punctuation">#</span>中的数值，按照BYTE位和BIT位分类相加。BIT位相加按八进制规则运算，而BYTE位相加，则按照十进制规则运算。<br><br>对于[AR1，P<span class="hljs-punctuation">#</span>2.6]，若AR1=26.4 &gt;&gt;&gt;AR1(26.4)+P<span class="hljs-punctuation">#</span><span class="hljs-params">(2.6)</span>=29.7，这是区域内寄存器间接寻址的最终确切地址数值单元<br>对于[AR1，P<span class="hljs-punctuation">#</span>2.6]，若AR1=DBX26.4 &gt;&gt;&gt;AR1(DBX26.4)+P<span class="hljs-punctuation">#</span><span class="hljs-params">(2.6)</span>=DBX29.7，这是区域间寄存器间接寻址的最终确切地址数值单元<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>AR的地址运算</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-comment">//1.直接赋值，保证直接数是32位，包含相关区域，位置，地址信息</span><br><span class="hljs-selector-tag">L</span> <span class="hljs-selector-tag">DW</span><span class="hljs-selector-id">#16</span><span class="hljs-selector-id">#83000320</span><br><span class="hljs-selector-tag">LAR1</span><br><span class="hljs-comment">//2.间接赋值，可以用存储器间接寻址指针给定AR1内容。具体内容存储在MD100中</span><br><span class="hljs-selector-tag">L</span> <span class="hljs-selector-attr">[MD100]</span><br><span class="hljs-selector-tag">LAR1</span><br><span class="hljs-comment">//3.指针赋值，使用P#这个32位“常数”指针赋值AR。</span><br><span class="hljs-selector-tag">LAR1</span> <span class="hljs-selector-tag">P</span><span class="hljs-selector-id">#26</span><span class="hljs-selector-class">.2</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/PLC-related/" class="category-chain-item">PLC related</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/PLC-related/1200-1500PLC/" class="category-chain-item">1200/1500PLC</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/PLC-part/" class="print-no-link">#PLC part</a>
+      
+        <a href="/tags/industrial-control/" class="print-no-link">#industrial control</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>关于西门子间接寻址的一些理解</div>
+      <div>http://example.com/2024/07/21/关于西门子间接寻址的一些理解/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiao cuncun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年7月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/07/21/%E6%8A%8Amarkdown%E6%96%87%E4%BB%B6%E8%BD%AC%E6%8D%A2%E4%B8%BAhtml%E6%96%87%E4%BB%B6/" title="把markdown文件转换为html文件">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">把markdown文件转换为html文件</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/07/21/%E6%A8%A1%E6%8B%9F%E5%80%BC%E5%A4%84%E7%90%86-base%20on%20simatic/" title="模拟值处理-base on simatic">
+                        <span class="hidden-mobile">模拟值处理-base on simatic</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

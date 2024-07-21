@@ -1,0 +1,757 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiao cuncun">
+  <meta name="keywords" content="blog">
+  
+    <meta name="description" content="本次选择的是WinCC RT Advance而不是用的SIMATIC Comfort Panel来做的主要原因是因Comfort系列HMI虽然是支持VBS脚本的，但是如果要创造一些CSV文件的话，HMI不带USB的情况下是很存取数据的。另一方面向比于PC station嵌入的RT Advance，HMI的运行速度和响应速度也是有差别的。不用Classic WinCC来做的原因是经典WinCC想实现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WinCC RT Advance的VBS脚本应用">
+<meta property="og:url" content="http://example.com/2024/07/21/WinCC%20RT%20Advance%E7%9A%84VBS%E8%84%9A%E6%9C%AC%E5%BA%94%E7%94%A8/index.html">
+<meta property="og:site_name" content="Whatsxiaocuncun Personal website">
+<meta property="og:description" content="本次选择的是WinCC RT Advance而不是用的SIMATIC Comfort Panel来做的主要原因是因Comfort系列HMI虽然是支持VBS脚本的，但是如果要创造一些CSV文件的话，HMI不带USB的情况下是很存取数据的。另一方面向比于PC station嵌入的RT Advance，HMI的运行速度和响应速度也是有差别的。不用Classic WinCC来做的原因是经典WinCC想实现">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240414200042330-304076386.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240414205146446-515867530.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240414210224874-1355865341.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240414214620467-824539474.png">
+<meta property="article:published_time" content="2024-07-21T06:44:39.308Z">
+<meta property="article:modified_time" content="2024-07-21T09:33:09.211Z">
+<meta property="article:author" content="xiao cuncun">
+<meta property="article:tag" content="industrial control">
+<meta property="article:tag" content="HMI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/blog_page/3427087-20240414200042330-304076386.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>WinCC RT Advance的VBS脚本应用 - Whatsxiaocuncun Personal website</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>一位不愿透露姓名的小村村同学的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="WinCC RT Advance的VBS脚本应用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-21 14:44" pubdate>
+          2024年7月21日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">WinCC RT Advance的VBS脚本应用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>本次选择的是WinCC RT Advance而不是用的SIMATIC Comfort Panel来做的主要原因是因Comfort系列HMI虽然是支持VBS脚本的，但是如果要创造一些CSV文件的话，HMI不带USB的情况下是很存取数据的。另一方面向比于PC station嵌入的RT Advance，HMI的运行速度和响应速度也是有差别的。<br>不用Classic WinCC来做的原因是经典WinCC想实现脚本是个很简单的事；<br>不用KTP系列的原因是它们根本不支持脚本系统。</p>
+<h2 id="1-一个简单的乘法脚本"><a href="#1-一个简单的乘法脚本" class="headerlink" title="1. 一个简单的乘法脚本"></a>1. 一个简单的乘法脚本</h2><p>需要做成的效果如图：<br><img src="/img/blog_page/3427087-20240414200042330-304076386.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>.使能乘法脚本的按钮在<code>=</code>符号中，按下即使能运算<br>.右键<code>=</code>，找到<code>事件</code>，选择<code>单击事件</code>，把脚本嵌入事件。</p>
+</blockquote>
+<p>新建一个名为<code>multiplication</code>的VBS脚本，类型选择Sub(不带返回值)</p>
+<ul>
+<li>Sub:不带返回值；</li>
+<li>Function:带返回值，没找到Return,所以应该只能通过Function返回；</li>
+<li>ByVal:按值传参，传入的数不管再脚本内如何被赋值，接口上的值不会改变；</li>
+<li>ByRef：按地址传参，可以在脚本内部改变参数值并传到接口上；</li>
+</ul>
+<p>代码内容如下：</p>
+<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs vbnet"><span class="hljs-keyword">Sub</span> multiplication()<br><br><span class="hljs-keyword">Dim</span> a,b,c <span class="hljs-comment">&#x27;定义变量</span><br>a=SmartTags(<span class="hljs-string">&quot;乘数&quot;</span>)<br>b=SmartTags(<span class="hljs-string">&quot;被乘数&quot;</span>)<br>c=a*b<br>SmartTags(<span class="hljs-string">&quot;结果值&quot;</span>)=c<br><br><span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>.<code>SmartTags()</code>连接的是HMI变量表中的变量</p>
+</blockquote>
+<h2 id="2-带返回值的方法"><a href="#2-带返回值的方法" class="headerlink" title="2. 带返回值的方法"></a>2. 带返回值的方法</h2><p>带返回值，应该只能通过Function返回，且只能返回一个值（网上资料VBS传递值可以用<code>Class name ... End Class</code>，但是在WinccRT上报错，也许是不支持，先保留）；</p>
+<p>代码内容如下：</p>
+<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs vbscript"><span class="hljs-keyword">Function</span> Average(<span class="hljs-keyword">ByRef</span> Value1, <span class="hljs-keyword">ByRef</span> Value2)<br><br><span class="hljs-keyword">If</span> I<span class="hljs-built_in">sNumeric</span> (Value1) = <span class="hljs-literal">False</span> <span class="hljs-keyword">Then</span> Value1 = <span class="hljs-number">1</span><br><span class="hljs-keyword">If</span> I<span class="hljs-built_in">sNumeric</span> (Value1) = <span class="hljs-literal">False</span> <span class="hljs-keyword">Then</span> Value1 = <span class="hljs-number">1</span><br>Average = (Value1 + Value2)/<span class="hljs-number">2</span><br><br><span class="hljs-keyword">End</span> <span class="hljs-keyword">Function</span><br></code></pre></td></tr></table></figure>
+<p>脚本呈现效果如下：<br><img src="/img/blog_page/3427087-20240414205146446-515867530.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>.返回值需要新建一个<code>HMI_Tags</code>或者<code>PLC变量</code>来接收；<br>.Value1&#x2F;Value2被固定输入为<code>int型（有符号位）</code>；</p>
+</blockquote>
+<h2 id="3-随机数和数组"><a href="#3-随机数和数组" class="headerlink" title="3. 随机数和数组"></a>3. 随机数和数组</h2><p>效果画面如图所示：<br><img src="/img/blog_page/3427087-20240414210224874-1355865341.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>.需要在HMI变量表里面新建一个数组，我这里建立的是<code>Array[0..9] of Real</code>,为左侧<code>IO域</code>分别分配一个数组元素；<br>.建立一个<code>Uint类型</code>HMI变量分配给右侧IO域，目的是作为脚本要生成的随机数组的最大值；<br>.按钮的作用是按下就开始使能脚本内容；</p>
+</blockquote>
+<p>新建一个名为<code>Array_Generators</code>的VBS脚本，代码内容如下：</p>
+<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs vbscript"><span class="hljs-keyword">Sub</span> Array_Generator()<br><span class="hljs-keyword">Dim</span> Temp_<span class="hljs-built_in">Array</span>(),i<br><span class="hljs-keyword">For</span> i=<span class="hljs-number">0</span> <span class="hljs-keyword">To</span> SmartTags(<span class="hljs-string">&quot;数组最大元素&quot;</span>)<br>	<span class="hljs-keyword">ReDim</span> <span class="hljs-keyword">Preserve</span> Temp_<span class="hljs-built_in">Array</span>(i+<span class="hljs-number">1</span>) <span class="hljs-comment">&#x27;Preserve为保留之前数据</span><br>	Temp_<span class="hljs-built_in">Array</span>(i)=Rnd*<span class="hljs-number">1000</span><br><span class="hljs-keyword">Next</span><br>	<span class="hljs-keyword">For</span> i=<span class="hljs-number">0</span> <span class="hljs-keyword">To</span> SmartTags(<span class="hljs-string">&quot;数组最大元素&quot;</span>)<br>		SmartTags(<span class="hljs-string">&quot;动态数组Array1显示&quot;</span>)(i)=Temp_<span class="hljs-built_in">Array</span>(i)<br>	<span class="hljs-keyword">Next</span>	<br><span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span><br></code></pre></td></tr></table></figure>
+<h2 id="4-更改元素位置和大小"><a href="#4-更改元素位置和大小" class="headerlink" title="4. 更改元素位置和大小"></a>4. 更改元素位置和大小</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs routeros">Sub setColor()<br>On <span class="hljs-built_in">Error</span> Resume Next<br>Dim VAL,SHAPE<br><span class="hljs-built_in">Set</span> VAL = SmartTags(<span class="hljs-string">&quot;COLORCODE&quot;</span>)<br><span class="hljs-built_in">Set</span> SHAPE = HmiRuntime.Screens(<span class="hljs-string">&quot;画面_1&quot;</span>).ScreenItems(<span class="hljs-string">&quot;圆_1&quot;</span>)<br>Dim b1,b2,b3<br><span class="hljs-built_in">Set</span> <span class="hljs-attribute">b1</span>=SmartTags(&quot;a1&quot;)<br><span class="hljs-built_in">Set</span> b2 = SmartTags(<span class="hljs-string">&quot;a2&quot;</span>)<br><span class="hljs-built_in">Set</span> b3 = SmartTags(<span class="hljs-string">&quot;a3&quot;</span>)<br><span class="hljs-keyword">If</span> b1&gt;255 <span class="hljs-keyword">Or</span> b2&gt;255 <span class="hljs-keyword">Or</span> b3&gt;255 Then<br>	<span class="hljs-attribute">a1</span>=0<br>	<span class="hljs-attribute">a2</span>=0<br>	<span class="hljs-attribute">a3</span>=0<br>	SHAPE.BackColor = RGB(b1,b2,b3)<br><span class="hljs-keyword">Else</span><br>SHAPE.BackColor = RGB(b1,b2,b3)<br>End <span class="hljs-keyword">If</span><br><span class="hljs-string">&#x27;Select Case VAL</span><br><span class="hljs-string">&#x27;</span>	Case 0<br><span class="hljs-string">&#x27;		SHAPE.BackColor = RGB(255,255,255)</span><br><span class="hljs-string">&#x27;</span>	Case 1<br><span class="hljs-string">&#x27;		SHAPE.BackColor = RGB(255,0,0)</span><br><span class="hljs-string">&#x27;</span>	Case 2<br><span class="hljs-string">&#x27;		SHAPE.BackColor = RGB(0,255,0)</span><br><span class="hljs-string">&#x27;</span>	Case 3<br><span class="hljs-string">&#x27;		SHAPE.BackColor = RGB(0,0,255)</span><br><span class="hljs-string">&#x27;</span>	Case <span class="hljs-keyword">Else</span><br><span class="hljs-string">&#x27;		SHAPE.BackColor = RGB(0,0,0)</span><br><span class="hljs-string">&#x27;</span>End Select<br><span class="hljs-keyword">If</span> Err.Number &lt;&gt;0 Then<br>	Err.Clear<br>End <span class="hljs-keyword">If</span><br>Dim box1,box2,box3,box4,box<br><span class="hljs-attribute">box1</span>=SmartTags(&quot;boxA&quot;)<br><span class="hljs-attribute">box2</span>=SmartTags(&quot;boxB&quot;)<br><span class="hljs-attribute">box3</span>=SmartTags(&quot;boxC&quot;)<br><span class="hljs-attribute">box4</span>=SmartTags(&quot;boxD&quot;)<br><span class="hljs-built_in">Set</span> <span class="hljs-attribute">box</span>=HmiRuntime.Screens(&quot;画面_1&quot;).ScreenItems(&quot;矩形_1&quot;)<br>box.<span class="hljs-attribute">Height</span>=box1<br>box.<span class="hljs-attribute">Width</span>=box2<br>box.BackColor = RGB(b2,b1,b3)<br>box.<span class="hljs-attribute">Top</span>=box3<br>box.<span class="hljs-attribute">Left</span>=box4<br>End Sub<br></code></pre></td></tr></table></figure>
+<h2 id="5-条件和循环指令应用"><a href="#5-条件和循环指令应用" class="headerlink" title="5. 条件和循环指令应用"></a>5. 条件和循环指令应用</h2><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-variable">Sub</span> <span class="hljs-variable">practiceVBS</span><span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><br><span class="hljs-operator">&#x27;</span>提示：<br><span class="hljs-operator">&#x27;</span> <span class="hljs-number">1.</span> 使用 <span class="hljs-operator">&lt;</span><span class="hljs-variable">CTRL</span><span class="hljs-operator">+</span><span class="hljs-variable">SPACE</span><span class="hljs-operator">&gt;</span> 或 <span class="hljs-operator">&lt;</span><span class="hljs-variable">CTRL</span><span class="hljs-operator">+</span><span class="hljs-built_in">I</span><span class="hljs-operator">&gt;</span> 快捷键打开含所有对象和函数的列表<br><span class="hljs-operator">&#x27;</span> <span class="hljs-number">2.</span> 使用 <span class="hljs-variable">HMI</span> <span class="hljs-variable">Runtime</span> 对象写入代码。<br><span class="hljs-operator">&#x27;</span>  示例：<span class="hljs-variable">HmiRuntime</span><span class="hljs-operator">.</span><span class="hljs-variable">Screens</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;Screen_1&quot;</span><span class="hljs-punctuation">)</span>。<br><span class="hljs-operator">&#x27;</span> <span class="hljs-number">3.</span> 使用 <span class="hljs-operator">&lt;</span><span class="hljs-variable">CTRL</span><span class="hljs-operator">+</span><span class="hljs-variable">J</span><span class="hljs-operator">&gt;</span> 快捷键创建对象引用。<br><span class="hljs-operator">&#x27;</span>从此位置起写入代码：<br><span class="hljs-variable">Dim</span> <span class="hljs-variable">CMD</span><span class="hljs-operator">,</span><span class="hljs-built_in">Count</span><span class="hljs-operator">,</span><span class="hljs-variable">tt</span><span class="hljs-operator">,</span><span class="hljs-variable">i</span><br><span class="hljs-built_in">Set</span> <span class="hljs-variable">CMD</span> <span class="hljs-operator">=</span> <span class="hljs-variable">SmartTags</span><span class="hljs-operator">.</span><span class="hljs-built_in">Item</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;Addflag&quot;</span><span class="hljs-punctuation">)</span><br><span class="hljs-built_in">Set</span> <span class="hljs-built_in">Count</span> <span class="hljs-operator">=</span> <span class="hljs-variable">SmartTags</span><span class="hljs-operator">.</span><span class="hljs-built_in">Item</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;AddCountint&quot;</span><span class="hljs-punctuation">)</span><br><span class="hljs-built_in">Set</span> <span class="hljs-variable">tt</span> <span class="hljs-operator">=</span> <span class="hljs-variable">SmartTags</span><span class="hljs-operator">.</span><span class="hljs-built_in">Item</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;flag&quot;</span><span class="hljs-punctuation">)</span><br><span class="hljs-variable">tt</span><span class="hljs-operator">.</span><span class="hljs-variable">Value</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">True</span><br><span class="hljs-built_in">If</span> <span class="hljs-variable">CMD</span><span class="hljs-operator">.</span><span class="hljs-variable">Value</span> <span class="hljs-variable">Then</span><br>	<span class="hljs-built_in">For</span> <span class="hljs-variable">i</span><span class="hljs-operator">=</span><span class="hljs-number">0</span> <span class="hljs-variable">To</span> <span class="hljs-number">999</span><br>	<span class="hljs-built_in">Count</span><span class="hljs-operator">.</span><span class="hljs-variable">Value</span><span class="hljs-operator">=</span><span class="hljs-built_in">Count</span><span class="hljs-operator">.</span><span class="hljs-variable">Value</span> <span class="hljs-operator">+</span> <span class="hljs-number">1</span><br>	<span class="hljs-built_in">If</span> <span class="hljs-built_in">Count</span><span class="hljs-operator">.</span><span class="hljs-variable">Value</span><span class="hljs-operator">&gt;=</span><span class="hljs-number">100</span> <span class="hljs-variable">Then</span><br>		<span class="hljs-built_in">Count</span><span class="hljs-operator">.</span><span class="hljs-variable">Value</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span><br>	<span class="hljs-built_in">End</span> <span class="hljs-built_in">If</span><br>	<span class="hljs-built_in">Next</span><br>	<span class="hljs-variable">Else</span><br>		<span class="hljs-built_in">Count</span><span class="hljs-operator">.</span><span class="hljs-variable">Value</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>		<br><span class="hljs-built_in">End</span> <span class="hljs-built_in">If</span><br><span class="hljs-built_in">End</span> <span class="hljs-variable">Sub</span><br></code></pre></td></tr></table></figure>
+<h2 id="6-记录停机-恢复时间-生成记录日志"><a href="#6-记录停机-恢复时间-生成记录日志" class="headerlink" title="6. 记录停机+恢复时间+生成记录日志"></a>6. 记录停机+恢复时间+生成记录日志</h2><ul>
+<li>需要创建一个故障开始的变量</li>
+<li>需要创建一个故障结束的变量</li>
+</ul>
+<p>记录开始时间，新建一个名为<code>Start_Time</code>的VBS脚本，代码内容如下：</p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-variable">Sub</span> <span class="hljs-type">Start_Time</span><span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><br><br><span class="hljs-built_in">If</span> <span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;自动生产状态&quot;</span><span class="hljs-punctuation">)</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">False</span> <span class="hljs-built_in">And</span> <span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;做沿用的临时变量&quot;</span><span class="hljs-punctuation">)</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">True</span> <span class="hljs-variable">Then</span><br>	<span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;问题发生时系统时间&quot;</span><span class="hljs-punctuation">)</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">Now</span><br>	<span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;故障记录激活标志位&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-operator">=</span><span class="hljs-built_in">True</span><br><span class="hljs-built_in">End</span> <span class="hljs-built_in">If</span><br><span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;做沿用的临时变量&quot;</span><span class="hljs-punctuation">)</span> <span class="hljs-operator">=</span> <span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;自动生产状态&quot;</span><span class="hljs-punctuation">)</span><br><span class="hljs-variable">Dim</span> <span class="hljs-variable">Prompt</span><br><span class="hljs-built_in">Set</span> <span class="hljs-variable">Prompt</span><span class="hljs-operator">=</span><span class="hljs-variable">HmiRuntime</span><span class="hljs-operator">.</span><span class="hljs-variable">Screens</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;显示窗口名&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-operator">.</span><span class="hljs-variable">ScreenItems</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;文本域控件&quot;</span><span class="hljs-punctuation">)</span><br><span class="hljs-variable">Prompt</span><span class="hljs-operator">.</span><span class="hljs-built_in">Text</span><span class="hljs-operator">=</span><span class="hljs-string">&quot;故障开始时间脚本正在运行&quot;</span><br><span class="hljs-built_in">Set</span> <span class="hljs-variable">Prompt</span><span class="hljs-operator">=</span><span class="hljs-built_in">Nothing</span><br><span class="hljs-built_in">End</span> <span class="hljs-variable">Sub</span><br></code></pre></td></tr></table></figure>
+<p>创建记录事件，新建一个名为<code>Log_Record</code>的VBS脚本，代码内容如下：</p>
+<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs vbscript"><span class="hljs-keyword">Sub</span> Log_Record()<br><br><span class="hljs-keyword">Dim</span> FSO,MyFile,DateVal,StartTim,StopTim<br><span class="hljs-keyword">Set</span> StartTim = SmartTags(<span class="hljs-string">&quot;问题发生时系统时间&quot;</span>)<br><span class="hljs-keyword">Set</span> StopTim = SmartTags(<span class="hljs-string">&quot;问题结束时系统时间&quot;</span>)<br>DateVal = <span class="hljs-built_in">DateDiff</span>(<span class="hljs-string">&quot;s&quot;</span>,StartTim.Value,StopTim.Value)<br><span class="hljs-keyword">Set</span> FSO=<span class="hljs-built_in">CreateObject</span>(<span class="hljs-string">&quot;Scripting.FileSystemObject&quot;</span>)<br><span class="hljs-keyword">Set</span> MyFile=FSO.OpenTextFile(<span class="hljs-string">&quot;D:\停机时间记录表.csv&quot;</span>,<span class="hljs-number">8</span>,<span class="hljs-number">0</span>) <span class="hljs-comment">&#x27;打开文件并引用，8表示打开模式为在最后一行写入（1=只读；2=写入）；0代表ASCii显示方式</span><br>	MyFile.WriteLine MyFile.Line &amp; <span class="hljs-built_in">Date</span>() &amp;<span class="hljs-string">&quot;,&quot;</span>&amp; <span class="hljs-built_in">Time</span>() &amp;<span class="hljs-string">&quot;,&quot;</span>&amp; <span class="hljs-string">&quot;这是故障&quot;</span> &amp;<span class="hljs-string">&quot;,&quot;</span>&amp; DateVal<br>	MyFile.Close<br>	<br><span class="hljs-keyword">Set</span> FSO=<span class="hljs-literal">Nothing</span><br><span class="hljs-keyword">Set</span> MyFile=<span class="hljs-literal">Nothing</span><br><span class="hljs-keyword">Set</span> StartTim=<span class="hljs-literal">Nothing</span><br><span class="hljs-keyword">Set</span> StopTim=<span class="hljs-literal">Nothing</span><br><span class="hljs-keyword">Set</span> DateVal=<span class="hljs-literal">Nothing</span><br><span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span><br></code></pre></td></tr></table></figure>
+<p>创建CSV表格，新建一个名为<code>CSV_Generators</code>的VBS脚本，代码内容如下：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs routeros">Sub CSV_Generators()<br><br>Dim FSO,MyFile,Input<br><span class="hljs-built_in">Set</span> <span class="hljs-attribute">FSO</span>=CreateObject(&quot;Scripting.FileSystemObject&quot;)&#x27;创建文件系统<br><span class="hljs-keyword">If</span> FSO.FileExists(<span class="hljs-string">&quot;D:\停机时间记录表.csv&quot;</span>)=<span class="hljs-literal">True</span> Then<br>	Call Log_Record<br><span class="hljs-keyword">Else</span><br>	<span class="hljs-built_in">Set</span> <span class="hljs-attribute">MyFile</span>=FSO.CreateTextFile(&quot;D:\停机时间记录表.csv&quot;)<br>	MyFile.WriteLine<span class="hljs-string">&quot;时间,日期,故障,故障时间统计&quot;</span><br>	MyFile.Close<br>	<span class="hljs-built_in">Set</span> <span class="hljs-attribute">MyFile</span>=<span class="hljs-literal">Nothing</span><br>	Call Log_Record<br>End <span class="hljs-keyword">If</span><br><span class="hljs-built_in">Set</span> <span class="hljs-attribute">FSO</span>=<span class="hljs-literal">Nothing</span><br>End Sub<br></code></pre></td></tr></table></figure>
+
+<p>记录开始时间，新建一个名为<code>End_Time</code>的VBS脚本，代码内容如下：</p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-variable">Sub</span> <span class="hljs-type">End_Time</span><span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><br><br><span class="hljs-variable">Dim</span> <span class="hljs-variable">Prompt</span><br><span class="hljs-built_in">If</span> <span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;故障记录激活中&quot;</span><span class="hljs-punctuation">)</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">True</span> <span class="hljs-built_in">And</span> <span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;自动生产状态&quot;</span><span class="hljs-punctuation">)</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">True</span> <span class="hljs-variable">Then</span><br>	<span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;问题结束时系统时间&quot;</span><span class="hljs-punctuation">)</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">Now</span><br>	<br><span class="hljs-built_in">Set</span> <span class="hljs-variable">Prompt</span><span class="hljs-operator">=</span><span class="hljs-variable">HmiRuntime</span><span class="hljs-operator">.</span><span class="hljs-variable">Screens</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;显示窗口名&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-operator">.</span><span class="hljs-variable">ScreenItems</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;文本域控件&quot;</span><span class="hljs-punctuation">)</span><br><span class="hljs-variable">Prompt</span><span class="hljs-operator">.</span><span class="hljs-built_in">Text</span><span class="hljs-operator">=</span><span class="hljs-string">&quot;故障恢复时间脚本正在运行&quot;</span><br>	<span class="hljs-variable">Call</span> <span class="hljs-type">CSV_Generators</span><br> 	<span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;故障记录激活中&quot;</span><span class="hljs-punctuation">)</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">False</span><br><span class="hljs-built_in">End</span> <span class="hljs-built_in">If</span><br><span class="hljs-built_in">Set</span> <span class="hljs-variable">Prompt</span><span class="hljs-operator">=</span><span class="hljs-built_in">Nothing</span><br><span class="hljs-built_in">End</span> <span class="hljs-variable">Sub</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="7-生成记录报表"><a href="#7-生成记录报表" class="headerlink" title="7. 生成记录报表"></a>7. 生成记录报表</h2><p>想要生成如下图所示的报表：</p>
+<blockquote>
+<p>橘色文本框是建立来调试用的<br><img src="/img/blog_page/3427087-20240414214620467-824539474.png" srcset="/img/loading.gif" lazyload></p>
+</blockquote>
+<p>记录数据，新建一个名为<code>TEST_Record</code>的VBS脚本，代码内容如下：</p>
+<ul>
+<li>被下面的<code>Test_TagRecord</code>调用<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs vbnet"><span class="hljs-keyword">Sub</span> TEST_Record()<br><span class="hljs-keyword">Dim</span> FSO,MYFILE,RecordNbr <span class="hljs-comment">&#x27;FSO=访问系统文件对象，MYFILE=访问的文件，RecordNbr=记录条目数</span><br><span class="hljs-keyword">Set</span> FSO=CreateObject(<span class="hljs-string">&quot;Scripting.FileSystemObject&quot;</span>) <span class="hljs-comment">&#x27;创建文件访问对象并引用</span><br><span class="hljs-keyword">Set</span> MYFILE=FSO.OpenTextFile(<span class="hljs-string">&quot;D:\TEST数据记录.csv&quot;</span>,<span class="hljs-number">8</span>,<span class="hljs-number">0</span>) <span class="hljs-comment">&#x27;打开文件并引用，8表示打开模式为在最后一行写入（1=只读；2=写入）；0代表ASCii显示方式</span><br><span class="hljs-keyword">Set</span> RecordNbr=SmartTags(<span class="hljs-string">&quot;test_数据记录条目&quot;</span>) <span class="hljs-comment">&#x27;引用数据记录条数</span><br>	MYFILE.WriteLine MYFILE.Line-<span class="hljs-number">1</span> &amp; <span class="hljs-string">&quot;,&quot;</span>&amp; <span class="hljs-type">Date</span>()&amp;<span class="hljs-string">&quot;,&quot;</span> &amp; Time() &amp; <span class="hljs-string">&quot;,&quot;</span> &amp; SmartTags(<span class="hljs-string">&quot;test_喷涂量&quot;</span>) &amp; <span class="hljs-string">&quot;,&quot;</span> &amp; SmartTags(<span class="hljs-string">&quot;test_流量&quot;</span>) &amp; <span class="hljs-string">&quot;,&quot;</span> &amp; SmartTags(<span class="hljs-string">&quot;test_雾化量&quot;</span>) &amp; <span class="hljs-string">&quot;,&quot;</span> &amp; SmartTags(<span class="hljs-string">&quot;test_扇形量&quot;</span>)<br>	<span class="hljs-comment">&#x27;将变量记录的值写入到数据记录EXCEL中</span><br>	RecordNbr.Value=RecordNbr.Value+<span class="hljs-number">1</span><br>	MYFILE.Close<br><span class="hljs-keyword">Set</span> FSO=<span class="hljs-literal">Nothing</span><br><span class="hljs-keyword">Set</span> MYFILE=<span class="hljs-literal">Nothing</span><br><span class="hljs-keyword">Set</span> RecordNbr=<span class="hljs-literal">Nothing</span><br><span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<p>建立表头，新建一个名为<code>TEST_TagRecord</code>的VBS脚本，代码内容如下：</p>
+<ul>
+<li>在触发事件来临的时候被调用，它是第一个被调用的脚本<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs vbnet"><span class="hljs-keyword">Sub</span> TEST_TagRecord()<br><span class="hljs-comment">&#x27;检查变量存储EXCEL是否存在，若不存在则建立新的文件</span><br><span class="hljs-keyword">Dim</span> FSO,MYFILE <span class="hljs-comment">&#x27;FSO=访问系统文件对象，MYFILE=访问的文件</span><br><span class="hljs-keyword">Set</span> FSO=CreateObject(<span class="hljs-string">&quot;Scripting.FileSystemObject&quot;</span>) <span class="hljs-comment">&#x27;创建文件访问对象并引用</span><br><span class="hljs-keyword">If</span> FSO.FileExists(<span class="hljs-string">&quot;D:\TEST数据记录.csv&quot;</span>)=<span class="hljs-literal">True</span> <span class="hljs-keyword">Then</span><br>	<span class="hljs-keyword">Call</span> TEST_Record <span class="hljs-comment">&#x27;若存在，直接进行数据记录</span><br><span class="hljs-keyword">Else</span><br>	<span class="hljs-keyword">Set</span> MYFILE=FSO.CreateTextFile(<span class="hljs-string">&quot;D:\TEST数据记录.csv&quot;</span>) <span class="hljs-comment">&#x27;创建文件并返回到MYFILE</span><br>	MYFILE.WriteLine<span class="hljs-string">&quot;编号,日期,时间,喷涂量,流量,雾化量,扇形量&quot;</span> <span class="hljs-comment">&#x27;写入表头</span><br>	MYFILE.Close <span class="hljs-comment">&#x27;关闭文件</span><br>	<span class="hljs-keyword">Set</span> MYFILE=<span class="hljs-literal">Nothing</span><br>	<span class="hljs-keyword">Call</span> TEST_Record <span class="hljs-comment">&#x27;直接进行数据记录</span><br><span class="hljs-keyword">End</span> <span class="hljs-keyword">If</span><br><span class="hljs-keyword">Set</span> FSO=<span class="hljs-literal">Nothing</span><br><span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span><br></code></pre></td></tr></table></figure>
+刷新数据，新建一个名为<code> TEST_ReadLog</code>的VBS脚本，代码内容如下：</li>
+<li>为了翻页的时候刷新页面表格的内容，翻页的时候会有一个Int数记录变化的起始索引位置（列表行数）<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-variable">Sub</span> <span class="hljs-type">TEST_ReadLog</span><span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><br><span class="hljs-variable">Dim</span> <span class="hljs-variable">FSO</span><span class="hljs-operator">,</span><span class="hljs-variable">MYFILE</span><span class="hljs-operator">,</span><span class="hljs-variable">TEXT</span><span class="hljs-operator">,</span><span class="hljs-built_in">I</span><span class="hljs-operator">,</span><span class="hljs-variable">HELP</span> <span class="hljs-operator">&#x27;</span><span class="hljs-variable">FSO</span><span class="hljs-operator">=</span>访问文件系统和对象，<span class="hljs-variable">MYFILE</span><span class="hljs-operator">=</span>需要访问的文件，<span class="hljs-variable">TXET</span><span class="hljs-operator">=</span>从<span class="hljs-variable">csv</span>文件中读取的信息，<span class="hljs-built_in">I</span><span class="hljs-operator">=</span>整数<br><span class="hljs-built_in">Set</span> <span class="hljs-variable">HELP</span><span class="hljs-operator">=</span><span class="hljs-variable">HmiRuntime</span><span class="hljs-operator">.</span><span class="hljs-variable">Screens</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;VBS脚本测试2&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-operator">.</span><span class="hljs-variable">ScreenItems</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;文本域_19&quot;</span><span class="hljs-punctuation">)</span><br><span class="hljs-variable">HELP</span><span class="hljs-operator">.</span><span class="hljs-built_in">Text</span><span class="hljs-operator">=</span><span class="hljs-string">&quot;脚本正在运行！&quot;</span><br><span class="hljs-built_in">Set</span> <span class="hljs-variable">FSO</span><span class="hljs-operator">=</span><span class="hljs-variable">CreateObject</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;Scripting.FileSystemObject&quot;</span><span class="hljs-punctuation">)</span> <span class="hljs-operator">&#x27;</span>创建引用文件系统对象<br><span class="hljs-built_in">If</span> <span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;test_当前显示的变量号&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-operator">&lt;</span><span class="hljs-number">0</span> <span class="hljs-variable">Then</span> 	<span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;test_当前显示的变量号&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-operator">=</span><span class="hljs-number">0</span> <span class="hljs-operator">&#x27;</span>变量编号不能小于<span class="hljs-number">0</span><br><span class="hljs-built_in">If</span> <span class="hljs-variable">FSO</span><span class="hljs-operator">.</span><span class="hljs-variable">FileExists</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;D:\TEST数据记录.csv&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-operator">=</span> <span class="hljs-built_in">True</span> <span class="hljs-variable">Then</span> <br>	<span class="hljs-built_in">Set</span> <span class="hljs-variable">MYFILE</span><span class="hljs-operator">=</span><span class="hljs-variable">FSO</span><span class="hljs-operator">.</span><span class="hljs-variable">OpenTextFile</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;D:\TEST数据记录.csv&quot;</span><span class="hljs-operator">,</span><span class="hljs-number">1</span><span class="hljs-operator">,</span><span class="hljs-number">0</span><span class="hljs-punctuation">)</span> <span class="hljs-operator">&#x27;</span><span class="hljs-number">1</span><span class="hljs-operator">=</span>只读打开方式；<span class="hljs-number">0</span><span class="hljs-operator">=</span><span class="hljs-variable">ASCii</span>编码方式<br>	<span class="hljs-variable">HELP</span><span class="hljs-operator">.</span><span class="hljs-built_in">Text</span><span class="hljs-operator">=</span><span class="hljs-variable">HELP</span><span class="hljs-operator">.</span><span class="hljs-built_in">Text</span> <span class="hljs-operator">&amp;</span> <span class="hljs-variable">Chr</span><span class="hljs-punctuation">(</span><span class="hljs-number">13</span><span class="hljs-punctuation">)</span> <span class="hljs-operator">&amp;</span> <span class="hljs-string">&quot;CSV文件已打开！&quot;</span><br>	<span class="hljs-built_in">For</span> <span class="hljs-built_in">I</span><span class="hljs-operator">=</span><span class="hljs-number">0</span> <span class="hljs-variable">To</span> <span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;test_当前显示的变量号&quot;</span><span class="hljs-punctuation">)</span> <span class="hljs-operator">&#x27;</span>利用<span class="hljs-variable">FOR</span><span class="hljs-operator">..</span><span class="hljs-variable">NEXT</span>进行跳过某行，达到从最后一行开始读取的目的<br>	<span class="hljs-built_in">If</span> <span class="hljs-variable">MYFILE</span><span class="hljs-operator">.</span><span class="hljs-variable">AtEndOfLine</span><span class="hljs-operator">&lt;&gt;</span><span class="hljs-built_in">True</span> <span class="hljs-variable">Then</span> <span class="hljs-operator">&#x27;</span>判断是否在最后一行，没有到达则跳转，到达则退出<span class="hljs-variable">FOR</span>循环<br>		<span class="hljs-variable">MYFILE</span><span class="hljs-operator">.</span><span class="hljs-variable">SkipLine</span><br>	<span class="hljs-variable">Else</span><br>		<span class="hljs-built_in">Exit</span> <span class="hljs-built_in">For</span><br>	<span class="hljs-built_in">End</span> <span class="hljs-built_in">If</span><br>	<span class="hljs-built_in">Next</span><br><span class="hljs-operator">&#x27;---------------------</span>开始进行文件中信息读取<br><span class="hljs-variable">HELP</span><span class="hljs-operator">.</span><span class="hljs-built_in">Text</span><span class="hljs-operator">=</span><span class="hljs-variable">HELP</span><span class="hljs-operator">.</span><span class="hljs-built_in">Text</span> <span class="hljs-operator">&amp;</span> <span class="hljs-variable">Chr</span><span class="hljs-punctuation">(</span><span class="hljs-number">13</span><span class="hljs-punctuation">)</span> <span class="hljs-operator">&amp;</span> <span class="hljs-string">&quot;开始进行文件中信息读取！&quot;</span><br><span class="hljs-built_in">For</span> <span class="hljs-built_in">I</span><span class="hljs-operator">=</span><span class="hljs-number">0</span> <span class="hljs-variable">To</span> <span class="hljs-number">5</span>                              <span class="hljs-operator">&#x27;</span>依据画面显示的行数，从<span class="hljs-number">0</span>到<span class="hljs-number">5</span>一共<span class="hljs-number">6</span>行<br>	<span class="hljs-built_in">If</span> <span class="hljs-variable">MYFILE</span><span class="hljs-operator">.</span><span class="hljs-variable">AtEndOfLine</span><span class="hljs-operator">&lt;&gt;</span><span class="hljs-built_in">True</span> <span class="hljs-variable">Then</span><br>	 <span class="hljs-variable">TEXT</span><span class="hljs-operator">=</span><span class="hljs-built_in">Split</span><span class="hljs-punctuation">(</span><span class="hljs-variable">MYFILE</span><span class="hljs-operator">.</span><span class="hljs-built_in">ReadLine</span><span class="hljs-operator">,</span><span class="hljs-string">&quot;,&quot;</span><span class="hljs-operator">,-</span><span class="hljs-number">1</span><span class="hljs-operator">,</span><span class="hljs-number">1</span><span class="hljs-punctuation">)</span>  <span class="hljs-operator">&#x27;</span>读取<span class="hljs-variable">EXCEL</span>文件中的一行数据，并用<span class="hljs-built_in">Split</span>进行分隔，并将分隔后的一维数组赋值给<span class="hljs-variable">TXET</span><span class="hljs-operator">,-</span><span class="hljs-number">1</span>表示输出所有字符串，<span class="hljs-number">1</span>表示一维数组<br>     <span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;test_temp_编号&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">(</span><span class="hljs-built_in">I</span><span class="hljs-punctuation">)</span><span class="hljs-operator">=</span><span class="hljs-variable">TEXT</span><span class="hljs-punctuation">(</span><span class="hljs-number">0</span><span class="hljs-punctuation">)</span><span class="hljs-operator">&#x27;</span>左边都是数组变量<br>     <span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;test_temp_日期&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">(</span><span class="hljs-built_in">I</span><span class="hljs-punctuation">)</span><span class="hljs-operator">=</span><span class="hljs-variable">TEXT</span><span class="hljs-punctuation">(</span><span class="hljs-number">1</span><span class="hljs-punctuation">)</span><br>     <span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;test_temp_时间&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">(</span><span class="hljs-built_in">I</span><span class="hljs-punctuation">)</span><span class="hljs-operator">=</span><span class="hljs-variable">TEXT</span><span class="hljs-punctuation">(</span><span class="hljs-number">2</span><span class="hljs-punctuation">)</span><br>     <span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;test_temp_喷涂量&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">(</span><span class="hljs-built_in">I</span><span class="hljs-punctuation">)</span><span class="hljs-operator">=</span><span class="hljs-variable">TEXT</span><span class="hljs-punctuation">(</span><span class="hljs-number">3</span><span class="hljs-punctuation">)</span><br>     <span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;test_temp_流量&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">(</span><span class="hljs-built_in">I</span><span class="hljs-punctuation">)</span><span class="hljs-operator">=</span><span class="hljs-variable">TEXT</span><span class="hljs-punctuation">(</span><span class="hljs-number">4</span><span class="hljs-punctuation">)</span><br>     <span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;test_temp_雾化量&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">(</span><span class="hljs-built_in">I</span><span class="hljs-punctuation">)</span><span class="hljs-operator">=</span><span class="hljs-variable">TEXT</span><span class="hljs-punctuation">(</span><span class="hljs-number">5</span><span class="hljs-punctuation">)</span><br>     <span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;test_temp_扇形量&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">(</span><span class="hljs-built_in">I</span><span class="hljs-punctuation">)</span><span class="hljs-operator">=</span><span class="hljs-variable">TEXT</span><span class="hljs-punctuation">(</span><span class="hljs-number">6</span><span class="hljs-punctuation">)</span><br>     <span class="hljs-variable">SmartTags</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;test_当前显示的变量号&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-operator">=</span><span class="hljs-variable">TEXT</span><span class="hljs-punctuation">(</span><span class="hljs-number">0</span><span class="hljs-punctuation">)</span><br>     <span class="hljs-variable">HELP</span><span class="hljs-operator">.</span><span class="hljs-built_in">Text</span><span class="hljs-operator">=</span><span class="hljs-variable">HELP</span><span class="hljs-operator">.</span><span class="hljs-built_in">Text</span> <span class="hljs-operator">&amp;</span> <span class="hljs-variable">Chr</span><span class="hljs-punctuation">(</span><span class="hljs-number">13</span><span class="hljs-punctuation">)</span> <span class="hljs-operator">&amp;</span> <span class="hljs-string">&quot;数组读取成功！&quot;</span><br>	<span class="hljs-variable">Else</span><br>		<span class="hljs-built_in">Exit</span> <span class="hljs-built_in">For</span><br>	<span class="hljs-built_in">End</span> <span class="hljs-built_in">If</span><br><span class="hljs-built_in">Next</span><br><span class="hljs-variable">MYFILE</span><span class="hljs-operator">.</span><span class="hljs-built_in">Close</span> <span class="hljs-operator">&#x27;</span>关闭文件<br><span class="hljs-built_in">Set</span> <span class="hljs-variable">MYFILE</span><span class="hljs-operator">=</span><span class="hljs-built_in">Nothing</span>  <span class="hljs-operator">&#x27;</span>释放	<br><span class="hljs-built_in">End</span> <span class="hljs-built_in">If</span> <br><span class="hljs-built_in">Set</span> <span class="hljs-variable">FSO</span><span class="hljs-operator">=</span><span class="hljs-built_in">Nothing</span><br><span class="hljs-built_in">Set</span> <span class="hljs-variable">HELP</span><span class="hljs-operator">=</span><span class="hljs-built_in">Nothing</span><br><span class="hljs-built_in">End</span> <span class="hljs-variable">Sub</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/PLC-related/" class="category-chain-item">PLC related</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/PLC-related/HMI/" class="category-chain-item">HMI</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/industrial-control/" class="print-no-link">#industrial control</a>
+      
+        <a href="/tags/HMI/" class="print-no-link">#HMI</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>WinCC RT Advance的VBS脚本应用</div>
+      <div>http://example.com/2024/07/21/WinCC RT Advance的VBS脚本应用/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiao cuncun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年7月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/07/21/PLC%E6%8A%A5%E8%AD%A6%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86/" title="PLC报警消息处理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">PLC报警消息处理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/07/21/%E5%9B%BE%E7%89%87%E4%BF%9D%E5%AD%98%E5%88%B0%E6%9C%AC%E5%9C%B0%E5%B9%B6%E6%9B%BF%E6%8D%A2markdown%E4%B8%AD%E7%9A%84url%E5%9C%B0%E5%9D%80/" title="图片保存到本地并替换markdown中的url地址">
+                        <span class="hidden-mobile">图片保存到本地并替换markdown中的url地址</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

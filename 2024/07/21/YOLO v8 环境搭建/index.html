@@ -1,0 +1,880 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiao cuncun">
+  <meta name="keywords" content="blog">
+  
+    <meta name="description" content="1. Anaconda3安装： 下载：anaconda download默认：安装到根目录下：默认：下面一路默认，直至安装完成。 配置anaconda环境变量：我的安装路径是C盘，所以这么写，如果anaconda安装路径不是C盘，请按照实际更换。  2. 安装VScode并在vscode中配置anaconda配置解释器   安装，我有vscode所以不用重新安装了，去官网安装即可。 配置anaco">
+<meta property="og:type" content="article">
+<meta property="og:title" content="YOLO v8 环境搭建">
+<meta property="og:url" content="http://example.com/2024/07/21/YOLO%20v8%20%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="Whatsxiaocuncun Personal website">
+<meta property="og:description" content="1. Anaconda3安装： 下载：anaconda download默认：安装到根目录下：默认：下面一路默认，直至安装完成。 配置anaconda环境变量：我的安装路径是C盘，所以这么写，如果anaconda安装路径不是C盘，请按照实际更换。  2. 安装VScode并在vscode中配置anaconda配置解释器   安装，我有vscode所以不用重新安装了，去官网安装即可。 配置anaco">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240424105335272-89511551.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240424105410846-1280854706.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240424105659900-1930409797.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240424192115607-800661570.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240424192139835-1039518583.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240424112437783-1454796338.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240424113650002-1053817887.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240424140907912-2040140447.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240424114235365-595188138.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240425101555113-691871935.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240425101629510-557482046.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240425104726646-1237986810.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240424143156687-1425978902.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240424143308672-936963127.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240424174544540-966719915.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240424181421883-1283171647.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240424181040935-1996790290.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240424180829407-1425225907.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240424181207798-1152549194.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240424181551159-1223181770.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240425111000811-186101704.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240425111438476-1644608744.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240425111836539-1973083189.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240425114823601-1842963332.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240425115402534-1044476186.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240425123515822-878997939.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240425123934150-1484668699.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240425145131824-1813757175.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240425150438677-2028751450.png">
+<meta property="article:published_time" content="2024-07-21T06:44:39.288Z">
+<meta property="article:modified_time" content="2024-07-21T09:47:30.756Z">
+<meta property="article:author" content="xiao cuncun">
+<meta property="article:tag" content="Yolo v8">
+<meta property="article:tag" content="Anaconda3">
+<meta property="article:tag" content="py">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/blog_page/3427087-20240424105335272-89511551.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>YOLO v8 环境搭建 - Whatsxiaocuncun Personal website</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>一位不愿透露姓名的小村村同学的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="YOLO v8 环境搭建"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-21 14:44" pubdate>
+          2024年7月21日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">YOLO v8 环境搭建</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-Anaconda3安装："><a href="#1-Anaconda3安装：" class="headerlink" title="1. Anaconda3安装："></a>1. Anaconda3安装：</h2><ul>
+<li>下载：<a target="_blank" rel="noopener" href="https://www.anaconda.com/" title="anaconda">anaconda download</a><br>默认：<br><img src="/img/blog_page/3427087-20240424105335272-89511551.png" srcset="/img/loading.gif" lazyload><br>安装到<code>根目录</code>下：<br><img src="/img/blog_page/3427087-20240424105410846-1280854706.png" srcset="/img/loading.gif" lazyload><br>默认：<br><img src="/img/blog_page/3427087-20240424105659900-1930409797.png" srcset="/img/loading.gif" lazyload><br>下面一路默认，直至安装完成。</li>
+<li>配置anaconda环境变量：<br><img src="/img/blog_page/3427087-20240424192115607-800661570.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240424192139835-1039518583.png" srcset="/img/loading.gif" lazyload><br>我的安装路径是C盘，所以这么写，如果anaconda安装路径不是C盘，请按照实际更换。</li>
+</ul>
+<h2 id="2-安装VScode并在vscode中配置anaconda"><a href="#2-安装VScode并在vscode中配置anaconda" class="headerlink" title="2. 安装VScode并在vscode中配置anaconda"></a>2. 安装VScode并在vscode中配置anaconda</h2><h5 id="section1">配置解释器</h5>
+
+<ul>
+<li>安装，我有vscode所以不用重新安装了，去官网安装即可。</li>
+<li>配置anaconda<ul>
+<li>Vscode中使用<code>Ctrl+P</code>打开搜索</li>
+<li>搜索栏里输入：<code>&gt;select interpreter</code></li>
+<li>找到自己想要的anaconda路径下来的python.exe，<del>如果找不到的话自己去anaconda的安装路径下把python.exe的路径复制过来</del>。<font color=red> <em>最好等确定了anaconda虚拟环境后再来做这个工作，不然基于虚拟环境的python在这里也用不了。</em></font></li>
+<li>（<font color=red> <em>终端最好使用anaconda自带的终端，因为可以在anaconda建立虚拟环境，使用的python环境也是基于虚拟环境的</em></font>）<br><img src="/img/blog_page/3427087-20240424112437783-1454796338.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+</ul>
+<h2 id="3-配置镜像源："><a href="#3-配置镜像源：" class="headerlink" title="3. 配置镜像源："></a>3. 配置镜像源：</h2><ul>
+<li>pip配置镜像源（这里是清华镜像源）<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-comment">//复制到终端执行，或者复制到anaconda的终端运行</span><br>pip install -i https:<span class="hljs-comment">//pypi.tuna.tsinghua.edu.cn/simple pip -U</span><br>pip config set global.index-url https:<span class="hljs-comment">//pypi.tuna.tsinghua.edu.cn/simple</span><br></code></pre></td></tr></table></figure></li>
+<li>检查配置是否OK<ul>
+<li>只要终端输出<code>pip.ini</code>就装好了<br><img src="/img/blog_page/3427087-20240424113650002-1053817887.png" srcset="/img/loading.gif" lazyload></li>
+<li>去文件管理器路径下输入<code>%APPDATE%</code>，找到pip.ini的文件，记事本打开，看是否是我们使用的源。<br><img src="/img/blog_page/3427087-20240424140907912-2040140447.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+<li>conda配置镜像源：<ul>
+<li><p>在终端输入<code>conda config --set show_channel_urls yes</code>,执行后会在用户里面生成一个后缀名为<code>.condarc</code>的文件<br><img src="/img/blog_page/3427087-20240424114235365-595188138.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>使用记事本打开，复制以下镜像源并保存</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs less">channels:<br>  - defaults<br>show_channel_urls: true<br>default_channels:<br>  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main<br>  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/<span class="hljs-attribute">r</span><br><span class="hljs-attribute">  - https</span>:<span class="hljs-comment">//mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2</span><br><span class="hljs-attribute">custom_channels</span>:<br>  <span class="hljs-attribute">conda-forge</span>: <span class="hljs-attribute">https</span>:<span class="hljs-comment">//mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br>  <span class="hljs-attribute">msys2</span>: <span class="hljs-attribute">https</span>:<span class="hljs-comment">//mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br>  <span class="hljs-attribute">bioconda</span>: <span class="hljs-attribute">https</span>:<span class="hljs-comment">//mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br>  <span class="hljs-attribute">menpo</span>: <span class="hljs-attribute">https</span>:<span class="hljs-comment">//mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br>  <span class="hljs-attribute">pytorch</span>: <span class="hljs-attribute">https</span>:<span class="hljs-comment">//mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br>  <span class="hljs-attribute">pytorch-lts</span>: <span class="hljs-attribute">https</span>:<span class="hljs-comment">//mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br>  <span class="hljs-attribute">simpleitk</span>: <span class="hljs-attribute">https</span>:<span class="hljs-comment">//mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><span class="hljs-comment">//上述完成后，在终端清除索引缓存，保证用的是镜像索引</span><br>conda clean <span class="hljs-punctuation">-</span>i<br></code></pre></td></tr></table></figure>
+
+<h2 id="4-安装pytorch"><a href="#4-安装pytorch" class="headerlink" title="4. 安装pytorch"></a>4. 安装pytorch</h2><ul>
+<li><p>创建conda虚拟环境<br>因为在创建虚拟环境的时候会顺带下载一个python,所以接下来在虚拟环境里面写的一切代码其实都是在虚拟环境的python中<br><font color=red> <em><strong>虚拟环境python请指定3.9！！！</strong></em></font><br><font color=red> <em><strong>虚拟环境python请指定3.9！！！</strong></em></font><br><font color=red> <em><strong>虚拟环境python请指定3.9！！！</strong></em></font></p>
+<figure class="highlight gml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs gml"><span class="hljs-comment">//查看安装的conda包</span><br>conda list<br><span class="hljs-comment">//查看已有的conda环境</span><br>conda env list<br><span class="hljs-comment">//查看conda版本</span><br>conda --version<br><span class="hljs-comment">//查看conda信息</span><br>conda info<br><span class="hljs-comment">//python创建虚拟环境</span><br>conda create -n your_env_name python=<span class="hljs-variable language_">x</span>.<span class="hljs-variable language_">x</span><br><span class="hljs-comment">//删除虚拟环境</span><br>conda remove -n your_env_name --<span class="hljs-symbol">all</span><br><span class="hljs-comment">//激活环境</span><br>conda activate your_env_name<br></code></pre></td></tr></table></figure></li>
+<li><p>在线安装：（我的电脑没有显卡，所以选择CPU加速安装）：<br>(<del><font color=red>有坑，这里不要去带版本，对于网上教程要求的版本，可能你看到的时间已经不适用于你现在的python了。</font></del>)<br>(<del><font color=red>conda install pytorch&#x3D;&#x3D; 1.8.1 torchvision&#x3D;&#x3D; 0.9.1 torchaudio&#x3D;&#x3D; 0.8.1 cpuonly -c pytorch</font></del>)<br><font color=red><em><strong>报错如下：</strong></em></font></p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment"># 这个报错是在告诉我们0.81的torchaudio是找不到适合python3.9的包的</span><br><span class="hljs-comment"># 虽然在下表中找到了0.8.1可以用在py3.9里，可能是清华源的镜像太老了没有更新导致的</span><br>The following packages are incompatible<br>├─ pin<span class="hljs-number">-1</span> is <span class="hljs-keyword">installable </span><span class="hljs-keyword">and </span>it requires<br>│  └─ python <span class="hljs-number">3</span>.<span class="hljs-number">9</span>.* , which can <span class="hljs-keyword">be </span><span class="hljs-keyword">installed;</span><br><span class="hljs-keyword"></span>└─ torchaudio <span class="hljs-number">0</span>.<span class="hljs-number">8</span>.<span class="hljs-number">1</span>  is not <span class="hljs-keyword">installable </span><span class="hljs-keyword">because </span>there are no viable options<br>   ├─ torchaudio <span class="hljs-number">0</span>.<span class="hljs-number">8</span>.<span class="hljs-number">1</span> would require<br>   │  └─ python &gt;=<span class="hljs-number">3</span>.<span class="hljs-number">6</span>,&lt;<span class="hljs-number">3</span>.<span class="hljs-number">7</span>.<span class="hljs-number">0</span><span class="hljs-built_in">a0</span> , which conflicts with any <span class="hljs-keyword">installable </span>versions previously reported;<br>   ├─ torchaudio <span class="hljs-number">0</span>.<span class="hljs-number">8</span>.<span class="hljs-number">1</span> would require<br>   │  └─ python &gt;=<span class="hljs-number">3</span>.<span class="hljs-number">7</span>,&lt;<span class="hljs-number">3</span>.<span class="hljs-number">8</span>.<span class="hljs-number">0</span><span class="hljs-built_in">a0</span> , which conflicts with any <span class="hljs-keyword">installable </span>versions previously reported;<br>   ├─ torchaudio <span class="hljs-number">0</span>.<span class="hljs-number">8</span>.<span class="hljs-number">1</span> would require<br>   │  └─ python &gt;=<span class="hljs-number">3</span>.<span class="hljs-number">8</span>,&lt;<span class="hljs-number">3</span>.<span class="hljs-number">9</span>.<span class="hljs-number">0</span><span class="hljs-built_in">a0</span> , which conflicts with any <span class="hljs-keyword">installable </span>versions previously reported;<br>   └─ torchaudio <span class="hljs-number">0</span>.<span class="hljs-number">8</span>.<span class="hljs-number">1</span> would require<br>      └─ python_abi <span class="hljs-number">3</span>.<span class="hljs-number">9</span>.* *_cp39, which does not exist (perhaps a missing channel).<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>python&#x2F;pytorch&#x2F;torchvision&#x2F;torchaudio版本关系一览：<br><img src="/img/blog_page/3427087-20240425101555113-691871935.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240425101629510-557482046.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+</ul>
+<p>(<font color=green><strong>指定pyhon版本3.9，并用这个版本安装pytorach:</strong></font><font color=red><del>conda install pytorch&#x3D;&#x3D; 1.10.0 torchvision&#x3D;&#x3D; 0.11.1 torchaudio&#x3D;&#x3D; 0.10.0 cpuonly -c pytorch</del></font>)</p>
+<p><a href="#section3">转到版本问题最终解决方案</a></p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><br><span class="hljs-comment">//反复测试后，不是一定要带版本号才行</span><br><span class="hljs-comment">//确认装的python版本正确后，安装pytorch和 torchvision最好不要去带版本，让pip/conda自动帮你选最合适的版本</span><br>conda install pytorch torchvision torchaudio cpuonly <span class="hljs-punctuation">-</span>c pytorch<br></code></pre></td></tr></table></figure>
+<p>下载如图所示，选择<code>Y</code>就行：<br><img src="/img/blog_page/3427087-20240425104726646-1237986810.png" srcset="/img/loading.gif" lazyload></p>
+<p>因为是国内的源，下载速度还是很快的，完成会出现<code>done</code>。</p>
+<ul>
+<li>若卡在solving environment或有其他问题(<strong><font color=red> 问题可能是python版本导致的，如果确定不是因为版本问题引起的可以折腾下面的内容，没有这个问题的不用折腾下面的内容</font></strong>)，可以选择从pytorch官网安装：<ul>
+<li>下载：<a target="_blank" rel="noopener" href="https://www.pytorch.org/" title="pytorch">pytorch online downlaod</a></li>
+<li>选择版本，OS,package，等等信息，最后生成了一个command。<br><img src="/img/blog_page/3427087-20240424143156687-1425978902.png" srcset="/img/loading.gif" lazyload></li>
+<li>将command复制到终端或者conda中下载（看你怎么选的package）；如下图,包很大,但是因为上面配置了镜像源，所以下起来还挺快（包特别大，下了个开头我心疼流量直接取消了）。<br><img src="/img/blog_page/3427087-20240424143308672-936963127.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+<li>除了在线下载之后，还可以选择去镜像源离线下载，下载后用命令安装<ul>
+<li>下载：<a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/" title="pytorch">pytorch offline downlaod</a></li>
+<li>查看自己处理器架构，在终端输入<code>systeminfo</code>，</li>
+<li>下载<code>pytorch</code>和<code>torchivision</code>和<code>torchaudio</code>包</li>
+<li>下载好后，终端输入<code>cd 包位置</code></li>
+<li>输入安装命令<code>conda install --offline pytorch包名</code></li>
+<li>输入安装命令<code>conda install --offline torchvision包名</code></li>
+<li>输入安装命令<code>conda install --offline torchaudio包名</code></li>
+<li>安装好后，在终端输入<code>import torch</code>和<code>torch.cuda.is_available()</code>，不管返回true或者false,不报错就证明装好了。</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-CV2安装"><a href="#5-CV2安装" class="headerlink" title="5. CV2安装"></a>5. CV2安装</h2><p><font color=red> <strong>先默认，pip会去找适合py3.9的最新版</strong></font></p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">pip <span class="hljs-keyword">install</span> opencv-python<br></code></pre></td></tr></table></figure>
+
+<h2 id="6-YOLO-v8代码库下载安装："><a href="#6-YOLO-v8代码库下载安装：" class="headerlink" title="6. YOLO v8代码库下载安装："></a>6. YOLO v8代码库下载安装：</h2><p><font color=red> <strong>默认</strong></font></p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">pip install ultralytics  <span class="hljs-comment">--user</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="7-yolo数据集"><a href="#7-yolo数据集" class="headerlink" title="7. yolo数据集"></a>7. yolo数据集</h2><p><font color=red> <strong>默认</strong></font></p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">pip <span class="hljs-keyword">install</span> labelImg<br></code></pre></td></tr></table></figure>
+<ul>
+<li>终端敲<code>labelImg</code>使用<ul>
+<li>open:打开单张图片</li>
+<li>open Dir:打开文件夹中的所有图片</li>
+<li>Change Save Dir:更改标签存放路径</li>
+<li>格式选择yolo格式<br><img src="/img/blog_page/3427087-20240424174544540-966719915.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240424181421883-1283171647.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+</ul>
+<h2 id="8-yolo文件夹建立"><a href="#8-yolo文件夹建立" class="headerlink" title="8. yolo文件夹建立"></a>8. yolo文件夹建立</h2><h5 id="section2">yolo可以按如下层级和命名`建立文件夹`：</h5>
+（<font color=green>命名尽量规范，不然yolo可能识别不出而报错</font>）
+
+<ul>
+<li>dataset<ul>
+<li>images<ul>
+<li>test</li>
+<li>train</li>
+<li>val</li>
+</ul>
+</li>
+<li>labels<ul>
+<li>test</li>
+<li>train</li>
+<li>val</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="9-标注-训练图片"><a href="#9-标注-训练图片" class="headerlink" title="9. 标注&#x2F;训练图片"></a>9. 标注&#x2F;训练图片</h2><ul>
+<li><p>原始图集放<code>dataset-images</code>里面。<br><img src="/img/blog_page/3427087-20240424181040935-1996790290.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>启动<code>LabelImg</code>，找到图片路径<br><img src="/img/blog_page/3427087-20240424180829407-1425225907.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>点击<code>Change Save Dir</code>选择保存标签的路径，保存标签路径为<code>dataset-labels</code>。<br><img src="/img/blog_page/3427087-20240424181207798-1152549194.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>设置自动保存图片和标签<br><img src="/img/blog_page/3427087-20240424181551159-1223181770.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>打标签<br><img src="/img/blog_page/3427087-20240425111000811-186101704.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>（<font color=red> <strong>有坑：python版本太高（<del>本来装的3.11</del>）会导致LabelLmg闪退，报错如下：</strong></font>）<br><font color=red> <strong>最好把之前安装的环境统一降到兼容python3.9的环境</strong></font><br><font color=red><em><strong>报错如下：</strong></em></font></p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs vim">TypeError: arguments did not <span class="hljs-keyword">match</span> any overloaded <span class="hljs-keyword">call</span>:<br>  drawLine(self, <span class="hljs-keyword">l</span>: QLineF): <span class="hljs-keyword">argument</span> <span class="hljs-number">1</span> <span class="hljs-built_in">has</span> unexpected <span class="hljs-built_in">type</span> <span class="hljs-string">&#x27;float&#x27;</span><br>  drawLine(self, <span class="hljs-built_in">line</span>: QLine): <span class="hljs-keyword">argument</span> <span class="hljs-number">1</span> <span class="hljs-built_in">has</span> unexpected <span class="hljs-built_in">type</span> <span class="hljs-string">&#x27;float&#x27;</span><br>  drawLine(self, x1: <span class="hljs-keyword">int</span>, y1: <span class="hljs-keyword">int</span>, x2: <span class="hljs-keyword">int</span>, y2: <span class="hljs-keyword">int</span>): <span class="hljs-keyword">argument</span> <span class="hljs-number">1</span> <span class="hljs-built_in">has</span> unexpected <span class="hljs-built_in">type</span> <span class="hljs-string">&#x27;float&#x27;</span><br>  drawLine(self, p1: QPoint, p2: QPoint): <span class="hljs-keyword">argument</span> <span class="hljs-number">1</span> <span class="hljs-built_in">has</span> unexpected <span class="hljs-built_in">type</span> <span class="hljs-string">&#x27;float&#x27;</span><br>  drawLine(self, p1: Union[QPointF, QPoint], p2: Union[QPointF, QPoint]): <span class="hljs-keyword">argument</span> <span class="hljs-number">1</span> <span class="hljs-built_in">has</span> unexpected <span class="hljs-built_in">type</span> <span class="hljs-string">&#x27;float&#x27;</span><br><br># 总体来说，就是<span class="hljs-keyword">python</span>版本没有对应上导致闪退<br># 解决方案，如下代码：<br># 相当于是新建立了一个名字叫labelimg的conda虚拟空间，但是这个空间里面还是需要重新装符合<span class="hljs-number">3.9</span>版本的pytorach那些<br>conda create -n labelimag <span class="hljs-keyword">python</span>=<span class="hljs-number">3.9</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>标签<br>打标签是个简单而繁琐的事情，我这里就打了5张标注，标准名为<code>highspeedrail</code><br><img src="/img/blog_page/3427087-20240425111438476-1644608744.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+</ul>
+<h2 id="10-数据集"><a href="#10-数据集" class="headerlink" title="10. 数据集"></a>10. 数据集</h2><ul>
+<li><p>自动生成的标签<br>打完标签之后可以看一眼<code>dataset-labels</code>，里面已经为我们打的每一个标签都新建了一个txt文件（<font color=green>class装的是标签信息，其他装的是一些模型参数信息，不要去手动改</font>）了。<br>打完标注之后就可以直接<code>关闭labelImg</code>了。<br><img src="/img/blog_page/3427087-20240425111836539-1973083189.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>整理数据</p>
+<ul>
+<li><p>在<code>images</code>和<code>labels</code>的文件夹下分别存放<code>test</code>,<code>train</code>,<code>val</code>三个子文件夹。<br><a href="#section2">转到文件夹建立</a></p>
+</li>
+<li><p>把图片按比例放入<code>images</code>文件夹中，一般<code>train</code>训练集放<code>60%</code>（比如10张图片就放6张）；剩下的<code>test和val</code>各占<code>20%</code>（2张&#x2F;2张）</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="/img/blog_page/3427087-20240425114823601-1842963332.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li><p><code>标签与之一一对应</code>，<font color=green>图片的位置和它的标签对应好</font>，不然可能会报错!<br><code>class.txts</code>文件放到dataset下一级去（和labels同级）<br><img src="/img/blog_page/3427087-20240425115402534-1044476186.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240425123515822-878997939.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>为数据集创建一个<code>data.yaml</code>文件，文件位于dataset的根目录下，文件应该包括数据路径，类别数，类别信息等必要的内容。<br>把dataset放进之前建立的yolo_v8（其实就是为vscode工作区建立的一个工作文件夹）的空文件夹中去<br><img src="/img/blog_page/3427087-20240425123934150-1484668699.png" srcset="/img/loading.gif" lazyload><br><code>data.yaml如下:</code></p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">train:</span> .<span class="hljs-keyword">/images/</span>train <span class="hljs-meta">#自己的训练集地址</span><br><span class="hljs-symbol">val:</span> .<span class="hljs-keyword">/images/</span>val <span class="hljs-meta">#自己的验证集地址</span><br><span class="hljs-symbol">test:</span> .<span class="hljs-keyword">/images/</span>test <span class="hljs-meta">#自己的测试集地址</span><br><br><span class="hljs-meta"># Classes</span><br><span class="hljs-symbol">nc:</span> <span class="hljs-number">1</span> <span class="hljs-meta"># 自己定义的类别数 number of classes</span><br><span class="hljs-symbol">names:</span> [ <span class="hljs-meta">#类别的名字</span><br><span class="hljs-string">&quot;highspeedrail&quot;</span><br><br>]<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="11-开始训练"><a href="#11-开始训练" class="headerlink" title="11. 开始训练"></a>11. 开始训练</h2><ul>
+<li><p>python的解释器路径，终端敲<code>where python</code></p>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">(yolo_v8) <span class="hljs-name">C</span>:\WINDOWS\system32&gt;where python<br><span class="hljs-name">C</span>:\Users\wuyucun\.conda\envs\yolo_v8\python.exe<br><span class="hljs-name">C</span>:\anaconda3\python.exe<br><span class="hljs-name">C</span>:\Users\wuyucun\AppData\Local\Programs\Python\Python311\python.exe<br></code></pre></td></tr></table></figure>
+<p>volo_v8\环境下的就是我们在虚拟环境中使用的python解释器，去vscode中把解释器选中为它就好了。<br><a href="#section1">转到配置解释器</a></p>
+</li>
+<li><p>yolo V8训练<br>代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> ultralytics <span class="hljs-keyword">import</span> YOLO<br><br><span class="hljs-comment"># Load a model</span><br><span class="hljs-comment">#model = YOLO(&#x27;yolov8n.yaml&#x27;)  # build a new model from YAML</span><br><span class="hljs-comment">#model = YOLO(&#x27;yolov8n.pt&#x27;)  # load a pretrained model (recommended for training)</span><br>model = YOLO(<span class="hljs-string">&#x27;yolov8n.yaml&#x27;</span>).load(<span class="hljs-string">&#x27;yolov8n.pt&#x27;</span>)  <span class="hljs-comment">#加载模型和预训练权重</span><br><br><span class="hljs-comment"># Train the model</span><br>model.train(data=<span class="hljs-string">r&#x27;C:\Users\wuyucun\Desktop\yolo_v8\dataset\data.yaml&#x27;</span>, epochs=<span class="hljs-number">100</span>, imgsz=<span class="hljs-number">640</span>,workers=<span class="hljs-number">2</span>) <span class="hljs-comment">#训练数据集路径，epochs，迭代次数；imgsz，图片大小；works,线程。</span><br></code></pre></td></tr></table></figure>
+<h5 id="section3">训练时又产生了因版本问题引起的报错：</h5></li>
+</ul>
+<p><font color=red>这里面又有个坑，虽然我们前面已经很认真的在选版本的，但是在训练的时候依旧报了个错误告诉我pytorch和torchvision版本不兼容（因为这个报错的存在，我weights里面的权重并没有生成）</font><br><font color=red><em><strong>报错如下</strong></em></font></p>
+<figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs smali">RuntimeError: Couldn&#x27;t load custom C++ ops. This can happen<span class="hljs-built_in"> if </span>your PyTorch<span class="hljs-built_in"> and </span>torchvision versions are incompatible,<span class="hljs-built_in"> or </span>if you had errors while compiling torchvision from source. For further information on the compatible v<br>ersions,<span class="hljs-built_in"> check </span>https://github.com/pytorch/vision<span class="hljs-comment">#installation for the compatibility matrix. Please check your PyTorch version with torch.__version__ and your torchvision version with torchvision.__version__ and verify if the</span><br>y are compatible,<span class="hljs-built_in"> and </span>if<span class="hljs-built_in"> not </span>please reinstall torchvision so that it matches your PyTorch install.<br></code></pre></td></tr></table></figure>
+<p>于是我又按照pytorch官网建议，全部不带版本去安装：<br><img src="/img/blog_page/3427087-20240425145131824-1813757175.png" srcset="/img/loading.gif" lazyload><br>敲入终端后，终端回了我一些信息：</p>
+<figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs xl">...<br><br>The following packages will be UPDATED:<br><br>  <span class="hljs-function"><span class="hljs-title">pytorch</span>                                1.10.0-py3.9_cpu_0 --&gt;</span> <span class="hljs-number">2.3</span>.<span class="hljs-number">0</span>-py3.<span class="hljs-number">9</span>_cpu_0<br>  <span class="hljs-function"><span class="hljs-title">torchaudio</span>                              0.10.0-py39_cu113 --&gt;</span> <span class="hljs-number">2.3</span>.<span class="hljs-number">0</span>-py39_cpu<br>  <span class="hljs-function"><span class="hljs-title">torchvision</span>                             0.11.1-py39_cu113 --&gt;</span> <span class="hljs-number">0.18</span>.<span class="hljs-number">0</span>-py39_cpu<br><br>...<br></code></pre></td></tr></table></figure>
+<p><font color=green>他把我原来的旧版本全部变成py3.9适用的最新版本了。首先保证你python环境是对的话。不指定版本安装也是可以的，我用这个成功了</font></p>
+<p>如果环境没问题，最后跑出来的结果应该如下图所示：<br><img src="/img/blog_page/3427087-20240425150438677-2028751450.png" srcset="/img/loading.gif" lazyload></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Python/" class="category-chain-item">Python</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Python/Vision/" class="category-chain-item">Vision</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Yolo-v8/" class="print-no-link">#Yolo v8</a>
+      
+        <a href="/tags/Anaconda3/" class="print-no-link">#Anaconda3</a>
+      
+        <a href="/tags/py/" class="print-no-link">#py</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>YOLO v8 环境搭建</div>
+      <div>http://example.com/2024/07/21/YOLO v8 环境搭建/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiao cuncun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年7月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/07/21/PROFINET%20IO%E5%BA%94%E7%94%A8%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="PROFINET IO应用层数据结构">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">PROFINET IO应用层数据结构</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/07/21/%5B%E7%AC%94%E8%AE%B0%5Dhtml+css%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="【笔记】html+css基础知识">
+                        <span class="hidden-mobile">【笔记】html+css基础知识</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

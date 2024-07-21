@@ -1,0 +1,715 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiao cuncun">
+  <meta name="keywords" content="blog">
+  
+    <meta name="description" content="1. 为什么会提出这个题目 在PLC指令的执行过程中，FOR循环会在每个扫描周期执行完一个循环，然后程序才会接着往下扫描 在PLC指令的执行过程中，IF判断会在每次扫描中判断一次条件，满足则进入执行体，不满足则跳出IF 把IF放在FOR循环里面，会导致循环体执行时间过长，或者其他问题吗？（答案是不会）毕竟每个循环周期for循环的变量都要从起始值到最大值循环一遍。 在FOR循环里面嵌入定时器，会导致">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在PLC的扫描特性下，FOR循环里面套IF或者定时器会发生什么？">
+<meta property="og:url" content="http://example.com/2024/07/21/%E5%9C%A8PLC%E7%9A%84%E6%89%AB%E6%8F%8F%E7%89%B9%E6%80%A7%E4%B8%8B%EF%BC%8CFOR%E5%BE%AA%E7%8E%AF%E9%87%8C%E9%9D%A2%E5%A5%97IF%E6%88%96%E8%80%85%E5%AE%9A%E6%97%B6%E5%99%A8%E4%BC%9A%E5%8F%91%E7%94%9F%E4%BB%80%E4%B9%88%EF%BC%9F/index.html">
+<meta property="og:site_name" content="Whatsxiaocuncun Personal website">
+<meta property="og:description" content="1. 为什么会提出这个题目 在PLC指令的执行过程中，FOR循环会在每个扫描周期执行完一个循环，然后程序才会接着往下扫描 在PLC指令的执行过程中，IF判断会在每次扫描中判断一次条件，满足则进入执行体，不满足则跳出IF 把IF放在FOR循环里面，会导致循环体执行时间过长，或者其他问题吗？（答案是不会）毕竟每个循环周期for循环的变量都要从起始值到最大值循环一遍。 在FOR循环里面嵌入定时器，会导致">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-07-21T06:44:39.247Z">
+<meta property="article:modified_time" content="2024-07-21T09:10:44.963Z">
+<meta property="article:author" content="xiao cuncun">
+<meta property="article:tag" content="PLC part">
+<meta property="article:tag" content="industrial control">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>在PLC的扫描特性下，FOR循环里面套IF或者定时器会发生什么？ - Whatsxiaocuncun Personal website</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>一位不愿透露姓名的小村村同学的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="在PLC的扫描特性下，FOR循环里面套IF或者定时器会发生什么？"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-21 14:44" pubdate>
+          2024年7月21日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">在PLC的扫描特性下，FOR循环里面套IF或者定时器会发生什么？</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-为什么会提出这个题目"><a href="#1-为什么会提出这个题目" class="headerlink" title="1. 为什么会提出这个题目"></a>1. 为什么会提出这个题目</h2><ul>
+<li>在PLC指令的执行过程中，FOR循环会在每个扫描周期执行完一个循环，然后程序才会接着往下扫描</li>
+<li>在PLC指令的执行过程中，IF判断会在每次扫描中判断一次条件，满足则进入执行体，不满足则跳出IF</li>
+<li>把IF放在FOR循环里面，会导致循环体执行时间过长，或者其他问题吗？（<strong>答案是不会</strong>）毕竟每个循环周期for循环的变量都要从起始值到最大值循环一遍。</li>
+<li>在FOR循环里面嵌入定时器，会导致PLC扫描时间超看门狗时间吗？（<strong>答案是不会</strong>）</li>
+<li>如果把FOR循环换成<code>REPEAT..UNTIL</code>，程序会容易超过看门狗时间吗？（<strong>答案是会</strong>，repeat会一直循环执行体中内容，直到满足break条件；换句话说，FOR和REPEAT的工作原理不一样）</li>
+</ul>
+<h2 id="2-从应用讲起"><a href="#2-从应用讲起" class="headerlink" title="2. 从应用讲起"></a>2. 从应用讲起</h2><ul>
+<li>做一个跑马灯，让PLC DQ输出从小到大依次点亮，再达到最大时再依次减少；设计思路用FOR循环去做DQ点灯的遍历，同时依靠IF去判断当前实际应该点亮的灯是哪个，IF里面再放入定时器来做点亮时间控制。<ul>
+<li>虽然每一遍FOR循环都会把循环数完全跑一遍，但是仅仅只有当满足IF条件的时候才能真正进得去循环体；相当于每个扫描周期内IF被判断了FOR的循环次数那么多次。</li>
+<li>如果FOR循环的次数都结束了还没有进入IF执行体，PLC程序会卡死在这儿吗？<strong>答案是不会</strong>。FOR循环结束后程序会继续往下<code>扫描</code>，不会在意是否进入了IF的判断体</li>
+<li>在IF或者直接在FOR里面嵌套了长时间的定时器，会拉长FOR循环的循环时间吗？<strong>答案是不会</strong>。因为每经过一次扫描周期，PLC去检查一遍定时器时间到了没，不管定时器时间到了还是没到，程序都依旧按照设定扫描顺序依次扫描。<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><code class="hljs clean"><span class="hljs-comment">//循环开始</span><br><span class="hljs-comment">//variant &quot;QB0_QB1&quot; means %QW0,as a word.</span><br>IF <span class="hljs-string">&quot;QB0_QB1&quot;</span> = <span class="hljs-number">0</span> AND NOT #subflag_bool THEN<br>    #addflag_bool := TRUE;<br>END_IF;<br><br>IF #addflag_bool THEN<br>    #BOOL_ARRAY[<span class="hljs-number">0</span>] := true;<br>    #TIME_add_ARRAY[<span class="hljs-number">0</span>](IN := #BOOL_ARRAY[<span class="hljs-number">0</span>],<br>                       PT := T#<span class="hljs-number">2</span>S);<br>    <br>    FOR #FOR_I := <span class="hljs-number">0</span> TO <span class="hljs-number">8</span> DO<br>        IF #TIME_add_ARRAY[#FOR_I].Q THEN<br>            #BOOL_ARRAY[#FOR_I + <span class="hljs-number">1</span>] := TRUE;<br>            #TIME_add_ARRAY[#FOR_I + <span class="hljs-number">1</span>](IN := #BOOL_ARRAY[#FOR_I + <span class="hljs-number">1</span>],<br>                                        PT := T#<span class="hljs-number">2</span>S);<br>        END_IF;<br>    END_FOR;<br>    <br>END_IF;<br><br><span class="hljs-comment">//正循环结束</span><br>IF #TIME_add_ARRAY[<span class="hljs-number">9</span>].Q THEN<br>    <br>    #TIME_sub_ARRAY[<span class="hljs-number">9</span>](IN := #BOOL_ARRAY[<span class="hljs-number">9</span>],<br>                       PT := t#<span class="hljs-number">2</span>s);<br>    IF #TIME_sub_ARRAY[<span class="hljs-number">9</span>].Q THEN<br>        #addflag_bool := FALSE;<br>        #subflag_bool := true;<br>    END_IF;<br>    <br>END_IF;<br><br><span class="hljs-comment">//负循环开始</span><br>IF #subflag_bool THEN<br>    FOR #FOR_J := <span class="hljs-number">9</span> TO <span class="hljs-number">1</span> BY <span class="hljs-number">-1</span> DO<br>        IF #TIME_sub_ARRAY[#FOR_J].Q THEN<br>            #BOOL_ARRAY[#FOR_J] := false;<br>            #TIME_sub_ARRAY[#FOR_J - <span class="hljs-number">1</span>](IN := #BOOL_ARRAY[#FOR_J - <span class="hljs-number">1</span>],<br>                                        PT := T#<span class="hljs-number">2</span>S);<br>        END_IF;<br>    END_FOR;<br>END_IF;<br><br><span class="hljs-comment">//全周期结束</span><br>IF #TIME_sub_ARRAY[<span class="hljs-number">0</span>].Q OR <span class="hljs-string">&quot;Switch&quot;</span> THEN<br>    #subflag_bool := false;<br>    #addflag_bool := FALSE;<br>    FOR #FOR_K := <span class="hljs-number">0</span> TO <span class="hljs-number">9</span> DO<br>        RESET_TIMER(#TIME_add_ARRAY[#FOR_K]);<br>        RESET_TIMER(#TIME_sub_ARRAY[#FOR_K]);<br>        #BOOL_ARRAY[#FOR_K] := FALSE;<br>    END_FOR;<br>END_IF;<br><br><span class="hljs-comment">//赋值</span><br><span class="hljs-string">&quot;Q0.0&quot;</span> := #BOOL_ARRAY[<span class="hljs-number">0</span>];<br><span class="hljs-string">&quot;Q0.1&quot;</span> := #BOOL_ARRAY[<span class="hljs-number">1</span>];<br><span class="hljs-string">&quot;Q0.2&quot;</span> := #BOOL_ARRAY[<span class="hljs-number">2</span>];<br><span class="hljs-string">&quot;Q0.3&quot;</span> := #BOOL_ARRAY[<span class="hljs-number">3</span>];<br><span class="hljs-string">&quot;Q0.4&quot;</span> := #BOOL_ARRAY[<span class="hljs-number">4</span>];<br><span class="hljs-string">&quot;Q0.5&quot;</span> := #BOOL_ARRAY[<span class="hljs-number">5</span>];<br><span class="hljs-string">&quot;Q0.6&quot;</span> := #BOOL_ARRAY[<span class="hljs-number">6</span>];<br><span class="hljs-string">&quot;Q0.7&quot;</span> := #BOOL_ARRAY[<span class="hljs-number">7</span>];<br><span class="hljs-string">&quot;Q1.0&quot;</span> := #BOOL_ARRAY[<span class="hljs-number">8</span>];<br><span class="hljs-string">&quot;Q1.1&quot;</span> := #BOOL_ARRAY[<span class="hljs-number">9</span>];<br><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="3-这种嵌套模式的应用设想"><a href="#3-这种嵌套模式的应用设想" class="headerlink" title="3. 这种嵌套模式的应用设想"></a>3. 这种嵌套模式的应用设想</h2><ul>
+<li>在做MODBUS轮询的时候，有些时候我们需要调用很多次功能块，那么能不能利用上述方法，然调用块只被写一次，从而提高效率呢？<ul>
+<li>下例中，主要注意点都写在注释中了</li>
+<li>下例中，ModbusMaster块没有以<code>ARRAY..OF iDB</code>的方式去做多个iDB是因为轮询的方式其实在同一时刻只会调用一次MobusMaster,不必浪费内存去重复做存储区。共用存储区也是可以的。（当然做成iDB数组动态调用也是可以的）</li>
+<li>下例中，代码没有被调试过，只是用来做一种ModBus轮询思路的探讨<figure class="highlight leaf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs leaf">//1.通讯数量的问题<br>//来自于西门子官方文档：<br>//Modbus 寻址支持最多 247 个从站（从站编号 1 到 247）。每个 Modbus 网段最多可以有 32 个设备，具体取决于 RS485 接口的负载和驱动能力。当达到 32 个设备的限制时，必须使用中继器来扩展到下一个网段。需要七个中继器才能将 247 个从站连接到同一个主站的 RS485 接口。<br>//Siemens 中继器仅支持 PROFIBUS；其功能为监视 PROFIBUS 令牌传递。Siemens 中继器不支持其它协议。因此，需要第三方 Modbus 中继器。<br>//Modbus 超时默认较长；使用多个中继器不会产生延时问题。Modbus 主站不关心从站是否响应慢或者多个中继器是否延迟了响应。<br>//2.思路：若要想要只调用一次Modbus_master指令。我想到的方法是用smart200的子程序编程思路去实现（摒弃背景DB的方法来实现只把逻辑写一遍）。<br>//程序如下：<br>//********************************************************START****************************************************//<br><br>//用for执行程序，做轮询！切记同一时间只能访问一个从站，其他从站需要排队！<br>FOR <span class="hljs-punctuation">#</span><span class="hljs-keyword">SlaveNumber</span> := 0 TO 40 DO<br>    //主执行逻辑<br>    //req逻辑依据实际情况在外部写逻辑<br>    IF &quot;ModbusRTUDB&quot;.modbusMasterArray[<span class="hljs-punctuation">#</span><span class="hljs-keyword">SlaveNumber</span>].req AND NOT &quot;ModbusRTUDB&quot;.modbusMasterArray[<span class="hljs-punctuation">#</span><span class="hljs-keyword">SlaveNumber</span>].done THEN<br>        //调用一次初始化块，MB_DB接口用array间接寻址<br>        <span class="hljs-punctuation">#</span><span class="hljs-keyword">Modbus_Comm_Load_Instance</span><span class="hljs-params">(<span class="hljs-variable">REQ</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&quot;FirstScan&quot;</span>,</span><br><span class="hljs-params">                                   <span class="hljs-string">&quot;PORT&quot;</span> :<span class="hljs-operator">=</span> 261,</span><br><span class="hljs-params">                                   <span class="hljs-variable">BAUD</span> :<span class="hljs-operator">=</span> 9600,</span><br><span class="hljs-params">                                   <span class="hljs-variable">PARITY</span> :<span class="hljs-operator">=</span> 0,</span><br><span class="hljs-params">                                   <span class="hljs-variable">MB_DB</span> :<span class="hljs-operator">=</span> #<span class="hljs-variable">MB_MASTER</span>[#<span class="hljs-variable">SlaveNumber</span>].<span class="hljs-variable">MB_DB</span>)</span>;<br>        <br>        //调用一次Master块，背景DB用ARRAY序列化，接口参数用UDT封装后用globleDB序列化<br>        <span class="hljs-punctuation">#</span><span class="hljs-keyword">commMB_MASTER</span><span class="hljs-params">(<span class="hljs-variable">REQ</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&quot;ModbusRTUDB&quot;</span>.<span class="hljs-variable">modbusMasterArray</span>[#<span class="hljs-variable">SlaveNumber</span>].<span class="hljs-variable">req</span>,</span><br><span class="hljs-params">                      <span class="hljs-variable">MB_ADDR</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&quot;ModbusRTUDB&quot;</span>.<span class="hljs-variable">modbusMasterArray</span>[#<span class="hljs-variable">SlaveNumber</span>].<span class="hljs-variable">mb_addr</span>,</span><br><span class="hljs-params">                      <span class="hljs-variable">MODE</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&quot;ModbusRTUDB&quot;</span>.<span class="hljs-variable">modbusMasterArray</span>[#<span class="hljs-variable">SlaveNumber</span>].<span class="hljs-variable">mode</span>,</span><br><span class="hljs-params">                      <span class="hljs-variable">DATA_ADDR</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&quot;ModbusRTUDB&quot;</span>.<span class="hljs-variable">modbusMasterArray</span>[#<span class="hljs-variable">SlaveNumber</span>].<span class="hljs-variable">data_addr</span>,</span><br><span class="hljs-params">                      <span class="hljs-variable">DATA_LEN</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&quot;ModbusRTUDB&quot;</span>.<span class="hljs-variable">modbusMasterArray</span>[#<span class="hljs-variable">SlaveNumber</span>].<span class="hljs-variable">data_len</span>,</span><br><span class="hljs-params">                      <span class="hljs-variable">DONE</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;ModbusRTUDB&quot;</span>.<span class="hljs-variable">modbusMasterArray</span>[#<span class="hljs-variable">SlaveNumber</span>].<span class="hljs-variable">done</span>,</span><br><span class="hljs-params">                      <span class="hljs-variable">BUSY</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;ModbusRTUDB&quot;</span>.<span class="hljs-variable">modbusMasterArray</span>[#<span class="hljs-variable">SlaveNumber</span>].<span class="hljs-variable">busy</span>,</span><br><span class="hljs-params">                      <span class="hljs-variable">ERROR</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;ModbusRTUDB&quot;</span>.<span class="hljs-variable">modbusMasterArray</span>[#<span class="hljs-variable">SlaveNumber</span>].<span class="hljs-variable">error</span>,</span><br><span class="hljs-params">                      <span class="hljs-variable">STATUS</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;ModbusRTUDB&quot;</span>.<span class="hljs-variable">modbusMasterArray</span>[#<span class="hljs-variable">SlaveNumber</span>].<span class="hljs-variable">statrus</span>,</span><br><span class="hljs-params">                      <span class="hljs-variable">DATA_PTR</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&quot;ModbusRTUDB&quot;</span>.<span class="hljs-variable">modbusMasterArray</span>[#<span class="hljs-variable">SlaveNumber</span>].<span class="hljs-variable">data_ptr</span>)</span>;<br>    END_IF;<br>END_FOR;<br><br>//********************************************************END****************************************************//<br>//3.总结:毕竟PLC是结构化编程而不是面向对象编程，所以要想做到继承父类就能直接调用所有父类方法的思想不容易，<br>//其实西门子官方也不建议向上面这么玩，因为数据安全和数据稳定问题。为每个对象均分配一个专有的背景DB才是西门子的思想所在。<br>//这种玩法参考了没有背景DB思想的SMART200程序，SMART200里面子程序是common的，所有重复调用必须满足异步调用，这很重要，否则数据要出错。<br>//4.缺点：这个方法属于轮询方法，同一时间只会有一个从站设备在通信！数据传输可能会出现排队现象，必须处理好req逻辑！<br>//串行传输，传输效率极其低下。<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/PLC-related/" class="category-chain-item">PLC related</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/PLC-related/1200-1500PLC/" class="category-chain-item">1200/1500PLC</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/PLC-part/" class="print-no-link">#PLC part</a>
+      
+        <a href="/tags/industrial-control/" class="print-no-link">#industrial control</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>在PLC的扫描特性下，FOR循环里面套IF或者定时器会发生什么？</div>
+      <div>http://example.com/2024/07/21/在PLC的扫描特性下，FOR循环里面套IF或者定时器会发生什么？/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiao cuncun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年7月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/07/21/%E9%9A%8F%E6%9C%BA%E6%95%B0%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%8C%E6%94%AF%E6%8C%81Udint%E5%92%8CChar%E4%B8%A4%E4%B8%AA%E6%A0%BC%E5%BC%8F/" title="随机数生成器，支持Udint和Char两个格式">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">随机数生成器，支持Udint和Char两个格式</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/07/21/%E8%BF%94%E5%9B%9Etxt%E6%96%87%E6%A1%A3%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F/" title="返回txt文档编码格式">
+                        <span class="hidden-mobile">返回txt文档编码格式</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

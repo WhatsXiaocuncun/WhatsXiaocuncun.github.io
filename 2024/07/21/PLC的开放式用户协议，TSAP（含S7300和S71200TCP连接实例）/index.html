@@ -1,0 +1,845 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiao cuncun">
+  <meta name="keywords" content="blog">
+  
+    <meta name="description" content="0. 向导只想看S7-300和S7-1200 TCP连接实例的朋友请直接点击这里 1. OUC开放式用户协议，包括ISO，ISO-on-TCP，TCP&#x2F;IP，UDP四种。西门子PLC中有多种不同的方式建立连接。 2. 在硬件组态中建立TCP通信 打开硬件组图，网络视图 添加新连接 填入本地ID，关于本地ID：**针对1513实测过,ID的取值范围从16#01到16#999，但是16#01">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PLC的开放式用户协议，TSAP（含S7300和S71200TCP连接实例）">
+<meta property="og:url" content="http://example.com/2024/07/21/PLC%E7%9A%84%E5%BC%80%E6%94%BE%E5%BC%8F%E7%94%A8%E6%88%B7%E5%8D%8F%E8%AE%AE%EF%BC%8CTSAP%EF%BC%88%E5%90%ABS7300%E5%92%8CS71200TCP%E8%BF%9E%E6%8E%A5%E5%AE%9E%E4%BE%8B%EF%BC%89/index.html">
+<meta property="og:site_name" content="Whatsxiaocuncun Personal website">
+<meta property="og:description" content="0. 向导只想看S7-300和S7-1200 TCP连接实例的朋友请直接点击这里 1. OUC开放式用户协议，包括ISO，ISO-on-TCP，TCP&#x2F;IP，UDP四种。西门子PLC中有多种不同的方式建立连接。 2. 在硬件组态中建立TCP通信 打开硬件组图，网络视图 添加新连接 填入本地ID，关于本地ID：**针对1513实测过,ID的取值范围从16#01到16#999，但是16#01">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240511160920321-291085229.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240511161137748-1460136048.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240511163232908-1740416681.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240511164312031-920183375.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240511170230936-68911964.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240511170539898-442979798.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240512002850593-1590451675.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240512004653440-1719905333.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240511170638899-1236707875.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240512002438188-807718440.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240512010717362-68626940.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240512005035553-1179741087.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240512005410756-1255528561.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240512010243740-1205108135.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240512091629794-2026117979.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240512091922336-1365018284.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240512091941875-2088334463.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240512092629037-913907065.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240512092659216-268447606.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240512092727780-968042234.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240512093717514-1513347507.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240512093908649-1006816470.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240620150011903-1012416435.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240620150157393-1067386055.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240620150413140-1497816252.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240620150915426-2078925698.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240620151015765-349541889.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240620150930911-1405115942.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240620151220883-143734236.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240620151249669-577294301.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240620151412810-1043122720.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240620151621486-1950483657.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240620151641236-1102650565.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240620152110313-954182134.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240620152159492-1396183871.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240620152227061-934763987.png">
+<meta property="article:published_time" content="2024-07-21T06:44:39.217Z">
+<meta property="article:modified_time" content="2024-07-21T09:12:20.351Z">
+<meta property="article:author" content="xiao cuncun">
+<meta property="article:tag" content="PLC part">
+<meta property="article:tag" content="industrial control">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/blog_page/3427087-20240511160920321-291085229.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>PLC的开放式用户协议，TSAP（含S7300和S71200TCP连接实例） - Whatsxiaocuncun Personal website</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>一位不愿透露姓名的小村村同学的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="PLC的开放式用户协议，TSAP（含S7300和S71200TCP连接实例）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-21 14:44" pubdate>
+          2024年7月21日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          23 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">PLC的开放式用户协议，TSAP（含S7300和S71200TCP连接实例）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="0-向导"><a href="#0-向导" class="headerlink" title="0. 向导"></a>0. 向导</h2><p><a href="#section">只想看S7-300和S7-1200 TCP连接实例的朋友请直接点击这里</a></p>
+<h2 id="1-OUC"><a href="#1-OUC" class="headerlink" title="1. OUC"></a>1. OUC</h2><p>开放式用户协议，包括ISO，ISO-on-TCP，TCP&#x2F;IP，UDP四种。西门子PLC中有多种不同的方式建立连接。</p>
+<h2 id="2-在硬件组态中建立TCP通信"><a href="#2-在硬件组态中建立TCP通信" class="headerlink" title="2. 在硬件组态中建立TCP通信"></a>2. 在硬件组态中建立TCP通信</h2><ul>
+<li>打开硬件组图，网络视图<br><img src="/img/blog_page/3427087-20240511160920321-291085229.png" srcset="/img/loading.gif" lazyload></li>
+<li>添加新连接<br><img src="/img/blog_page/3427087-20240511161137748-1460136048.png" srcset="/img/loading.gif" lazyload></li>
+<li>填入本地ID，关于本地ID：**<font color=red>针对1513实测过,ID的取值范围从16#01到16#999，但是16#01-16#99大概率被系统占用了，可用范围从16#100开始。西门子本身没有规定ID必须从多少开始，所以在允许范围类，随便填。一条TCP连接（或者一个通信设备之间）分配一个唯一的ID</font>**<ul>
+<li>主动连接：如果本地对象是客户端就勾选主动建立连接，如果做服务器可以不用勾选</li>
+<li>添加后关闭页面</li>
+</ul>
+</li>
+</ul>
+<p><img src="/img/blog_page/3427087-20240511163232908-1740416681.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>设置伙伴参数<ul>
+<li><strong><font color=red>本地端口和伙伴端口可以不一致，也可以一致，本地端口甚至可以不用填写。端口设定范围从1-65535，也可以自由定义。一般约定从2000开始(ipv4)</font></strong></li>
+<li>伙伴设备可以选择不指定</li>
+</ul>
+</li>
+</ul>
+<p><img src="/img/blog_page/3427087-20240511164312031-920183375.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>网络视图的连接建立好之后就可以在程序中调用<code>TSEND</code>和<code>TRCV</code>指令用作收发数据了。<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-comment">//ID就是在网络视图里面设置的ID</span><br><span class="hljs-string">&quot;TSEND_DB&quot;</span>.TSEND(REQ:=<span class="hljs-string">&quot;Tag_1&quot;</span>,<br><span class="hljs-symbol">                 ID:</span>=<span class="hljs-number">16</span><span class="hljs-meta">#100,</span><br><span class="hljs-symbol">                 DATA:</span>=_variant_inout_)<span class="hljs-punctuation">;</span><br><br><span class="hljs-string">&quot;TRCV_DB&quot;</span>.TRCV(EN_R:=<span class="hljs-string">&quot;Tag_2&quot;</span>,<br><span class="hljs-symbol">               ID:</span>=<span class="hljs-number">16</span><span class="hljs-meta">#100,</span><br><span class="hljs-symbol">               DATA:</span>=_variant_inout_)<span class="hljs-punctuation">;</span><br></code></pre></td></tr></table></figure></li>
+<li>在硬件组态里面建立TCP连接的方式会在“系统资源”里面使用一条OUC资源，连接在线时也能在线看到连接详情</li>
+</ul>
+<h2 id="2-参数化的方式建立TCP连接"><a href="#2-参数化的方式建立TCP连接" class="headerlink" title="2. 参数化的方式建立TCP连接"></a>2. 参数化的方式建立TCP连接</h2><ul>
+<li><p>在这种方式中，不需要在硬件组态里面配置连接，它在资源占用上是动态化的，“系统资源”里面体现不出来，但是在线的时候看得到连接详情</p>
+</li>
+<li><p>TCON连接参数设置</p>
+<figure class="highlight leaf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs leaf">&quot;_ShareDB&quot;.FB110.tcon.I_req := NOT &quot;_ShareDB&quot;.FB110.tdiscon.I_req;<br><br>&quot;_ShareDB&quot;.FB110.tcon.I_id := 16<span class="hljs-punctuation">#</span>100;//ID<br>&quot;_ShareDB&quot;.FB110.tcon.IO_connect.InterfaceID := 64;//Local~PROFINET_接口，hw_Interface<br><br>//connect参数，ID,Type,连接方式<br>&quot;_ShareDB&quot;.FB110.tcon.IO_connect.ID := 16<span class="hljs-punctuation">#</span>100;//ID<br>&quot;_ShareDB&quot;.FB110.tcon.IO_connect.connType := 11;//11 TCP,19 UDP<br>&quot;_ShareDB&quot;.FB110.tcon.IO_connect.activeEst := 1;//=1：建立主动连接 =0：建立被动连接<br><br>//伙伴端点IP地址<br>&quot;_ShareDB&quot;.FB110.tcon.IO_connect.reAddress[0] := 192;<br>&quot;_ShareDB&quot;.FB110.tcon.IO_connect.reAddress[1] := 168;<br>&quot;_ShareDB&quot;.FB110.tcon.IO_connect.reAddress[2] := 0;<br>&quot;_ShareDB&quot;.FB110.tcon.IO_connect.reAddress[3] := 241;<br><br>//远程和本地端口<br>&quot;_ShareDB&quot;.FB110.tcon.IO_connect.rePort := 6688;//ipv4 0-65535<br>&quot;_ShareDB&quot;.FB110.tcon.IO_connect.LoPort := 2000;//ipv4 1-49151<br><br><span class="hljs-punctuation">#</span><span class="hljs-keyword">TCON_Instance</span><span class="hljs-params">(<span class="hljs-variable">REQ</span>:<span class="hljs-operator">=</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tcon</span>.<span class="hljs-variable">I_req</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">ID</span>:<span class="hljs-operator">=</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tcon</span>.<span class="hljs-variable">I_id</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">DONE</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tcon</span>.<span class="hljs-variable">O_done</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">BUSY</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tcon</span>.<span class="hljs-variable">O_busy</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">ERROR</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tcon</span>.<span class="hljs-variable">O_error</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">STATUS</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tcon</span>.<span class="hljs-variable">O_status</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">CONNECT</span>:<span class="hljs-operator">=</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">IO_connect</span>)</span>;<br></code></pre></td></tr></table></figure></li>
+<li><p>关于connect参数的数据类型</p>
+<ul>
+<li>TCP_IP_v4结构如下：<br><img src="/img/blog_page/3427087-20240511170230936-68911964.png" srcset="/img/loading.gif" lazyload></li>
+<li>对于ISO-on-TCP,使用TCP_IP_RFC结构<br><img src="/img/blog_page/3427087-20240511170539898-442979798.png" srcset="/img/loading.gif" lazyload></li>
+<li>其他结构参见帮助</li>
+</ul>
+</li>
+<li><p>发送指令，异步指令</p>
+<figure class="highlight leaf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs leaf">//TSEND<br>&quot;_ShareDB&quot;.FB110.tsend.I_id := 16<span class="hljs-punctuation">#</span>100;<br>&quot;_ShareDB&quot;.FB110.tsend.I_len := 10;<br><br><span class="hljs-punctuation">#</span><span class="hljs-keyword">TSEND_Instance</span><span class="hljs-params">(<span class="hljs-variable">REQ</span>:<span class="hljs-operator">=</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tsend</span>.<span class="hljs-variable">I_req</span>,</span><br><span class="hljs-params">                <span class="hljs-variable">ID</span>:<span class="hljs-operator">=</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tsend</span>.<span class="hljs-variable">I_id</span>,</span><br><span class="hljs-params">                <span class="hljs-variable">LEN</span>:<span class="hljs-operator">=</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tsend</span>.<span class="hljs-variable">I_len</span>,<span class="hljs-operator">/</span><span class="hljs-operator">/</span>处理长度，1200<span class="hljs-operator">=</span>8.192<span class="hljs-variable">kb</span>，1500<span class="hljs-operator">=</span>65.536<span class="hljs-variable">kb</span>,<span class="hljs-variable">CM1542</span><span class="hljs-operator">=</span>240<span class="hljs-variable">bytes</span></span><br><span class="hljs-params">                <span class="hljs-variable">DONE</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tsend</span>.<span class="hljs-variable">O_done</span>,</span><br><span class="hljs-params">                <span class="hljs-variable">BUSY</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tsend</span>.<span class="hljs-variable">O_busy</span>,</span><br><span class="hljs-params">                <span class="hljs-variable">ERROR</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tsend</span>.<span class="hljs-variable">O_err</span>,</span><br><span class="hljs-params">                <span class="hljs-variable">STATUS</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tsend</span>.<span class="hljs-variable">O_status</span>,</span><br><span class="hljs-params">                <span class="hljs-variable">DATA</span>:<span class="hljs-operator">=</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tsend</span>.<span class="hljs-variable">IO_data</span>)</span>;//数据指针，发送端和接收端的数据格式要一致<br></code></pre></td></tr></table></figure></li>
+<li><p>接收指令，<code>TRCV</code>为异步指令</p>
+<ul>
+<li>ADHOC接口用于指定TCP协议下是否启动<code>动态长度接收</code>功能（对ISO-on-TCP或者FDL无效）；ADHOC&#x3D;0，按length指定的长度接收数据；ADHOC&#x3D;1，至少会接收到一个可用字节数据<figure class="highlight leaf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs leaf">//TRCV<br>&quot;_ShareDB&quot;.FB110.trcv.I_R := TRUE;<br>&quot;_ShareDB&quot;.FB110.trcv.I_id := 16<span class="hljs-punctuation">#</span>100;<br>&quot;_ShareDB&quot;.FB110.trcv.I_len := 10;<br>&quot;_ShareDB&quot;.FB110.trcv.I_ADHOC := 0;<br><br><span class="hljs-punctuation">#</span><span class="hljs-keyword">TRCV_Instance</span><span class="hljs-params">(<span class="hljs-variable">EN_R</span>:<span class="hljs-operator">=</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">trcv</span>.<span class="hljs-variable">I_R</span>,<span class="hljs-operator">/</span><span class="hljs-operator">/</span>使能接收</span><br><span class="hljs-params">               <span class="hljs-variable">ID</span>:<span class="hljs-operator">=</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">trcv</span>.<span class="hljs-variable">I_id</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">LEN</span>:<span class="hljs-operator">=</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">trcv</span>.<span class="hljs-variable">I_len</span>,<span class="hljs-operator">/</span><span class="hljs-operator">/</span>在<span class="hljs-variable">ADHOC</span><span class="hljs-operator">=</span>0时指定长度</span><br><span class="hljs-params">               <span class="hljs-variable">ADHOC</span>:<span class="hljs-operator">=</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">trcv</span>.<span class="hljs-variable">I_ADHOC</span>,<span class="hljs-operator">/</span><span class="hljs-operator">/</span>指定以固定长度接收或者动态长度接收</span><br><span class="hljs-params">               <span class="hljs-variable">NDR</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">trcv</span>.<span class="hljs-variable">O_NDR</span>,<span class="hljs-operator">/</span><span class="hljs-operator">/</span>作业过程标志位 <span class="hljs-operator">=</span>1，<span class="hljs-variable">Done</span></span><br><span class="hljs-params">               <span class="hljs-variable">BUSY</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">trcv</span>.<span class="hljs-variable">O_busy</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">ERROR</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">trcv</span>.<span class="hljs-variable">O_err</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">STATUS</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">trcv</span>.<span class="hljs-variable">O_status</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">RCVD_LEN</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">trcv</span>.<span class="hljs-variable">O_len</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">DATA</span>:<span class="hljs-operator">=</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">trcv</span>.<span class="hljs-variable">IO_data</span>)</span>;//接收到的数据，格式和发送端一致<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>断开连接</p>
+<figure class="highlight leaf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs leaf">//TDISCON<br>&quot;_ShareDB&quot;.FB110.tdiscon.I_id := 16<span class="hljs-punctuation">#</span>100;<br><br><span class="hljs-punctuation">#</span><span class="hljs-keyword">TDISCON_Instance</span><span class="hljs-params">(<span class="hljs-variable">REQ</span>:<span class="hljs-operator">=</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tdiscon</span>.<span class="hljs-variable">I_req</span>,</span><br><span class="hljs-params">                  <span class="hljs-variable">ID</span>:<span class="hljs-operator">=</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tdiscon</span>.<span class="hljs-variable">I_id</span>,<span class="hljs-operator">/</span><span class="hljs-operator">/</span>要终止作业的<span class="hljs-variable">ID</span></span><br><span class="hljs-params">                  <span class="hljs-variable">DONE</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tdiscon</span>.<span class="hljs-variable">O_done</span>,</span><br><span class="hljs-params">                  <span class="hljs-variable">BUSY</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tdiscon</span>.<span class="hljs-variable">O_busy</span>,</span><br><span class="hljs-params">                  <span class="hljs-variable">ERROR</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tdiscon</span>.<span class="hljs-variable">O_error</span>,</span><br><span class="hljs-params">                  <span class="hljs-variable">STATUS</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_ShareDB&quot;</span>.<span class="hljs-variable">FB110</span>.<span class="hljs-variable">tdiscon</span>.<span class="hljs-variable">O_status</span>)</span>;<br></code></pre></td></tr></table></figure></li>
+<li><p>各个指令的”属性”-“组态”-“块参数”</p>
+<ul>
+<li>如图，这些块参数其实就是指令接口填写的内容，接口填写完成后这里会自动生成相应的变量符号名<br><img src="/img/blog_page/3427087-20240512002850593-1590451675.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+<li><p><font color=red>这个方法有个特点，所有的参数都可以动态化，动态配置，由程序更改，更好的实现自动化。但是它看不了也用不了TCON关于“属性”-“组态”-“连接参数”里面的静态设置。</font></p>
+</li>
+</ul>
+<h2 id="3-参数化但使用”属性”-“组态”-“连接参数”"><a href="#3-参数化但使用”属性”-“组态”-“连接参数”" class="headerlink" title="3. 参数化但使用”属性”-“组态”-“连接参数”"></a>3. 参数化但使用”属性”-“组态”-“连接参数”</h2><ul>
+<li>不同于第二种方法，这是一种介于第一种和第二种方法之间的方法，它既需要填写常量的ID，IP等等信息，但是又不会在“系统资源”里显示出来，属于参数化方法。</li>
+<li>依旧使用TCON,TSEND,TRCV,TDISCON等方法来做程序</li>
+<li>如图，TCON的参数不用在程序里填写，在“属性”-“组态”-“连接参数”里定义，定义为固定的设置<br><img src="/img/blog_page/3427087-20240512004653440-1719905333.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+<h2 id="4-OUC相关指令以及它们的区别和应用场景"><a href="#4-OUC相关指令以及它们的区别和应用场景" class="headerlink" title="4. OUC相关指令以及它们的区别和应用场景"></a>4. OUC相关指令以及它们的区别和应用场景</h2><p><img src="/img/blog_page/3427087-20240511170638899-1236707875.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240512002438188-807718440.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="5-关于TSAP的概念"><a href="#5-关于TSAP的概念" class="headerlink" title="5. 关于TSAP的概念"></a>5. 关于TSAP的概念</h2><ul>
+<li><p>TSAP（Transport Server Access Point 传输服务访问点）是用于ISO-on-TCP上的两个参数，有本地TSAP和伙伴TSAP。用2个字节表示<br><img src="/img/blog_page/3427087-20240512010717362-68626940.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>本地TSAP和远程TSAP可以相同，因为通过不同的MAC地址建立的连接是唯一的，但如果要在两个站之间建立多个连接，则远程TSAP和本地TSAP必须不同。<br><img src="/img/blog_page/3427087-20240512005035553-1179741087.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>TSAP是ISO传输连接中的相关概念，ISO传输连接的过程如下:<br><img src="/img/blog_page/3427087-20240512005410756-1255528561.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>TSAP的结构</p>
+<ul>
+<li>TSAP(ASC II)</li>
+<li>TSAP-ID（Hex）（系统自动生成）<br><img src="/img/blog_page/3427087-20240512010243740-1205108135.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+<li><p>TSAP的含义<br><img src="/img/blog_page/3427087-20240512091629794-2026117979.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240512091922336-1365018284.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240512091941875-2088334463.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>TSAP分配案例（如何填写TSAP）</p>
+<ul>
+<li>在S7协议下的规定<ul>
+<li>对于S7-1500CPU:<code>&quot;SIMATIC-ACC&quot;&lt;nnn&gt;&lt;mm&gt;，nnn = 本地 ID，mm = 任何值</code></li>
+<li>对于S7-300&#x2F;400：<code>&lt;xx&gt;.&lt;yz&gt;，xx = 连接资源号，y = 机架号，z = 插槽号</code></li>
+<li>连接资源号由配置界面填入的<code>连接资源（十六进制）</code>确定<br><img src="/img/blog_page/3427087-20240512092629037-913907065.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240512092659216-268447606.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240512092727780-968042234.png" srcset="/img/loading.gif" lazyload><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs armasm">请参见不同连接组态的以下 TSAP 示例<br>两个 <span class="hljs-built_in">S7</span>-<span class="hljs-number">1200</span> CPU（固件版本均为 <span class="hljs-built_in">V2</span>.<span class="hljs-number">0</span>）之间的连接：<br><span class="hljs-symbol">S7</span>-<span class="hljs-number">1200</span> CPU“A”（固件版本为 <span class="hljs-built_in">V2</span>.<span class="hljs-number">0</span>，本地 ID 为 <span class="hljs-number">100</span>）：<br><span class="hljs-symbol">TSAP</span>： SIMATIC-ACC10001<br><span class="hljs-symbol">S7</span>-<span class="hljs-number">1200</span> CPU“B”（固件版本为 <span class="hljs-built_in">V2</span>.<span class="hljs-number">0</span>，本地 ID 为 <span class="hljs-number">5</span>AE）：<br><span class="hljs-symbol">TSAP</span>： SIMATIC-ACC5AE01<br>两个 <span class="hljs-built_in">S7</span>-<span class="hljs-number">1200</span> CPU（固件版本分别为 <span class="hljs-built_in">V2</span>.<span class="hljs-number">0</span> 和 <span class="hljs-built_in">V1</span>.<span class="hljs-number">0</span>）之间的连接：<br><span class="hljs-symbol">S7</span>-<span class="hljs-number">1200</span> CPU（固件版本为 <span class="hljs-built_in">V2</span>.<span class="hljs-number">0</span>，本地 ID 为 <span class="hljs-number">1</span>FF）：<br><span class="hljs-symbol">TSAP</span>： SIMATIC-ACC1FF01<br><span class="hljs-symbol">S7</span>-<span class="hljs-number">1200</span> CPU，固件版本为 <span class="hljs-built_in">V1</span>.<span class="hljs-number">0</span>（机架 <span class="hljs-number">0</span>，插槽 <span class="hljs-number">1</span>，连接资源 <span class="hljs-number">03</span>）：<br><span class="hljs-symbol">TSAP</span>： <span class="hljs-number">03</span>.<span class="hljs-number">01</span><br><span class="hljs-symbol">S7</span>-<span class="hljs-number">1200</span> CPU（固件版本为 <span class="hljs-built_in">V2</span>.<span class="hljs-number">0</span>）与 <span class="hljs-built_in">S7</span>-<span class="hljs-number">300</span>/<span class="hljs-number">400</span> CPU 之间的连接：<br><span class="hljs-symbol">S7</span>-<span class="hljs-number">1200</span> CPU，固件版本为 <span class="hljs-built_in">V2</span>.<span class="hljs-number">0</span>（机架 <span class="hljs-number">0</span>，插槽 <span class="hljs-number">1</span>，连接资源 <span class="hljs-number">12</span>）：<br><span class="hljs-symbol">TSAP</span>： <span class="hljs-number">12</span>.<span class="hljs-number">01</span><br><span class="hljs-symbol">S7</span>-<span class="hljs-number">300</span>/<span class="hljs-number">400</span> CPU（机架 <span class="hljs-number">0</span>，插槽 <span class="hljs-number">2</span>，连接资源 <span class="hljs-number">11</span>）：<br><span class="hljs-symbol">TSAP</span>： <span class="hljs-number">11</span>.<span class="hljs-number">02</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>在ISO-on-TCP下的实例</p>
+<ul>
+<li>PLC-PLC,ID由系统自动生成，TSAP可空<br><img src="/img/blog_page/3427087-20240512093717514-1513347507.png" srcset="/img/loading.gif" lazyload></li>
+<li>本地ASC II - TSAP<br><img src="/img/blog_page/3427087-20240512093908649-1006816470.png" srcset="/img/loading.gif" lazyload></li>
+<li>在本地CPU1513和远程CPU1516的ISO-on-TCP通信中，本地TSAP可填CPU1513,远程TSAP可填CPU1516。TSAP ID会根据TSAP填入的ASCii字符自动生成。</li>
+</ul>
+</li>
+</ul>
+<h2 id="6-S7300-S71200-TCP通信实例"><a href="#6-S7300-S71200-TCP通信实例" class="headerlink" title="6. S7300 - S71200 TCP通信实例"></a><h3 id="section">6. S7300 - S71200 TCP通信实例</h3></h2><ul>
+<li>案例中，S7 300和S7 1200同处在一个项目下，300做服务器端，1200做客户端。TCP配置从程序中进行，不在硬件组态中设置。</li>
+<li>若需要不在同一个项目下的案例，其实只需要把伙伴端口设置为<code>未指定</code>。其他步骤殊途同归。<br><img src="/img/blog_page/3427087-20240620150011903-1012416435.png" srcset="/img/loading.gif" lazyload></li>
+<li>配置300PLC参数和程序：<ul>
+<li>TCON：<br><img src="/img/blog_page/3427087-20240620150157393-1067386055.png" srcset="/img/loading.gif" lazyload><ul>
+<li>注意点1：指定出伙伴</li>
+<li>注意点2：子网为<code>PN/IE_1</code>，这条连接是在硬件组态中已经配好的，且是必要的。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="/img/blog_page/3427087-20240620150413140-1497816252.png" srcset="/img/loading.gif" lazyload><br>       - 注意点3：连接类型选择TCP<br>       - 注意点4：连接ID，此处填写的是<code>1</code>，可以随便填，但是要保证伙伴和本地端口的连接ID是一致的，连接ID表示当前使用的TCP网络通道号。<br>       - 注意点5：连接数据<code>TCP_Server_Connection_DB</code>和<code>TCP_Client_Connection_DB</code>。这是两个系统生成的DB。由系统自动建立，分别位于300和1200的程序文件夹内。（当然也可以自己填写和建立）<br><img src="/img/blog_page/3427087-20240620150915426-2078925698.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240620151015765-349541889.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240620150930911-1405115942.png" srcset="/img/loading.gif" lazyload><br>       - 注意点6：若你的连接配置页面出现了<code>无可用连接参数</code>界面。请注意检查一下你的<code>Connect</code>参数，或者干脆删除管脚的connect参数地址后重建。<br><img src="/img/blog_page/3427087-20240620151220883-143734236.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240620151249669-577294301.png" srcset="/img/loading.gif" lazyload><br>       - 客户端选择主动连接，如1200侧主动连接<br><img src="/img/blog_page/3427087-20240620151412810-1043122720.png" srcset="/img/loading.gif" lazyload><br>    - TCON配置好后，就可以自由配置<code>TSEND</code>和<code>TRCV</code>了。注意一下<code>连接ID</code>保持一致，接收或者发送长度可以自定。<font color=red>TSEND发送  REQ需要用上升沿触发，为了方便，可以在SEND_REQ管脚做周期频率触发（5Hz&#x2F;2Hz&#x2F;10Hz&#x2F;..）的信号</font><br><img src="/img/blog_page/3427087-20240620151621486-1950483657.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240620151641236-1102650565.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>配置1200PLC参数和程序：<ul>
+<li>TCON,细节注意点和300PLC配置TCON时一致<br><img src="/img/blog_page/3427087-20240620152110313-954182134.png" srcset="/img/loading.gif" lazyload></li>
+<li>TSEND及TRCV配置<br><img src="/img/blog_page/3427087-20240620152159492-1396183871.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240620152227061-934763987.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+</ul>
+<h2 id="7-update-实际用例"><a href="#7-update-实际用例" class="headerlink" title="7. update 实际用例"></a>7. update 实际用例</h2><ul>
+<li>300侧<br>开头一部分是用于出错重连逻辑；<br>tcp_start点在OB100里面被初始化置1；<figure class="highlight leaf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs leaf">//Establish TCP comm<br>//TCON<br><span class="hljs-punctuation">#</span><span class="hljs-keyword">IEC_Timer_0_Instance</span><span class="hljs-params">(<span class="hljs-variable">IN</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">tcp_start</span>,</span><br><span class="hljs-params">                      <span class="hljs-variable">PT</span> :<span class="hljs-operator">=</span> <span class="hljs-variable">T</span>#1<span class="hljs-variable">S</span>,</span><br><span class="hljs-params">                      <span class="hljs-variable">Q</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">TCON</span>.<span class="hljs-variable">REQ</span>)</span>;<br><br>IF &quot;_TcpComm2client&quot;.TRCV.ERROR AND NOT <span class="hljs-punctuation">#</span><span class="hljs-keyword">pulser</span>[0] THEN<br>    &quot;_TcpComm2client&quot;.tcp_start := false;<br>END_IF;<br><span class="hljs-punctuation">#</span><span class="hljs-keyword">pulser</span>[0] := &quot;_TcpComm2client&quot;.TRCV.ERROR;<br><br><span class="hljs-punctuation">#</span><span class="hljs-keyword">IEC_Timer_0_Instance_1</span><span class="hljs-params">(<span class="hljs-variable">IN</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">TRCV</span>.<span class="hljs-variable">ERROR</span>,</span><br><span class="hljs-params">                        <span class="hljs-variable">PT</span> :<span class="hljs-operator">=</span> <span class="hljs-variable">T</span>#50<span class="hljs-variable">MS</span>)</span>;<br>IF <span class="hljs-punctuation">#</span><span class="hljs-keyword">IEC_Timer_0_Instance_1</span>.Q AND NOT <span class="hljs-punctuation">#</span><span class="hljs-keyword">pulser</span>[1] THEN<br>    &quot;_TcpComm2client&quot;.tcp_start := TRUE;<br>END_IF;<br><span class="hljs-punctuation">#</span><span class="hljs-keyword">pulser</span>[1] := <span class="hljs-punctuation">#</span><span class="hljs-keyword">IEC_Timer_0_Instance_1</span>.Q;<br><br>//&quot;_TcpComm2client&quot;.TCON.REQ := true;<br><span class="hljs-punctuation">#</span><span class="hljs-keyword">TCON_Instance</span><span class="hljs-params">(<span class="hljs-variable">REQ</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">TCON</span>.<span class="hljs-variable">REQ</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">ID</span> :<span class="hljs-operator">=</span> 1,</span><br><span class="hljs-params">               <span class="hljs-variable">DONE</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">TCON</span>.<span class="hljs-variable">DONE</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">BUSY</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">TCON</span>.<span class="hljs-variable">BUSY</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">ERROR</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">TCON</span>.<span class="hljs-variable">ERROR</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">STATUS</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">TCON</span>.<span class="hljs-variable">STATUS</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">CONNECT</span> :<span class="hljs-operator">=</span> <span class="hljs-variable">P</span>#<span class="hljs-variable">DB6</span>.<span class="hljs-variable">DBX0</span>.0 <span class="hljs-variable">BYTE</span> 64)</span>;<br><br>IF &quot;_TcpComm2client&quot;.TCON.REQ THEN<br>    <br>    //TRCV<br>    <span class="hljs-punctuation">#</span><span class="hljs-keyword">TRCV_Instance</span><span class="hljs-params">(<span class="hljs-variable">EN_R</span> :<span class="hljs-operator">=</span> <span class="hljs-variable">NOT</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">TRCV</span>.<span class="hljs-variable">EN_R</span>,</span><br><span class="hljs-params">                   <span class="hljs-variable">ID</span> :<span class="hljs-operator">=</span> 1,</span><br><span class="hljs-params">                   <span class="hljs-variable">LEN</span> :<span class="hljs-operator">=</span> 8,</span><br><span class="hljs-params">                   <span class="hljs-variable">NDR</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">TRCV</span>.<span class="hljs-variable">NDR</span>,</span><br><span class="hljs-params">                   <span class="hljs-variable">BUSY</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">TRCV</span>.<span class="hljs-variable">BUSY</span>,</span><br><span class="hljs-params">                   <span class="hljs-variable">ERROR</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">TRCV</span>.<span class="hljs-variable">ERROR</span>,</span><br><span class="hljs-params">                   <span class="hljs-variable">STATUS</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">TRCV</span>.<span class="hljs-variable">STATUS</span>,</span><br><span class="hljs-params">                   <span class="hljs-variable">RCVD_LEN</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">TRCV</span>.<span class="hljs-variable">RCVD_LEN</span>,</span><br><span class="hljs-params">                   <span class="hljs-variable">DATA</span> :<span class="hljs-operator">=</span> <span class="hljs-variable">P</span>#<span class="hljs-variable">DB11</span>.<span class="hljs-variable">DBX0</span>.0 <span class="hljs-variable">BYTE</span> 8)</span>;<br>    <br>    //TSEND<br>    &quot;_TcpComm2client&quot;.TSEND.REQ := &quot;1.0s&quot;;<br>    <span class="hljs-punctuation">#</span><span class="hljs-keyword">TSEND_Instance</span><span class="hljs-params">(<span class="hljs-variable">REQ</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">TSEND</span>.<span class="hljs-variable">REQ</span>,</span><br><span class="hljs-params">                    <span class="hljs-variable">ID</span> :<span class="hljs-operator">=</span> 1,</span><br><span class="hljs-params">                    <span class="hljs-variable">LEN</span> :<span class="hljs-operator">=</span> 8,</span><br><span class="hljs-params">                    <span class="hljs-variable">DONE</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">TSEND</span>.<span class="hljs-variable">DONE</span>,</span><br><span class="hljs-params">                    <span class="hljs-variable">BUSY</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">TSEND</span>.<span class="hljs-variable">BUSY</span>,</span><br><span class="hljs-params">                    <span class="hljs-variable">ERROR</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">TSEND</span>.<span class="hljs-variable">ERROR</span>,</span><br><span class="hljs-params">                    <span class="hljs-variable">STATUS</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2client&quot;</span>.<span class="hljs-variable">TSEND</span>.<span class="hljs-variable">STATUS</span>,</span><br><span class="hljs-params">                    <span class="hljs-variable">DATA</span> :<span class="hljs-operator">=</span> <span class="hljs-variable">P</span>#<span class="hljs-variable">DB15</span>.<span class="hljs-variable">DBX0</span>.0 <span class="hljs-variable">BYTE</span> 8)</span>;<br>END_IF;<br><br></code></pre></td></tr></table></figure></li>
+<li>1200侧<figure class="highlight leaf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs leaf">//Establish TCP comm<br>//TCON<br><span class="hljs-punctuation">#</span><span class="hljs-keyword">IEC_Timer_0_Instance</span><span class="hljs-params">(<span class="hljs-variable">IN</span>:<span class="hljs-operator">=</span><span class="hljs-variable">TRUE</span>,</span><br><span class="hljs-params">                      <span class="hljs-variable">PT</span>:<span class="hljs-operator">=</span><span class="hljs-variable">T</span>#2<span class="hljs-variable">s</span>,</span><br><span class="hljs-params">                      <span class="hljs-variable">Q</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_TcpComm2serve&quot;</span>.<span class="hljs-variable">TCON</span>.<span class="hljs-variable">REQ</span>)</span>;<br><br>//&quot;_TcpComm2serve&quot;.TCON.REQ:=true;<br><span class="hljs-punctuation">#</span><span class="hljs-keyword">TCON_Instance</span><span class="hljs-params">(<span class="hljs-variable">REQ</span>:<span class="hljs-operator">=</span><span class="hljs-string">&quot;_TcpComm2serve&quot;</span>.<span class="hljs-variable">TCON</span>.<span class="hljs-variable">REQ</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">ID</span>:<span class="hljs-operator">=</span>1,</span><br><span class="hljs-params">               <span class="hljs-variable">DONE</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_TcpComm2serve&quot;</span>.<span class="hljs-variable">TCON</span>.<span class="hljs-variable">DONE</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">BUSY</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_TcpComm2serve&quot;</span>.<span class="hljs-variable">TCON</span>.<span class="hljs-variable">BUSY</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">ERROR</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_TcpComm2serve&quot;</span>.<span class="hljs-variable">TCON</span>.<span class="hljs-variable">ERROR</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">STATUS</span><span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span><span class="hljs-string">&quot;_TcpComm2serve&quot;</span>.<span class="hljs-variable">TCON</span>.<span class="hljs-variable">STATUS</span>,</span><br><span class="hljs-params">               <span class="hljs-variable">CONNECT</span>:<span class="hljs-operator">=</span><span class="hljs-string">&quot;_1200PLC_Connection_DB&quot;</span>)</span>;<br><br>IF &quot;_TcpComm2serve&quot;.TCON.REQ THEN<br>    <br>    //TSEND<br>    &quot;_TcpComm2serve&quot;.SEND.REQ := &quot;Clock_1Hz&quot;;<br>    <span class="hljs-punctuation">#</span><span class="hljs-keyword">TSEND_Instance</span><span class="hljs-params">(<span class="hljs-variable">REQ</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&quot;_TcpComm2serve&quot;</span>.<span class="hljs-variable">SEND</span>.<span class="hljs-variable">REQ</span>,</span><br><span class="hljs-params">                    <span class="hljs-variable">ID</span> :<span class="hljs-operator">=</span> 1,</span><br><span class="hljs-params">                    <span class="hljs-variable">LEN</span> :<span class="hljs-operator">=</span> 8,</span><br><span class="hljs-params">                    <span class="hljs-variable">DONE</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2serve&quot;</span>.<span class="hljs-variable">SEND</span>.<span class="hljs-variable">DONE</span>,</span><br><span class="hljs-params">                    <span class="hljs-variable">BUSY</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2serve&quot;</span>.<span class="hljs-variable">SEND</span>.<span class="hljs-variable">BUSY</span>,</span><br><span class="hljs-params">                    <span class="hljs-variable">ERROR</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2serve&quot;</span>.<span class="hljs-variable">SEND</span>.<span class="hljs-variable">ERROR</span>,</span><br><span class="hljs-params">                    <span class="hljs-variable">STATUS</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2serve&quot;</span>.<span class="hljs-variable">SEND</span>.<span class="hljs-variable">STATUS</span>,</span><br><span class="hljs-params">                    <span class="hljs-variable">DATA</span> :<span class="hljs-operator">=</span> <span class="hljs-variable">P</span>#<span class="hljs-variable">DB7</span>.<span class="hljs-variable">DBX0</span>.0 <span class="hljs-variable">BYTE</span> 8)</span>;<br>    <br>    //TRCV<br>    <span class="hljs-punctuation">#</span><span class="hljs-keyword">TRCV_Instance</span><span class="hljs-params">(<span class="hljs-variable">EN_R</span> :<span class="hljs-operator">=</span> <span class="hljs-variable">NOT</span> <span class="hljs-string">&quot;_TcpComm2serve&quot;</span>.<span class="hljs-variable">TRCV</span>.<span class="hljs-variable">EN_R</span>,</span><br><span class="hljs-params">                   <span class="hljs-variable">ID</span> :<span class="hljs-operator">=</span> 1,</span><br><span class="hljs-params">                   <span class="hljs-variable">LEN</span> :<span class="hljs-operator">=</span> 8,</span><br><span class="hljs-params">                   <span class="hljs-variable">NDR</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2serve&quot;</span>.<span class="hljs-variable">TRCV</span>.<span class="hljs-variable">NDR</span>,</span><br><span class="hljs-params">                   <span class="hljs-variable">BUSY</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2serve&quot;</span>.<span class="hljs-variable">TRCV</span>.<span class="hljs-variable">BUSY</span>,</span><br><span class="hljs-params">                   <span class="hljs-variable">ERROR</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2serve&quot;</span>.<span class="hljs-variable">TRCV</span>.<span class="hljs-variable">ERROR</span>,</span><br><span class="hljs-params">                   <span class="hljs-variable">STATUS</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2serve&quot;</span>.<span class="hljs-variable">TRCV</span>.<span class="hljs-variable">STATUS</span>,</span><br><span class="hljs-params">                   <span class="hljs-variable">RCVD_LEN</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_TcpComm2serve&quot;</span>.<span class="hljs-variable">TRCV</span>.<span class="hljs-variable">RCVD_LEN</span>,</span><br><span class="hljs-params">                   <span class="hljs-variable">DATA</span> :<span class="hljs-operator">=</span> <span class="hljs-variable">P</span>#<span class="hljs-variable">DB8</span>.<span class="hljs-variable">DBX0</span>.0 <span class="hljs-variable">BYTE</span> 8)</span>;<br>END_IF;<br><br></code></pre></td></tr></table></figure></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/PLC-related/" class="category-chain-item">PLC related</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/PLC-related/1200-1500PLC/" class="category-chain-item">1200/1500PLC</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/PLC-part/" class="print-no-link">#PLC part</a>
+      
+        <a href="/tags/industrial-control/" class="print-no-link">#industrial control</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>PLC的开放式用户协议，TSAP（含S7300和S71200TCP连接实例）</div>
+      <div>http://example.com/2024/07/21/PLC的开放式用户协议，TSAP（含S7300和S71200TCP连接实例）/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiao cuncun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年7月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/07/21/CP341+CM1241%E9%80%9A%E8%BF%87ASCII%EF%BC%88%E8%87%AA%E7%94%B1%E5%8F%A3%EF%BC%89%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1/" title="CP341+CM1241通过ASCII（自由口）协议通信">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CP341+CM1241通过ASCII（自由口）协议通信</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/07/21/S7%E6%8C%87%E4%BB%A4%E4%B8%AD%E7%9A%84PUTGET%E6%88%96%E8%80%85BSENDBRCV%E7%9A%84%E9%80%89%E6%8B%A9%EF%BC%88BSENDBRCV%E4%BB%85%E6%94%AF%E6%8C%813004001500%EF%BC%89/" title="S7指令中的PUTGET或者BSENDBRCV的选择（BSENDBRCV仅支持3004001500）">
+                        <span class="hidden-mobile">S7指令中的PUTGET或者BSENDBRCV的选择（BSENDBRCV仅支持3004001500）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

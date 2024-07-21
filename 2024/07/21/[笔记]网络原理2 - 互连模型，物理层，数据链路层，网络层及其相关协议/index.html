@@ -1,0 +1,730 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiao cuncun">
+  <meta name="keywords" content="blog">
+  
+    <meta name="description" content="1. 五层模型 层层叠加，层层封装  2. 数据链路层中的一些概念 MTU: 最大传输单元，每一种数据链路层协议都规定了最大能传送的帧的数据长度上限，以太网的 MTU 最大为 1500bytes,最小为64bytes。 数据链路层会在数据包的左边（帧开始&#x2F;结束符）右边（帧开始&#x2F;结束符）都封装一些东西，封装成帧。通过帧开始结束符来判定当前帧从哪开始，从哪结束。为了防止误把数据当作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【笔记】网络原理2 - 互连模型，物理层，数据链路层，网络层及其相关协议">
+<meta property="og:url" content="http://example.com/2024/07/21/[%E7%AC%94%E8%AE%B0]%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%862%20-%20%E4%BA%92%E8%BF%9E%E6%A8%A1%E5%9E%8B%EF%BC%8C%E7%89%A9%E7%90%86%E5%B1%82%EF%BC%8C%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%EF%BC%8C%E7%BD%91%E7%BB%9C%E5%B1%82%E5%8F%8A%E5%85%B6%E7%9B%B8%E5%85%B3%E5%8D%8F%E8%AE%AE/index.html">
+<meta property="og:site_name" content="Whatsxiaocuncun Personal website">
+<meta property="og:description" content="1. 五层模型 层层叠加，层层封装  2. 数据链路层中的一些概念 MTU: 最大传输单元，每一种数据链路层协议都规定了最大能传送的帧的数据长度上限，以太网的 MTU 最大为 1500bytes,最小为64bytes。 数据链路层会在数据包的左边（帧开始&#x2F;结束符）右边（帧开始&#x2F;结束符）都封装一些东西，封装成帧。通过帧开始结束符来判定当前帧从哪开始，从哪结束。为了防止误把数据当作">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711102452387-536952018.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711102638305-337908750.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711102705684-1250232405.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711103224887-1675100335.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711103318258-1729816968.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711103537258-1808877533.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711103621687-958005941.png">
+<meta property="article:published_time" content="2024-07-21T06:44:39.197Z">
+<meta property="article:modified_time" content="2024-07-21T07:31:53.595Z">
+<meta property="article:author" content="xiao cuncun">
+<meta property="article:tag" content="TCP UDP">
+<meta property="article:tag" content="IP ICMP">
+<meta property="article:tag" content="router switch ARP">
+<meta property="article:tag" content="HTTP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/blog_page/3427087-20240711102452387-536952018.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>【笔记】网络原理2 - 互连模型，物理层，数据链路层，网络层及其相关协议 - Whatsxiaocuncun Personal website</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>一位不愿透露姓名的小村村同学的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="【笔记】网络原理2 - 互连模型，物理层，数据链路层，网络层及其相关协议"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-21 14:44" pubdate>
+          2024年7月21日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          797 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          7 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">【笔记】网络原理2 - 互连模型，物理层，数据链路层，网络层及其相关协议</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-五层模型"><a href="#1-五层模型" class="headerlink" title="1. 五层模型"></a>1. 五层模型</h2><ul>
+<li>层层叠加，层层封装<br><img src="/img/blog_page/3427087-20240711102452387-536952018.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+<h2 id="2-数据链路层中的一些概念"><a href="#2-数据链路层中的一些概念" class="headerlink" title="2. 数据链路层中的一些概念"></a>2. 数据链路层中的一些概念</h2><ul>
+<li>MTU: 最大传输单元，每一种数据链路层协议都规定了最大能传送的帧的数据长度上限，<code>以太网的 MTU 最大为 1500bytes,最小为64bytes。</code></li>
+<li>数据链路层会在数据包的左边（帧开始&#x2F;结束符）右边（帧开始&#x2F;结束符）都封装一些东西，封装成帧。通过帧开始结束符来判定当前帧从哪开始，从哪结束。为了防止误把数据当作帧的开始&#x2F;结束符，链路上和开始&#x2F;结束符同名的数据需要加上转义字符，解析的时候再去掉转义字符。<br><img src="/img/blog_page/3427087-20240711102638305-337908750.png" srcset="/img/loading.gif" lazyload></li>
+<li>FCS: 差错检验<br><img src="/img/blog_page/3427087-20240711102705684-1250232405.png" srcset="/img/loading.gif" lazyload></li>
+<li>CSMA&#x2F;CD 协议被称为载波侦听多路访问&#x2F;冲突检测协议。使用CSMA&#x2F;CD 的网络可以被称为以太网，它传输的是以太网帧。以太网帧的格式有<code>Ethernet V2</code>、<code>IEEE802.3</code> 等。为了正常检测正在发生的帧是否产生了冲突，以太网的帧至少需要 64bytes。交换机组成的网络虽然支持全双工，已不需要 CSMA&#x2F;CD 协议了，但是传输的帧依旧是以太网帧，所以交换机组成的网络依旧可以称为以太网。</li>
+<li>PPP协议也是数据链路层的，不怎么熟悉，就不写了。</li>
+<li>64bytes 的最小字节，如果从上层自下层的数据量都还不够，数据链路层会自动补全首部和尾部帧到 64bytes。</li>
+<li>下图 Ethernet V2 的帧格式,帧只在数据链路层封装<br><img src="/img/blog_page/3427087-20240711103224887-1675100335.png" srcset="/img/loading.gif" lazyload></li>
+<li>为什么数据的长度至少是 46 字节？因为[64-(6+6+2+4)]&#x3D;46bytes</li>
+<li>如果数据包下发下来总长不够 46bytes 怎么办？如下图“填充”部分：<br><img src="/img/blog_page/3427087-20240711103318258-1729816968.png" srcset="/img/loading.gif" lazyload></li>
+<li>物理网卡在接收到一个帧之后，首先会进行差错校验，如通过则接收，若失败则丢弃。</li>
+<li>WireShark 抓到的帧一定没有 FCS,因为它抓到的是差错校验通过的帧，FCS 已经被硬件丢掉了。</li>
+</ul>
+<h2 id="3-网络层中的一些概念"><a href="#3-网络层中的一些概念" class="headerlink" title="3. 网络层中的一些概念"></a>3. 网络层中的一些概念</h2><ul>
+<li>IP 数据包，网络层数据包，通常称为包（package）<br><img src="/img/blog_page/3427087-20240711103537258-1808877533.png" srcset="/img/loading.gif" lazyload></li>
+<li>因为帧不能超过 1500bytes，所以超过 1500bytes 的数据在网络层会被切片（fragments）传输给数据链路层，每一片都有自己的网络层首部。</li>
+<li>网络层标志字段用来表达切片，片偏移字段是 byte 的倍数。</li>
+<li>网络层协议字段表达了数据使用的协议是什么，含义如下图：<br><img src="/img/blog_page/3427087-20240711103621687-958005941.png" srcset="/img/loading.gif" lazyload></li>
+<li>ARP, IP, ICMP 协议都是直接工作在网络层的协议。如果 wireshark 抓到的协议是 ICMP 协议发送的，那它一定只有三层（比如 ping ）</li>
+<li><code>生存时间（Time To Live）</code>：每个<font color=red>路由器</font>在转发之前都会将 TTL 减 1，一旦减到 0 了，路由器就会返回错误而不会转发数据。Windows 系统的默认 TTL 是 128，其他的系统有区别。从 Ping 指令返回的 TTL可以用来推断目标 IP 过了大概经历了多少个路由器，甚至可以推测服务器大概率运行在哪个系统上的。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Proctocol-related/" class="category-chain-item">Proctocol related</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Proctocol-related/network/" class="category-chain-item">network</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/TCP-UDP/" class="print-no-link">#TCP UDP</a>
+      
+        <a href="/tags/IP-ICMP/" class="print-no-link">#IP ICMP</a>
+      
+        <a href="/tags/router-switch-ARP/" class="print-no-link">#router switch ARP</a>
+      
+        <a href="/tags/HTTP/" class="print-no-link">#HTTP</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>【笔记】网络原理2 - 互连模型，物理层，数据链路层，网络层及其相关协议</div>
+      <div>http://example.com/2024/07/21/[笔记]网络原理2 - 互连模型，物理层，数据链路层，网络层及其相关协议/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiao cuncun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年7月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/07/21/%5B%E7%AC%94%E8%AE%B0%5D%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%861%20-%20%E9%9B%86%E7%BA%BF%E5%99%A8%EF%BC%8C%E4%BA%A4%E6%8D%A2%E6%9C%BA%EF%BC%8C%E7%BD%91%E5%85%B3%EF%BC%8C%E8%B7%AF%E7%94%B1%E5%99%A8/" title="【笔记】网络原理1 - 集线器，交换机，网关，路由器">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">【笔记】网络原理1 - 集线器，交换机，网关，路由器</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/07/21/%5B%E7%AC%94%E8%AE%B0%5D%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%863%20-%20%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8F%8A%E5%85%B6%E7%9B%B8%E5%85%B3%E5%8D%8F%E8%AE%AE/" title="【笔记】网络原理3 - 传输层及其相关协议">
+                        <span class="hidden-mobile">【笔记】网络原理3 - 传输层及其相关协议</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

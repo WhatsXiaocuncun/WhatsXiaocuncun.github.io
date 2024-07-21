@@ -1,0 +1,772 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiao cuncun">
+  <meta name="keywords" content="blog">
+  
+    <meta name="description" content="从一个开源程序，学习access和sql serve在C#中的应用 1. 背景近来想看看怎么实现数据库的连接，在github上找到一个开源的记账项目，仅供学习使用。  项目使用了一个access数据库，做用户登陆，保存登陆数据 .mdb:access数据库文件   登陆成功之后，项目新建了一个sql serve数据库文件， 保存用户数据。 .mdf：数据文件 .ldf:日志文件    2. 打开数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C#应用access和sql serve数据库">
+<meta property="og:url" content="http://example.com/2024/07/21/C#%E5%BA%94%E7%94%A8access%E5%92%8Csql%20serve%E6%95%B0%E6%8D%AE%E5%BA%93/index.html">
+<meta property="og:site_name" content="Whatsxiaocuncun Personal website">
+<meta property="og:description" content="从一个开源程序，学习access和sql serve在C#中的应用 1. 背景近来想看看怎么实现数据库的连接，在github上找到一个开源的记账项目，仅供学习使用。  项目使用了一个access数据库，做用户登陆，保存登陆数据 .mdb:access数据库文件   登陆成功之后，项目新建了一个sql serve数据库文件， 保存用户数据。 .mdf：数据文件 .ldf:日志文件    2. 打开数">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240520112931600-1315834347.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240520113149776-2007725429.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240520114242076-321453979.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240520114901410-946271496.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240520115432796-307468361.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240520115719370-951774518.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240520124926856-1123771229.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240520125021429-1100672402.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240520130951971-736554499.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240520131302050-396938146.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240520131603328-1144114716.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240520131624917-796223776.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240520131708089-242416580.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240520125408427-1407161977.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240520130148482-1104705752.png">
+<meta property="article:published_time" content="2024-07-21T06:44:39.237Z">
+<meta property="article:modified_time" content="2024-07-21T08:43:20.889Z">
+<meta property="article:author" content="xiao cuncun">
+<meta property="article:tag" content="c#">
+<meta property="article:tag" content="winform">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/blog_page/3427087-20240520112931600-1315834347.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>C#应用access和sql serve数据库 - Whatsxiaocuncun Personal website</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>一位不愿透露姓名的小村村同学的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="C#应用access和sql serve数据库"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-21 14:44" pubdate>
+          2024年7月21日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">C#应用access和sql serve数据库</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>从一个开源程序，学习access和sql serve在C#中的应用</p>
+<h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><p>近来想看看怎么实现数据库的连接，在github上找到一个开源的记账项目，仅供学习使用。</p>
+<ul>
+<li>项目使用了一个access数据库，做用户登陆，保存登陆数据<ul>
+<li>.mdb:access数据库文件<br><img src="/img/blog_page/3427087-20240520112931600-1315834347.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+<li>登陆成功之后，项目新建了一个sql serve数据库文件， 保存用户数据。<ul>
+<li>.mdf：数据文件</li>
+<li>.ldf:日志文件<br><img src="/img/blog_page/3427087-20240520113149776-2007725429.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+</ul>
+<h2 id="2-打开数据库文件"><a href="#2-打开数据库文件" class="headerlink" title="2. 打开数据库文件"></a>2. 打开数据库文件</h2><ul>
+<li><p>打开access数据库文件：</p>
+<ul>
+<li>安装access数据库。从微软官网下载office365全家桶，自带access。</li>
+<li>双击打开，数据库文件。数据库密码从项目源码中可以得到：<code>string connectstring = &quot;provider=Microsoft.jet.OLEDB.4.0;Data Source=accountsystem.mdb;Jet OleDb:Database Password=lxw618&quot;</code></li>
+<li>登陆后在相应的表中得到了相应的登陆用户和密码。用于后续探索。</li>
+</ul>
+</li>
+<li><p>打开sql serve数据库文件</p>
+<ul>
+<li>安装sql serve数据库，去官网下载，可以选择SSMS安装（带UI），下载后如图：<br><img src="/img/blog_page/3427087-20240520114242076-321453979.png" srcset="/img/loading.gif" lazyload></li>
+<li>连接到SQL server服务器（没有远程的情况下，本地电脑本身也可以作为服务器）<ul>
+<li>本机服务器名称可以为<code>本机名</code>，可以为<code>.</code>， 也可以为<code>local</code>，也可以为<code>本机IP</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="/img/blog_page/3427087-20240520114901410-946271496.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240520115432796-307468361.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="3-sql-server如何导入外部-mdf文件"><a href="#3-sql-server如何导入外部-mdf文件" class="headerlink" title="3. sql server如何导入外部.mdf文件"></a>3. sql server如何导入外部.mdf文件</h2><ul>
+<li>以管理身份运行SSMS，不然没有权限导入，切记<br><img src="/img/blog_page/3427087-20240520115719370-951774518.png" srcset="/img/loading.gif" lazyload></li>
+<li>进入并且连接上数据库之后，右键“数据库”，选择“附加”，添加外部mdf文件，ldf文件会一并自动添加到数据库中<br><img src="/img/blog_page/3427087-20240520124926856-1123771229.png" srcset="/img/loading.gif" lazyload></li>
+<li>导入后的外部数据库<br><img src="/img/blog_page/3427087-20240520125021429-1100672402.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+<h2 id="4-检查配置sql远程权限，远程TCP连接用，本地不用"><a href="#4-检查配置sql远程权限，远程TCP连接用，本地不用" class="headerlink" title="4. 检查配置sql远程权限，远程TCP连接用，本地不用"></a>4. 检查配置sql远程权限，远程TCP连接用，本地不用</h2><ul>
+<li>SQL配置管理检查，TCP端口1433<br><img src="/img/blog_page/3427087-20240520130951971-736554499.png" srcset="/img/loading.gif" lazyload></li>
+<li>查看sql实例运行状态<br><img src="/img/blog_page/3427087-20240520131302050-396938146.png" srcset="/img/loading.gif" lazyload></li>
+<li>防火墙设置<br><img src="/img/blog_page/3427087-20240520131603328-1144114716.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240520131624917-796223776.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240520131708089-242416580.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+<h2 id="5-测试sql-serve"><a href="#5-测试sql-serve" class="headerlink" title="5. 测试sql serve"></a>5. 测试sql serve</h2><ul>
+<li><p>除了通过SSMS连接，还有一些其他方式，如<code>建立.udl</code>文件</p>
+<ul>
+<li>建立一个新建文本文档，把后缀改为.udl；右键打开文件属性，选择连接。测试连接<br><img src="/img/blog_page/3427087-20240520125408427-1407161977.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+<li><p>通过CMD测试连接,如果显示<code>1&gt;</code>则连接成功。用<code>QUIT</code>退出测试</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">sqlcmd -S &lt;<span class="hljs-keyword">server</span> <span class="hljs-type">name</span>&gt; -U &lt;<span class="hljs-keyword">user</span> <span class="hljs-type">name</span>&gt; -p &lt;pass word&gt; -d &lt;<span class="hljs-keyword">database</span> <span class="hljs-type">name</span>&gt;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="6-通过C-实现数据库的连接"><a href="#6-通过C-实现数据库的连接" class="headerlink" title="6. 通过C#实现数据库的连接"></a>6. 通过C#实现数据库的连接</h2><ul>
+<li><p>access数据库的连接方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> Boolean <span class="hljs-title function_">GetSqlConnectString</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-keyword">try</span><br>    &#123;<br>        <span class="hljs-type">string</span> <span class="hljs-variable">connectstring</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;provider=Microsoft.jet.OLEDB.4.0;Data Source=accountsystem.mdb;Jet OleDb:Database Password=lxw618&quot;</span>;<br>        <span class="hljs-type">string</span> <span class="hljs-variable">sqlcommand</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;select connect from [Set]&quot;</span>;<br>        <span class="hljs-type">OleDbConnection</span> <span class="hljs-variable">aConnection</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">OleDbConnection</span>(connectstring);<br>        aConnection.Open();<br>        <span class="hljs-type">OleDbCommand</span> <span class="hljs-variable">aCommand</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">OleDbCommand</span>(sqlcommand, aConnection);<br>        <span class="hljs-type">OleDbDataReader</span> <span class="hljs-variable">reader</span> <span class="hljs-operator">=</span> aCommand.ExecuteReader();<br>        reader.Read();<br>        sqlConectstring = reader.GetString(<span class="hljs-number">0</span>);               <br>        reader.Close();<br>        aConnection.Close();<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br>    <span class="hljs-keyword">catch</span> (Exception ex)<br>    &#123;<br>        MessageBox.Show(ex.Message, <span class="hljs-string">&quot;系统错误&quot;</span>);                <br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>sql server数据库连接方法，实际上示例名可以空着</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">private <span class="hljs-type">void</span> btnSetConnect_Click(<span class="hljs-keyword">object</span> sender, EventArgs e)<br>&#123;<br>    try<br>    &#123;<br>        <span class="hljs-keyword">if</span> (this.<span class="hljs-keyword">IsNull</span>() == <span class="hljs-keyword">true</span>)<br>        &#123;<br>            <span class="hljs-keyword">return</span>;<br>        &#125;                <br>        string connectstring = &quot;Data Source=&quot; + txtServer.Text + &quot;\\&quot; + txtCase.Text + &quot;;Initial Catalog=&quot; + txtDatabase.Text + &quot;;User ID=&quot; + txtUsername.Text + &quot;;Password=&quot; + txtPassword.Text;<br>        string sqlcommand = &quot;select username,password from [User]&quot;;<br>        SqlConnection sqlConnection = <span class="hljs-built_in">new</span> SqlConnection(connectstring);<br>        sqlConnection.<span class="hljs-keyword">Open</span>();<br>        SqlCommand sqlCommand = <span class="hljs-built_in">new</span> SqlCommand(sqlcommand, sqlConnection);<br>        SqlDataReader reader = sqlCommand.ExecuteReader();<br>        MessageBox.<span class="hljs-keyword">Show</span>(&quot;连接成功&quot;, &quot;恭喜&quot;);<br>    &#125;<br>    catch (<span class="hljs-keyword">Exception</span> ex)<br>    &#123;<br>        MessageBox.<span class="hljs-keyword">Show</span>(ex.Message, &quot;系统错误&quot;);<br>    &#125;   <br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="7-登陆测试"><a href="#7-登陆测试" class="headerlink" title="7. 登陆测试"></a>7. 登陆测试</h2><ul>
+<li><code>.</code>表示本地</li>
+<li>本地服务器实例名空着，因为不管用cmd还是udl验证都没填写实例名</li>
+<li>数据库名，用户名，密码保持一致</li>
+<li>实际上的中断用户名和密码是通过在线调试程序打断点的方式得到的。程序里有行比较数据库用户程序名和输入用户程序名的代码段。<br><img src="/img/blog_page/3427087-20240520130148482-1104705752.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+<h2 id="8-附录，早前使用access练习sql指令的命令行"><a href="#8-附录，早前使用access练习sql指令的命令行" class="headerlink" title="8. 附录，早前使用access练习sql指令的命令行"></a>8. 附录，早前使用access练习sql指令的命令行</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> 学生(学号 <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">Primary</span> Key, 姓名 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">4</span>) <span class="hljs-keyword">Not</span> <span class="hljs-keyword">Null</span>, 性别 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">1</span>), 出生日期 <span class="hljs-type">DATE</span>,家庭住址 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>), 学分 NUMBER);<span class="hljs-comment">----创建表格</span><br><br><span class="hljs-keyword">DROP</span> <span class="hljs-keyword">TABLE</span> 学生<span class="hljs-comment">----删除表格</span><br><br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> 学生 ( 学号, 姓名, 性别, 出生日期, 家庭住址, 学分 )<span class="hljs-keyword">VALUES</span> (<span class="hljs-number">1</span>, &quot;张三&quot;, &quot;男&quot;, #<span class="hljs-number">1999</span><span class="hljs-operator">/</span><span class="hljs-number">12</span><span class="hljs-operator">/</span><span class="hljs-number">9</span>#, &quot;成都市&quot;, <span class="hljs-number">98.5</span>);<span class="hljs-comment">----依据字段插入值</span><br><br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> 学生 <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">2</span>, &quot;翠翠&quot;, &quot;女&quot;, #<span class="hljs-number">2000</span><span class="hljs-operator">/</span><span class="hljs-number">12</span><span class="hljs-operator">/</span><span class="hljs-number">9</span>#, &quot;成都市&quot;, <span class="hljs-number">97.5</span>);<span class="hljs-comment">----依据字段（不标明字段）插入值</span><br><br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> 学生 ( 学号, 姓名, 性别, 家庭住址, 学分 ) <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">3</span>, &quot;李四&quot;, &quot;男&quot;, &quot;成都市&quot;, <span class="hljs-number">55.5</span>);<span class="hljs-comment">----依据字段（带空缺）插入值</span><br><br><span class="hljs-keyword">UPDATE</span> 学生 <span class="hljs-keyword">SET</span> 学分 <span class="hljs-operator">=</span> 学分<span class="hljs-number">-50</span> <span class="hljs-keyword">WHERE</span> 姓名<span class="hljs-operator">=</span>&quot;张三&quot;;<span class="hljs-comment">----带条件的更新数据</span><br><br><span class="hljs-keyword">UPDATE</span> 学生 <span class="hljs-keyword">SET</span> 学分 <span class="hljs-operator">=</span> 学分<span class="hljs-number">-50</span>;<span class="hljs-comment">----更新所有数据</span><br><br><span class="hljs-keyword">DELETE</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> 学生 <span class="hljs-keyword">WHERE</span> 姓名 <span class="hljs-operator">=</span> &quot;李四&quot;;<span class="hljs-comment">----带条件的删除</span><br><br><span class="hljs-keyword">DELETE</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> 学生;<span class="hljs-comment">----删除</span><br><br><span class="hljs-keyword">SELECT</span> 姓名, 性别 <span class="hljs-keyword">FROM</span> 学生;<span class="hljs-comment">----筛选</span><br><br><span class="hljs-keyword">SELECT</span> 姓名 <span class="hljs-keyword">AS</span> 名字 <span class="hljs-keyword">FROM</span> 学生;<span class="hljs-comment">----别名</span><br><br><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">DISTINCT</span> 性别 <span class="hljs-keyword">FROM</span> 学生;<span class="hljs-comment">----限制，不重复出现</span><br><br><span class="hljs-keyword">SELECT</span> 姓名, 性别, 学分 <span class="hljs-keyword">FROM</span> 学生 <span class="hljs-keyword">WHERE</span> 性别 <span class="hljs-operator">=</span> &quot;男&quot;;<br><br><span class="hljs-keyword">SELECT</span> 姓名, 性别, 学分 <span class="hljs-keyword">FROM</span> 学生 <span class="hljs-keyword">WHERE</span> 学分 <span class="hljs-operator">&gt;</span> <span class="hljs-number">90</span> <span class="hljs-keyword">OR</span> 学分 <span class="hljs-operator">&lt;</span> <span class="hljs-number">60</span>;<br><br><span class="hljs-keyword">SELECT</span> 姓名, 性别, 学分 <span class="hljs-keyword">FROM</span> 学生 <span class="hljs-keyword">WHERE</span> 性别 <span class="hljs-keyword">IN</span> (&quot;男&quot;);<br><br><span class="hljs-keyword">SELECT</span> 姓名, 性别, 学分 <span class="hljs-keyword">FROM</span> 学生 <span class="hljs-keyword">WHERE</span> 姓名 <span class="hljs-keyword">LIKE</span> &quot;李*&quot;;<br><br><span class="hljs-keyword">SELECT</span> 姓名, 性别, 学分 <span class="hljs-keyword">FROM</span> 学生 <span class="hljs-keyword">WHERE</span> 出生日期 <span class="hljs-keyword">Is</span> <span class="hljs-keyword">Null</span>;<br><br><span class="hljs-keyword">SELECT</span> 姓名, 性别, 学分 <span class="hljs-keyword">FROM</span> 学生 <span class="hljs-keyword">WHERE</span> 出生日期 <span class="hljs-keyword">Is</span> <span class="hljs-keyword">Not</span> <span class="hljs-keyword">Null</span>;<br><br><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> 学生 <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> 学分 <span class="hljs-keyword">ASC</span>;<span class="hljs-comment">----正序</span><br><br><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> 学生 <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> 学分 <span class="hljs-keyword">DESC</span>;<span class="hljs-comment">----反序</span><br><br><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> 学生 <span class="hljs-keyword">WHERE</span> 性别 <span class="hljs-operator">=</span> &quot;男&quot; <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> 学分 <span class="hljs-keyword">DESC</span>;<br><br><span class="hljs-keyword">SELECT</span> TOP <span class="hljs-number">1</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> 学生 <span class="hljs-keyword">WHERE</span> 性别 <span class="hljs-operator">=</span> &quot;男&quot; <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> 学分 <span class="hljs-keyword">DESC</span>;<span class="hljs-comment">----取前1名</span><br>...<br><span class="hljs-operator">/</span><span class="hljs-operator">/</span><span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span><br><span class="hljs-operator">/</span><span class="hljs-operator">/</span><span class="hljs-keyword">AS</span><br><span class="hljs-operator">/</span><span class="hljs-operator">/</span>AVG<br><span class="hljs-operator">/</span><span class="hljs-operator">/</span><span class="hljs-keyword">HAVING</span><br><br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/C-sharp/" class="category-chain-item">C sharp</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/C-sharp/basic-notes/" class="category-chain-item">basic notes</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/c/" class="print-no-link">#c#</a>
+      
+        <a href="/tags/winform/" class="print-no-link">#winform</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>C#应用access和sql serve数据库</div>
+      <div>http://example.com/2024/07/21/C#应用access和sql serve数据库/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiao cuncun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年7月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/07/21/%E5%9F%BA%E4%BA%8ETIA%20WINCC%E7%9A%84%E5%AE%A1%E8%AE%A1%E8%BF%BD%E8%B8%AA%E5%8A%9F%E8%83%BD/" title="基于TIA WINCC的审计追踪功能">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">基于TIA WINCC的审计追踪功能</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/07/21/%E6%8A%8Amarkdown%E6%96%87%E4%BB%B6%E8%BD%AC%E6%8D%A2%E4%B8%BAhtml%E6%96%87%E4%BB%B6/" title="把markdown文件转换为html文件">
+                        <span class="hidden-mobile">把markdown文件转换为html文件</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

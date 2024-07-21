@@ -1,0 +1,866 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiao cuncun">
+  <meta name="keywords" content="blog">
+  
+    <meta name="description" content="从远古时代讲起 在300&#x2F;400的年代，SIMATIC模块要提供一些特定的信息的方法是将特定信息保存到SSL里，通过查询的方法获得。  SSL中文名叫做系统状态列表，帮助里面有些时候有写成SZL，不过都是一样的东西。 在Step7中使用SFC51(RDSYSST)，SFB54(RALRM)来获取SSL和报告系统错误，具体的records数据结构会根据你的SSL ID在博图帮助里索引出来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PROFINET IO应用层数据结构">
+<meta property="og:url" content="http://example.com/2024/07/21/PROFINET%20IO%E5%BA%94%E7%94%A8%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.html">
+<meta property="og:site_name" content="Whatsxiaocuncun Personal website">
+<meta property="og:description" content="从远古时代讲起 在300&#x2F;400的年代，SIMATIC模块要提供一些特定的信息的方法是将特定信息保存到SSL里，通过查询的方法获得。  SSL中文名叫做系统状态列表，帮助里面有些时候有写成SZL，不过都是一样的东西。 在Step7中使用SFC51(RDSYSST)，SFB54(RALRM)来获取SSL和报告系统错误，具体的records数据结构会根据你的SSL ID在博图帮助里索引出来">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240422141635419-776917532.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240422144025199-1466320511.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240422202107321-2110906025.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240422202447718-875842832.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423132439191-169037629.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240422202022588-374365820.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240422202139507-79281090.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423102052603-1122622650.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240422203657987-370649958.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423113921682-318463166.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423120309312-870640852.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423122058982-1893854012.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423140925482-1043848103.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423132602745-755010602.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423134049408-1999304422.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423134303717-1908844309.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423134356412-23282886.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423135412181-663067120.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423135455050-605215538.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423135559434-91899254.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423140329308-2061732091.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423141417135-2096926989.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423142617897-1277464026.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423144130450-153679549.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423144207513-1941115211.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423144252070-1996683463.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423144322494-554334810.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423144714856-2085916315.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423144741894-394791315.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423144815541-1304158415.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423144848135-1624380343.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240423144914172-1133343699.png">
+<meta property="article:published_time" content="2024-07-21T06:44:39.298Z">
+<meta property="article:modified_time" content="2024-07-21T09:35:10.985Z">
+<meta property="article:author" content="xiao cuncun">
+<meta property="article:tag" content="S7">
+<meta property="article:tag" content="PN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/blog_page/3427087-20240422141635419-776917532.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>PROFINET IO应用层数据结构 - Whatsxiaocuncun Personal website</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>一位不愿透露姓名的小村村同学的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="PROFINET IO应用层数据结构"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-21 14:44" pubdate>
+          2024年7月21日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">PROFINET IO应用层数据结构</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="从远古时代讲起"><a href="#从远古时代讲起" class="headerlink" title="从远古时代讲起"></a>从远古时代讲起</h2><ul>
+<li><p>在300&#x2F;400的年代，SIMATIC模块要提供一些特定的信息的方法是将特定信息保存到<code>SSL</code>里，通过查询的方法获得。</p>
+<ul>
+<li>SSL中文名叫做<code>系统状态列表</code>，帮助里面有些时候有写成SZL，不过都是一样的东西。</li>
+<li>在Step7中使用<code>SFC51(RDSYSST)</code>，<code>SFB54(RALRM)</code>来获取SSL和报告系统错误，具体的records数据结构会根据你的<code>SSL ID</code>在博图帮助里索引出来<br> 部分SSL ID如图：<br><img src="/img/blog_page/3427087-20240422141635419-776917532.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+<li><p>在Step7中如果要获得数据记录和诊断记录，依旧可以通过SFB52(RDREC)和SFB53(WRREC)获得，因为早期PLC没有硬件标识符的概念，所以SFB的ID管脚填写IO组件的实际逻辑地址，<code>如果是输出模块，第15位必须设置为1</code>；如果是混合模块，则依据15位状态选择输入或者输出。</p>
+</li>
+</ul>
+<h2 id="PN-IO的设备模型"><a href="#PN-IO的设备模型" class="headerlink" title="PN-IO的设备模型"></a>PN-IO的设备模型</h2><p><img src="/img/blog_page/3427087-20240422144025199-1466320511.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>slot:插槽，和硬件组态里面的插槽概念一致，一般来说slot1是PLC,IM那些（slot0一般是ps，MP系统最大插槽号31）</li>
+<li>subslot：位于物理的slot中，是个虚拟的概念。比如混合模块Input和Output位于不同的两个subslots；又比如带有MSO&#x2F;MSI(最多分4个subslot)和Submodule功能的IO模块，他们可以根据需求和组态配置分出多个subslot出来。</li>
+<li>Channel: 最小级别，也是实际承载数据的级别，它的理解就是正常里面里面的通道概念。</li>
+</ul>
+<h2 id="应用关系AR和应用程序进程标识符API"><a href="#应用关系AR和应用程序进程标识符API" class="headerlink" title="应用关系AR和应用程序进程标识符API"></a>应用关系AR和应用程序进程标识符API</h2><ul>
+<li>AR:控制器或者监管者必须通过AR终端才能链接到AR设备，举个具体的例子，<code>AR</code>指的就是数据交互的传输管道（pn网络，DP所承载的数据管道等）</li>
+<li>CR:符合PN规定的每一个AR中必须至少满足以下三个通信关系（CR）：分别是<code>records data（异步）</code>,<code>alarm data（中断）</code>,<code>I/O data（循环或同步刷新_IRT）</code>。除它们三个外，其余的CR是可选项。</li>
+<li>API:<code>应用程序进程标识符</code>。可以理解为一个PN IO系统里面的逻辑设备。API0（默认的）是PN指定的设备（API地址范围是0x00000000和0x00010000-0x0001FFFF），其他的是供应商指定的设备。<br><img src="/img/blog_page/3427087-20240422202107321-2110906025.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240422202447718-875842832.png" srcset="/img/loading.gif" lazyload><blockquote>
+<p>.如上，还有一些地址段的API表示DP，一些地址段表示编码器，一些表示，LO-Link设备等等很多很多地址段来分类很多很多设备类型</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="用户结构标识符USI"><a href="#用户结构标识符USI" class="headerlink" title="用户结构标识符USI"></a>用户结构标识符USI</h2><ul>
+<li>USI：<code>用户结构标识符</code>。用于标识以下设备（第15位&#x3D;1的都表示子插槽级别，就是16#8000开头的USI）<ul>
+<li>（在诊断记录中）通道诊断，W#16#8000</li>
+<li>（在诊断记录中）拓展通道诊断, W#16#8002</li>
+<li>（在诊断记录中）供应商特定的通道诊断, W#16#000-W#16#7FFF</li>
+<li>（在组态记录中）用于请求目标组态，W#16#8000</li>
+<li>（在组态记录中）用于请求实际组态，W#16#8001</li>
+<li>上面的例子都是16#80xx开头的，表示子插槽级别，结构内容最小到通道</li>
+<li>16#C0xx开头的是插槽级别的，结构内容最小到Slot下面的子插槽</li>
+<li>16#F0xx开头的是API级别的</li>
+<li>16#E0xx开头的是AR级别的</li>
+<li>不同的寻址级别的差别是定义具体寻址结构的时候所带信息量的多少，16#80xx能够带的信息最多最丰富<br><img src="/img/blog_page/3427087-20240423132439191-169037629.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+<li><font color=red>USI可以认为等同于用户程序（RDREC&#x2F;WRREC）请求数据的寻址index号但是又不完全等同，比如诊断用的800A&#x2F;E00C这类index号就属于叠加了基础USI&#x3D;16#8000&#x2F;16#8002的结果，但你不能直接用USI&#x3D;16#8000去寻址诊断，因为USI&#x3D;16#8000是寻址组态记录的index号。</font></li>
+<li>诊断数据记录和组态数据记录的寻址结构：<br><img src="/img/blog_page/3427087-20240422202022588-374365820.png" srcset="/img/loading.gif" lazyload><blockquote>
+<p>.组态数据记录寻址结构<br><img src="/img/blog_page/3427087-20240422202139507-79281090.png" srcset="/img/loading.gif" lazyload><br>.诊断数据记录寻址结构</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="组态和诊断记录的结构及含义"><a href="#组态和诊断记录的结构及含义" class="headerlink" title="组态和诊断记录的结构及含义"></a>组态和诊断记录的结构及含义</h2><ul>
+<li>头结构(组态和诊断记录具有相同的header结构)：<br><img src="/img/blog_page/3427087-20240423102052603-1122622650.png" srcset="/img/loading.gif" lazyload><ul>
+<li><code>Blocktype</code>:<ol>
+<li>用W#16#0001和W#16#0002分别表示中断传输通道1和2（中断类）</li>
+<li>用W#16#0010表示诊断记录（诊断类）</li>
+<li>用W#16#0012,W#16#0013,W#16#8104分别表示目标，实际，目标实际比较（组态类）</li>
+</ol>
+</li>
+<li><code>BlockLength</code>:<ol>
+<li>块长度包含了请求来的结构的长度信息，但是不包括BlockType和BlockLength本身（共4字节），意味着我们计算<code>总长度=(BlockLength值 + 4)bytes</code>。</li>
+</ol>
+</li>
+<li><code>BlockVersion</code>:<ol>
+<li>Version本身由高字节版本（01）和低字节版本（01或者00）两个字节构成</li>
+<li>对于W#16#0100的版本，它所表现的内容更少，它没有承载关于API的信息；</li>
+<li>对于W#16#0101的版本，它所表现的内容更多，它承载了关于API的信息；</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="组态记录集结构"><a href="#组态记录集结构" class="headerlink" title="组态记录集结构"></a>组态记录集结构</h2><ul>
+<li><p>16#80xx级别，组态USI(这里和用户程序的<code>index</code>号对应)的最后一位只有0和1，其中<code>0表示请求的是目标组态，1表示请求的是实际组态</code>。<br><img src="/img/blog_page/3427087-20240422203657987-370649958.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>.由图，其实如果<code>USI=E#16#E002</code>的话，是可以得到实际和目标组态的差异信息的。这个索引号<code>特殊</code>一点。</p>
+</blockquote>
+</li>
+<li><p>组态记录的结构（USI为16#xx01和xx00结构一致）<br>如上介绍，组态记录的包括了BlockType,BlockLength,BlockVersion三个word。我们直接接着header的结构往下介绍：</p>
+</li>
+</ul>
+<ol>
+<li><p>当BlocVersion&#x3D;W#16#0100时（不带API信息），整体结构就该为header+numberodslots+根据slotsnumber迭代的slots结构+根据slots结构里面的subslotsnumber迭代而来的subslots结构。如图：<br><img src="/img/blog_page/3427087-20240423113921682-318463166.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>.因为NumberOfSlots&#x3D;2,所以调用了2遍Rec_Slot_000_001结构<br>.因为第一个Slots里面NumberOfSubSlots&#x3D;2，所以第一个Slots下面跟了2个SubSlots,同理，第二个Slots下面只跟了一个Subslots<br>.计算总长度：header(6bytes)+numberofslots(2bytes)+slots1(8bytes)+subslots1&#x2F;2(6bytes+6bytes)+slots2(8bytes)+subslots1(6bytes)&#x3D;42bytes;<br>.BlockLength显示值应该是：42-4&#x3D;38bytes。</p>
+</blockquote>
+</li>
+<li><p>当BlocVersion&#x3D;W#16#0101时（带API信息），整体结构会在上述基础上迭代一个NumberOfAPIs的个数。如图：<br><img src="/img/blog_page/3427087-20240423120309312-870640852.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>请自行体会和上述0100版本的差异，注意各个number的值。</p>
+</blockquote>
+</li>
+<li><p>当USI&#x3D;W#16#E002时（特殊情况）<br><img src="/img/blog_page/3427087-20240423122058982-1893854012.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>.也请自行体会结构和上面两种结构的差异，除了number外，还需注意看命名的差异。</p>
+</blockquote>
+</li>
+<li><p>ModuleState的含义：<br><img src="/img/blog_page/3427087-20240423140925482-1043848103.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>SubmoduleState的含义用bit表达，详情查找帮助</p>
+</li>
+</ol>
+<h2 id="诊断记录集"><a href="#诊断记录集" class="headerlink" title="诊断记录集"></a>诊断记录集</h2><ul>
+<li><p>诊断USI的类型比较多。例如上面提到的<code>W#16#8000（通道诊断）和W#16#8002（扩展通道诊断），这俩是反馈回来的基础USI，不属于用户寻址的index</code>就属于标准化USI值的范围，除此之外还有0A,0B,0C,10,11,12,13（<code>属于用户最终使用的index</code>）等一系列标准化USI。剩下的一些则是供应商定制的结构。</p>
+</li>
+<li><p>0A,0B,0C,10,11,12,13的区别：他们<code>在数据结构上没有什么太多区别</code>。<br><img src="/img/blog_page/3427087-20240423132602745-755010602.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>A,B,C,10,11,12,13在具体信息量和触发条件上有一点细微的区别（前提不变，若第一位是8则为子插槽级，C为模块级，E为AR级，F为API级）：</p>
+<ul>
+<li>xx0A，10，11：诊断通道数据和扩展通道数据（由反馈的USI？&#x3D;8000&#x2F;8002确定）</li>
+<li>xx0B，12，113: 在上述基础增加供应商特定的数据 </li>
+<li>xx0C: 在xx0B基础上可能多包含IE&#x2F;PB连接器状态信息</li>
+</ul>
+</li>
+<li><p>诊断结构</p>
+<ol>
+<li>header:<br><img src="/img/blog_page/3427087-20240423134049408-1999304422.png" srcset="/img/loading.gif" lazyload></li>
+<li>判断BlockVersion，等于0100时如下：<br><img src="/img/blog_page/3427087-20240423134303717-1908844309.png" srcset="/img/loading.gif" lazyload></li>
+<li>判断BlockVersion，等于0101时如下（依旧只多API信息）：<br><img src="/img/blog_page/3427087-20240423134356412-23282886.png" srcset="/img/loading.gif" lazyload></li>
+<li>根据给出的USI结构中的值判断下挂的诊断结构，当USI&#x3D;8000时：<br><img src="/img/blog_page/3427087-20240423135412181-663067120.png" srcset="/img/loading.gif" lazyload></li>
+<li>当USI&#x3D;8002时：<br><img src="/img/blog_page/3427087-20240423135455050-605215538.png" srcset="/img/loading.gif" lazyload></li>
+<li>当USI&#x3D;0-16#7FFF时：<br><img src="/img/blog_page/3427087-20240423135559434-91899254.png" srcset="/img/loading.gif" lazyload></li>
+<li>迭代次数由发生<code>诊断的模块</code>和<code>模块里面的通道数</code>决定。</li>
+<li>ChannelErrorType:表示故障类型，不完全举例如下：<br><img src="/img/blog_page/3427087-20240423140329308-2061732091.png" srcset="/img/loading.gif" lazyload></li>
+<li>ChannelNumber:如果值等于<code>W#16#8000则为子模块</code>，其他值都属于供应商特定或保留内容。</li>
+<li>ChannelPropertes:每一位拆分表达了不同的含义，所传递的信息比较多，详情查找帮助。</li>
+</ol>
+</li>
+<li><p>应用案例说明<br><img src="/img/blog_page/3427087-20240423141417135-2096926989.png" srcset="/img/loading.gif" lazyload><br>如图，一共两个子模块故障，一个子模块上两个通道故障，一个子模块上一个通道故障，用<code>E00C</code>(AR层级去请求)，迭代结构如下：<br><img src="/img/blog_page/3427087-20240423142617897-1277464026.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>.我们平时由RALRM得到的error_code其实本质就是在这里给出的。<br>.用E（AR级）去请求是因为发生了跨插槽的多种故障，如果用8(channel级)则只会得到一个插槽的内容，当然一个插槽可以有多个通道诊断。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="其他记录号"><a href="#其他记录号" class="headerlink" title="其他记录号"></a>其他记录号</h2><p>以下均是和用户程序index号直接对应的记录号（<code>DS </code>number）</p>
+<ol>
+<li>在PN IO中读取I&#x2F;O的记录<br><img src="/img/blog_page/3427087-20240423144130450-153679549.png" srcset="/img/loading.gif" lazyload></li>
+<li>返回PN的接口状态信息<br><img src="/img/blog_page/3427087-20240423144207513-1941115211.png" srcset="/img/loading.gif" lazyload></li>
+<li>返回I&amp;M标识和维护数据<br><img src="/img/blog_page/3427087-20240423144252070-1996683463.png" srcset="/img/loading.gif" lazyload></li>
+<li>返回协议参数<br><img src="/img/blog_page/3427087-20240423144322494-554334810.png" srcset="/img/loading.gif" lazyload></li>
+</ol>
+<h2 id="I-M数据的结构"><a href="#I-M数据的结构" class="headerlink" title="I&amp;M数据的结构"></a>I&amp;M数据的结构</h2><ol>
+<li>I&amp;M0：<br><img src="/img/blog_page/3427087-20240423144714856-2085916315.png" srcset="/img/loading.gif" lazyload></li>
+<li>I&amp;M1:<br><img src="/img/blog_page/3427087-20240423144741894-394791315.png" srcset="/img/loading.gif" lazyload></li>
+<li>I&amp;M2:<br><img src="/img/blog_page/3427087-20240423144815541-1304158415.png" srcset="/img/loading.gif" lazyload></li>
+<li>I&amp;M3：<br><img src="/img/blog_page/3427087-20240423144848135-1624380343.png" srcset="/img/loading.gif" lazyload></li>
+<li>I&amp;M4:<br><img src="/img/blog_page/3427087-20240423144914172-1133343699.png" srcset="/img/loading.gif" lazyload></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Proctocol-related/" class="category-chain-item">Proctocol related</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Proctocol-related/Profinet/" class="category-chain-item">Profinet</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/S7/" class="print-no-link">#S7</a>
+      
+        <a href="/tags/PN/" class="print-no-link">#PN</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>PROFINET IO应用层数据结构</div>
+      <div>http://example.com/2024/07/21/PROFINET IO应用层数据结构/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiao cuncun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年7月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/07/21/%E7%BB%84%E6%80%81%E6%8E%A7%E5%88%B6%E6%96%B9%E6%B3%95/" title="组态控制方法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">组态控制方法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/07/21/YOLO%20v8%20%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="YOLO v8 环境搭建">
+                        <span class="hidden-mobile">YOLO v8 环境搭建</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

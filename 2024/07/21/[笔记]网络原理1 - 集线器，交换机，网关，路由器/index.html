@@ -1,0 +1,871 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiao cuncun">
+  <meta name="keywords" content="blog">
+  
+    <meta name="description" content="1. 一些零散的知识记录 OSI 七层模型：应表会传网数物 TCP&#x2F;IP 五层模型：应传网数物 TCP&#x2F;IP 四层模型：应传网+网络接口 特定格式，在常用五层模型里面 物 -&gt; 电信号（Bits,比特流，有一些类似时钟信号的数据流传输）； 数据链路 -&gt; MAC地址（Frames,帧）；PPP（路由器之间）协议，CSMA&#x2F;CD（hub,设备间）协议； 网络">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【笔记】网络原理1 - 集线器，交换机，网关，路由器">
+<meta property="og:url" content="http://example.com/2024/07/21/[%E7%AC%94%E8%AE%B0]%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%861%20-%20%E9%9B%86%E7%BA%BF%E5%99%A8%EF%BC%8C%E4%BA%A4%E6%8D%A2%E6%9C%BA%EF%BC%8C%E7%BD%91%E5%85%B3%EF%BC%8C%E8%B7%AF%E7%94%B1%E5%99%A8/index.html">
+<meta property="og:site_name" content="Whatsxiaocuncun Personal website">
+<meta property="og:description" content="1. 一些零散的知识记录 OSI 七层模型：应表会传网数物 TCP&#x2F;IP 五层模型：应传网数物 TCP&#x2F;IP 四层模型：应传网+网络接口 特定格式，在常用五层模型里面 物 -&gt; 电信号（Bits,比特流，有一些类似时钟信号的数据流传输）； 数据链路 -&gt; MAC地址（Frames,帧）；PPP（路由器之间）协议，CSMA&#x2F;CD（hub,设备间）协议； 网络">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711094505800-1219824751.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711094752911-2018576556.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711095321275-1033943764.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711095402498-509186349.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711095604829-861448052.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711095733398-2134187328.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711095909221-337495836.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711100159363-1414955122.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711100306367-1268921698.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711100635839-734009026.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711101235364-1636330405.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711101330772-1588256375.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711101431178-1442881053.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711101447721-723098966.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711101534455-1802411220.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711101612589-207746951.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711101856391-1158592152.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711101917439-1151086719.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711102027300-2082686146.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711102054186-600771052.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240711102130791-1183325409.png">
+<meta property="article:published_time" content="2024-07-21T06:44:39.197Z">
+<meta property="article:modified_time" content="2024-07-21T07:08:06.518Z">
+<meta property="article:author" content="xiao cuncun">
+<meta property="article:tag" content="TCP UDP">
+<meta property="article:tag" content="IP ICMP">
+<meta property="article:tag" content="router switch ARP">
+<meta property="article:tag" content="HTTP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/blog_page/3427087-20240711094505800-1219824751.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>【笔记】网络原理1 - 集线器，交换机，网关，路由器 - Whatsxiaocuncun Personal website</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>一位不愿透露姓名的小村村同学的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="【笔记】网络原理1 - 集线器，交换机，网关，路由器"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-21 14:44" pubdate>
+          2024年7月21日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          27 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">【笔记】网络原理1 - 集线器，交换机，网关，路由器</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-一些零散的知识记录"><a href="#1-一些零散的知识记录" class="headerlink" title="1. 一些零散的知识记录"></a>1. 一些零散的知识记录</h2><ul>
+<li>OSI 七层模型：应表会传网数物</li>
+<li>TCP&#x2F;IP 五层模型：应传网数物</li>
+<li>TCP&#x2F;IP 四层模型：应传网+网络接口</li>
+<li>特定格式，在常用五层模型里面<ul>
+<li>物 -&gt; 电信号<font color=green>（Bits,比特流，有一些类似时钟信号的数据流传输）</font>；</li>
+<li>数据链路 -&gt; MAC地址<font color=green>（Frames,帧）；PPP（路由器之间）协议，CSMA&#x2F;CD（hub,设备间）协议</font>；</li>
+<li>网络 -&gt; IP，ICMP<font color=green>（Packets,包）</font>；</li>
+<li>传输 -&gt; 端口<font color=green>（Segments,段）</font>;</li>
+<li>(应+表+会) -&gt; 共同组成用户数据<font color=green>（报文，用户数据 PDU）</font>；</li>
+</ul>
+</li>
+<li>每一层的主要协议<ul>
+<li>应-&gt;http,https,DNS,TELNET,FTP..;</li>
+<li>传-&gt;TCP,UDP..;</li>
+<li>网-&gt;IP，ARP;</li>
+<li>数据-&gt;IEEE802.11,以太网;</li>
+<li>物-&gt;电信号，光纤信号，比特流，时钟一类..;</li>
+</ul>
+</li>
+<li>常用端口号：<ul>
+<li>HTTP 80 TCP</li>
+<li>DNS 53 TCP UDP</li>
+<li>HTTPS 443 TCP</li>
+<li>SMB 445 TCP </li>
+<li>TELNET 23 TCP</li>
+<li>FTP 20&#x2F;21 TCP</li>
+</ul>
+</li>
+<li>端口：服务器和客户端之间数据交换的窗口。<br><img src="/img/blog_page/3427087-20240711094505800-1219824751.png" srcset="/img/loading.gif" lazyload></li>
+<li>访问服务器资源：<ul>
+<li><code>http://IP address: port number/project/subproject</code></li>
+<li><code>http://ip 地址：端口号/资源路径</code></li>
+<li><code>http://127.0.0.1：8080/资源路径 -&gt; 127.0.0.1 主机本身</code></li>
+<li><code>http://localhost:8080/资源路径 -&gt; localhost 主机本身</code></li>
+<li><code>Cisco Packet Tracer</code>,计算机网络仿真软件</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-ARP协议"><a href="#2-ARP协议" class="headerlink" title="2. ARP协议"></a>2. ARP协议</h2><ul>
+<li>ARP:<ul>
+<li>通信靠IP是因为好记，但是还需要mac地址来保证通信是正确的。</li>
+<li>在两个设备第一次连接的时候其实只知道对方IP,不知道对方的MAC地址,这时候就需要ARP协议来**<font color=red>广播</font><strong>,让</strong><font color=red>同一个网段</font>**中的所有设备都回复自己是不是请求的目的ip。目的ip就会回复它自己的mac地址了。</li>
+<li>ARP广播包的时候会看到的目标MAC地址是 <u>FFFF.FFFF.FFFF</u>，代表谁都能接收，那就是一个广播。</li>
+<li>ARP连接成功之后，以后就不会再广播来获取mac地址了（mac地址已经被记住了，不会再继续使用ARP协议），开始使用ICMP或者IP通信了。</li>
+<li>如图，一次完整的ARP需要经历三个包：计算机0广播（组包），计算机1回复（请求连接），计算机0响应。<br><img src="/img/blog_page/3427087-20240711094752911-2018576556.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+</ul>
+<h2 id="3-Hub和Hub机制"><a href="#3-Hub和Hub机制" class="headerlink" title="3. Hub和Hub机制"></a>3. Hub和Hub机制</h2><ul>
+<li>Hub没有存储，存不了IP和mac</li>
+<li>如下过程：第一次计算机0发送ARP广播给下挂的所有计算机，过hub时会把消息同时给到计算机1和2,计算机1因为查找的不是它所以拒绝了；第二次计算机2回复时过hubhub因为其特性又把给消息同时给了计算机1和计算机0,计算机1因为不匹配再次拒绝。所以整个过程出现了很多ARP包而且计算机1拒绝了2次。<br><img src="/img/blog_page/3427087-20240711095321275-1033943764.png" srcset="/img/loading.gif" lazyload></li>
+<li>因为hub没有筛选，只能无脑群发，所以就算是已知了ip和mac的ICMP协议和PDU也会再次转发给计算机1，然后计算机1拒绝。<br><img src="/img/blog_page/3427087-20240711095402498-509186349.png" srcset="/img/loading.gif" lazyload></li>
+<li>集线器的特性可以用来查找网络里面一共有多少个设备的mac地址。</li>
+<li>集线器设备越多，效率就会越低。</li>
+</ul>
+<h2 id="4-网桥Bridge"><a href="#4-网桥Bridge" class="headerlink" title="4. 网桥Bridge"></a>4. 网桥Bridge</h2><ul>
+<li>相比于hub，网桥可以通过自学习得知每个接口（左侧，右侧）侧的mac 地址。</li>
+<li>网桥有一个mac表，在已经记录下的mac地址中（学习的过程就逐步的记录mac地址，增加效率），可以排除不在同一侧的mac地址，增加效率。</li>
+<li>网桥在记录的很完整的前提下，可以隔离网桥左边和右边接口的冲突域，实现隔离干扰。</li>
+<li>网桥的缺点就是接口太少，而且冲突域内部的问题解决不了。<br><img src="/img/blog_page/3427087-20240711095604829-861448052.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+<h2 id="5-交换机"><a href="#5-交换机" class="headerlink" title="5. 交换机"></a>5. 交换机</h2><ul>
+<li>交换机是具有更多接口的网桥</li>
+<li>交换机全双工通信</li>
+<li>二层交换机没有IP层，只能在同一个网段之间转发数据。现在市面上已经由三层交换机了。</li>
+<li>如图，如果交换机把每个接口的mac地址都学习完了，那么就可以端到端通信了。</li>
+<li>在局域网内，交换机就是数据交换的最终解决方案。</li>
+<li>交换机不会把数据包群发给其他不必要的设备，就没有被其他设备抓包的风险，这一点就比hub安全很多。</li>
+<li>交换机的缺点：交换机的要求是所有设备在同一网段，局域网可以满足。如果在互联网上,IP地址则会显得不够用。另外一方面互联上设备太多，如果全球广播则是灾难，同一时间的全球广播更会造成不可避免的堵塞。<br><img src="/img/blog_page/3427087-20240711095733398-2134187328.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+<h2 id="6-路由器"><a href="#6-路由器" class="headerlink" title="6. 路由器"></a>6. 路由器</h2><ul>
+<li>在不同网段之间转发数据</li>
+<li><font color=red>隔离广播域，路由器会把第一次ARP的包给隔离了（但是路由器上的网关会通过ARP协议）。</font></li>
+<li>交换机+路由器：把同一网段的设备搞一起，不同网段的域由路由器连。</li>
+<li>主机发数据之前，首先会判断目标主机的IP地址是否和它在同一个网段:<ul>
+<li>如果在同一个网络-&gt;ARP(ARP只能在同一个网段中传播)；</li>
+<li>如果不在同一个网段-&gt;需要通过网关（路由器提供）-&gt;路由器通过跨网段功能传给目标。</li>
+</ul>
+</li>
+<li><font color=green>通信的两边，路由器一进一出需要两个网关，一个网关负责一边的网段。在路由器内部进行转换。</font><br><img src="/img/blog_page/3427087-20240711095909221-337495836.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+<h2 id="7-路由器配置"><a href="#7-路由器配置" class="headerlink" title="7. 路由器配置"></a>7. 路由器配置</h2><ul>
+<li>网关 1（fa0&#x2F;0）配置左边的ip段，约定俗成 <u>ip为.1 结尾</u>。子网掩码255.255.255.0</li>
+<li>网关 2(fa1&#x2F;0)配置右边的ip段，约定俗成 <u>ip为.1 结尾</u>。子网掩码255.255.255.0</li>
+<li>ARP 的广播域过不了路由器<br><img src="/img/blog_page/3427087-20240711100159363-1414955122.png" srcset="/img/loading.gif" lazyload></li>
+<li><font color=color><strong>为什么要把路由器的网关IP配置在设备的默认网关上？</strong></font>因为第一次连接的时候，不配置的话设备根本不认识目标网关的ip是哪个。<br><img src="/img/blog_page/3427087-20240711100306367-1268921698.png" srcset="/img/loading.gif" lazyload></li>
+<li>虽然路由器不能过广播域，但是第一次连接的时候，设备还是广播给路由器，<code>为的是获取默认网关的mac地址</code>。同一网段内的网关本身就是在同一网段内的一个设备，设备和网关之间通信还是需要ip+mac。</li>
+<li>路由器网关把自己变成了局域网中的一个设备。路由器处理两个网关之间的数据交互。</li>
+<li>生活中没有手动配置网关是因为用到了<code>DHCP</code>。</li>
+</ul>
+<h2 id="8-MAC地址"><a href="#8-MAC地址" class="headerlink" title="8. MAC地址"></a>8. MAC地址</h2><ul>
+<li>在 ipconfig 里面,MAC地址又可以叫做物理地址（Physical Address）</li>
+<li>如果目标MAC地址不是按照正常格式，而是 ffff.ffff.ffff, 这表示一个广播地址。</li>
+<li>虽然MAC地址是全球唯一的，网卡硬件不可更改，但是可以在电脑里模拟一个假的的MAC地址骗过协议，更改方法如下图：<br><img src="/img/blog_page/3427087-20240711100635839-734009026.png" srcset="/img/loading.gif" lazyload></li>
+<li>当我们不知道对方MAC地址的时候，可以通过ARP广播来获取。</li>
+<li><font color=green>ARP广播获取mac地址的过程属于动态缓存，存储时间较短，过期了缓存就没有了，需要重新获取</font></li>
+<li>arp -a [主机地址] 查询arp缓存</li>
+<li>arp -d [主机地址] 删除arp缓存</li>
+<li>arp -s [主机地址] [MAC地址] 增加一条arp静态缓存，存储时间比默认的动态缓存长很多。</li>
+</ul>
+<h2 id="9-IP地址（IPv4），子网掩码，网段，主机ID"><a href="#9-IP地址（IPv4），子网掩码，网段，主机ID" class="headerlink" title="9. IP地址（IPv4），子网掩码，网段，主机ID"></a>9. IP地址（IPv4），子网掩码，网段，主机ID</h2><ul>
+<li>IP 地址有两部分组成：网络标识（网段）(192.168.x.)、主机标识(.x)<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs dns">网段的计算（将子网掩码和 IP 按位与运算）：<br>如 <br><span class="hljs-number">192.168.1.10</span> -&gt; <span class="hljs-number">1100 0000</span>.<span class="hljs-number">1010 1000</span>.<span class="hljs-number">0000 0001</span>.<span class="hljs-number">000 1010</span><br><span class="hljs-number">255.255.255.0</span> -&gt; <span class="hljs-number">1111 1111</span>.<span class="hljs-number">1111 1111</span>.<span class="hljs-number">1111 1111</span>.<span class="hljs-number">0000 0000</span> <br>按位&amp;操作：<br>-&gt; <span class="hljs-number">1100 0000</span>.<span class="hljs-number">1010 1000</span>.<span class="hljs-number">0000 0001</span>.<span class="hljs-number">0000 0000</span> <br>-&gt; <span class="hljs-number">192.168.1.0</span><br></code></pre></td></tr></table></figure></li>
+<li><code>子网掩码的作用就是和ip做按位与运算，以得出网段</code>。</li>
+<li>一般子网掩码 255.255.255.0，因为最低位是0，所以按位与之后得出来的网段一般是IP地位的前三部分。但是如果子网掩码不是255.255.255.0，那么结果就不一样了。</li>
+<li><font color=green><strong>计算技巧：</strong>一般子网掩码是 255.255.255.0，那么主机 ID 一般是（256-2）个 &#x2F; 子网掩码是 255.255.0.0,那么主机 ID 一般是（256*256）-2，长度增加很多倍。（减 2 是因为主机 ID 0 一般不用，255 一般不用）&#x2F; 子网掩码 255 所占部分一般理解为网段 ID 占用部分，0 占用部分一般理解为主机 ID 占用部分。</font></li>
+<li>计算机通信之前，首先就会根据 IP 和子网掩码计算出目标主机和自己在不在一个网段，如果在则不需要路由器转发。如果不在就交给路由器转发。</li>
+<li>127 是保留网段，不随便用，其中 127.0.0.1 叫做<code>本地环回地址</code>（Loopback），仅代表本机地址。</li>
+<li><code>子网掩码的 CIDR 表示方法</code>：如 192.168.1.100&#x2F;24，代表子网掩码有24 个 1，就是 255.255.255.0；如 192.168.1.100&#x2F;16，代表子网掩码有 16 个 1，就是 255.255.0.0</li>
+</ul>
+<h2 id="10-子网，超网"><a href="#10-子网，超网" class="headerlink" title="10. 子网，超网"></a>10. 子网，超网</h2><ul>
+<li>首先判断网段的类型，是 A 类网络，B 类网络，C 类型网络？</li>
+<li>默认情况：A 类子网掩码位数是 8，B 类子网掩码位数是 16，C 类子网掩码位数是 24。</li>
+<li>然后如果该网段的子网掩码位数比默认的子网掩码位数多，就叫做子网；该段的子网掩码位数比默认的子网掩码位数少，就叫做超网。</li>
+</ul>
+<h2 id="11-路由"><a href="#11-路由" class="headerlink" title="11. 路由"></a>11. 路由</h2><ul>
+<li>在不同网段之间转发数据需要路由器。</li>
+<li><font color=red>默认情况下路由器只知道和他直连的网段（下图中计算机 0 可以ping 通计算机 1）</font>，非直连的网段（路由器 0 到路由器 1）需要通过静态路由，动态路由告诉他，不然通不了。路由器和路由器之间连接的 port 口叫做 Serial 口，买路由器的时候可以选支持几个 Serial 口的路由器，和设备或者交换机连的叫 Ethernet 口。<br><img src="/img/blog_page/3427087-20240711101235364-1636330405.png" srcset="/img/loading.gif" lazyload></li>
+<li>静态路由：管理员手动添加，告诉路由器怎么连。</li>
+<li>动态路由，路由器通过 RIP&#x2F;ASPF 等路由选择协议自动获取路由信息。</li>
+<li>静态路由的操作原理:路由器两端相互告诉对方自己直连的网段有哪些，用<code>路由表</code>表达。</li>
+<li>路由器之间想要联通，路由器和路由器连接端口的 ip 必须设置，而且他们<code>需要在同一个网段</code>。<br><img src="/img/blog_page/3427087-20240711101330772-1588256375.png" srcset="/img/loading.gif" lazyload></li>
+<li>路由器配置网络(路由器要跳进去的目标网段)，掩码，<code>下一跳</code>（表示当前路由器要进入的下一个路由器端口的 IP，只需要 IP 不需要子网掩码是因为路由器连接之间的 ip 必须是同一网段）</li>
+<li>下图里面 4 个网段，都想要连通就都要配。<br><img src="/img/blog_page/3427087-20240711101431178-1442881053.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240711101447721-723098966.png" srcset="/img/loading.gif" lazyload></li>
+<li>路由表长什么样，（C 表示和路由器直接连接在一起的设备，直连的所以往往没有下一跳）S 表示静态（static，是人为配置的静态路由）。<br><img src="/img/blog_page/3427087-20240711101534455-1802411220.png" srcset="/img/loading.gif" lazyload></li>
+<li>路由表的写法：子网掩码是 255.255.255 相当于把 IP 写死；255.255.255.0 留了一个主机 ID 段出来；0.0.0.0 默认路由，哪个网段都能接收。<br><img src="/img/blog_page/3427087-20240711101612589-207746951.png" srcset="/img/loading.gif" lazyload></li>
+<li>路由表就是在查找下一跳，直接跳到对应的路由器端口去。</li>
+</ul>
+<h2 id="12-数据包的传输数据流"><a href="#12-数据包的传输数据流" class="headerlink" title="12. 数据包的传输数据流"></a>12. 数据包的传输数据流</h2><p><img src="/img/blog_page/3427087-20240711101856391-1158592152.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>在上图中，目的是项从计算机 A 把数据传到计算机 F。途中MA&#x2F;M0&#x2F;M1&#x2F;M2&#x2F;M3&#x2F;MF 是网卡的 mac 地址。</li>
+<li>源 IP 是 192.168.1.10，目标 IP 是 192.168.3.10 没有问题，但是目标MAC 是 M0，原因是路由器隔离了广播，ARP 只能到对应路由端口侧mac 地址，到不了 MF。</li>
+<li>Mac 的跳转需要发生好几次变化。<br><img src="/img/blog_page/3427087-20240711101917439-1151086719.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+<h2 id="13-网络"><a href="#13-网络" class="headerlink" title="13. 网络"></a>13. 网络</h2><ul>
+<li>LAN，局域网，局域网中用到的广泛网络技术叫做以太网（Ethernet）</li>
+<li>WLAN，无线局域网（wireless LAN）</li>
+<li>WAN, 广域网，通常这个程度需要需要租用网络服务供应商（ISP）的服务器了。</li>
+<li>猫是调制解调器，电话拨号上网叫做 ADSL。<br><img src="/img/blog_page/3427087-20240711102027300-2082686146.png" srcset="/img/loading.gif" lazyload></li>
+<li>光猫是光调制解调器，光纤（光信号）取代了电话线（模拟信号）。非对称的概念就是上行带宽和下行带宽可以不一致。<br><img src="/img/blog_page/3427087-20240711102054186-600771052.png" srcset="/img/loading.gif" lazyload></li>
+<li>网线直接入户<br><img src="/img/blog_page/3427087-20240711102130791-1183325409.png" srcset="/img/loading.gif" lazyload></li>
+<li>公网 IP（因特网，ISP 服务器用到）：只能到达公网的路由表，没有到达私网的路由表。</li>
+<li>私网 IP 地址（局域网用到）：A 类 10.0.0.0&#x2F;8 B 类：172.168.0.0&#x2F;16 ~ 172.31.0.0&#x2F;16 C 类：192.168.0.0&#x2F;24 ~ 192.168.255.0&#x2F;24</li>
+<li>公网 IP 一定是唯一的，私网 IP 是可以重复和随意使用的。</li>
+</ul>
+<h2 id="14-NAT转换"><a href="#14-NAT转换" class="headerlink" title="14. NAT转换"></a>14. NAT转换</h2><ul>
+<li>Network address translation,私网 IP 可以通过 NAT 转换变为公网 IP。</li>
+<li>NAT 转换可以隐藏真实的 IP，但是真要查还是可以从 ISP 那里查到真实 IP。</li>
+<li>简单理解，可以用 NAT 来跨网段。</li>
+<li>局域网内用NAT来跨网段通信。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Proctocol-related/" class="category-chain-item">Proctocol related</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Proctocol-related/network/" class="category-chain-item">network</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/TCP-UDP/" class="print-no-link">#TCP UDP</a>
+      
+        <a href="/tags/IP-ICMP/" class="print-no-link">#IP ICMP</a>
+      
+        <a href="/tags/router-switch-ARP/" class="print-no-link">#router switch ARP</a>
+      
+        <a href="/tags/HTTP/" class="print-no-link">#HTTP</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>【笔记】网络原理1 - 集线器，交换机，网关，路由器</div>
+      <div>http://example.com/2024/07/21/[笔记]网络原理1 - 集线器，交换机，网关，路由器/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiao cuncun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年7月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/07/21/%5B%E7%AC%94%E8%AE%B0%5D%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%864%20-%E5%BA%94%E7%94%A8%E5%B1%82%E5%8F%8A%E5%85%B6%E7%9B%B8%E5%85%B3%E5%8D%8F%E8%AE%AE/" title="【笔记】网络原理4 -应用层及其相关协议">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">【笔记】网络原理4 -应用层及其相关协议</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/07/21/%5B%E7%AC%94%E8%AE%B0%5D%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%862%20-%20%E4%BA%92%E8%BF%9E%E6%A8%A1%E5%9E%8B%EF%BC%8C%E7%89%A9%E7%90%86%E5%B1%82%EF%BC%8C%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%EF%BC%8C%E7%BD%91%E7%BB%9C%E5%B1%82%E5%8F%8A%E5%85%B6%E7%9B%B8%E5%85%B3%E5%8D%8F%E8%AE%AE/" title="【笔记】网络原理2 - 互连模型，物理层，数据链路层，网络层及其相关协议">
+                        <span class="hidden-mobile">【笔记】网络原理2 - 互连模型，物理层，数据链路层，网络层及其相关协议</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

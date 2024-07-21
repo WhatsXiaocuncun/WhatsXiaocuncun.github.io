@@ -1,0 +1,892 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiao cuncun">
+  <meta name="keywords" content="blog">
+  
+    <meta name="description" content="1. html标签  单标签   &lt;br&#x2F;&gt;:换行用  &lt;meta&#x2F;&gt;:存字符编码，作者，版权，关键字，网页说明等信息，不显示在浏览器中a. 比如：&lt;meta http-equiv&#x3D;&quot;Content-Type&quot; content&#x3D;&quot;text&#x2F;html;charset&#x3D;gb2312&quot;&#x2F;&gt;  &lt;hr&#x2F;&gt;：插入一条水平">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【笔记】html+css基础知识">
+<meta property="og:url" content="http://example.com/2024/07/21/[%E7%AC%94%E8%AE%B0]html+css%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:site_name" content="Whatsxiaocuncun Personal website">
+<meta property="og:description" content="1. html标签  单标签   &lt;br&#x2F;&gt;:换行用  &lt;meta&#x2F;&gt;:存字符编码，作者，版权，关键字，网页说明等信息，不显示在浏览器中a. 比如：&lt;meta http-equiv&#x3D;&quot;Content-Type&quot; content&#x3D;&quot;text&#x2F;html;charset&#x3D;gb2312&quot;&#x2F;&gt;  &lt;hr&#x2F;&gt;：插入一条水平">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-07-21T06:44:39.288Z">
+<meta property="article:modified_time" content="2024-07-21T07:31:46.612Z">
+<meta property="article:author" content="xiao cuncun">
+<meta property="article:tag" content="html">
+<meta property="article:tag" content="css">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>【笔记】html+css基础知识 - Whatsxiaocuncun Personal website</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>一位不愿透露姓名的小村村同学的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="【笔记】html+css基础知识"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-21 14:44" pubdate>
+          2024年7月21日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          16 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">【笔记】html+css基础知识</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1>1. html标签</h1>
+
+<h3>单标签</h3>
+
+<ul>
+<li><p><code>&lt;br/&gt;</code>:换行用</p>
+</li>
+<li><p><code>&lt;meta/&gt;</code>:存字符编码，作者，版权，关键字，网页说明等信息，不显示在浏览器中<br>a. 比如：<code>&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=gb2312&quot;/&gt;</code></p>
+</li>
+<li><p><code>&lt;hr/&gt;</code>：插入一条水平线，两个标签表示插入两条</p>
+</li>
+<li><p><code>&lt;img/&gt;</code>:插入图片<br> a. <code>src</code>是图像存储url或名字，<code>alt</code>是图像的预备替换文本；比如：<code>&lt;img src=&quot;1.png&quot; width=&quot;100px&quot; heigh=&quot;200px&quot; alt=&quot;当显示不出来图像时就显示这句文本&quot;&gt;</code></p>
+</li>
+</ul>
+<h3>成对标签</h3>
+
+<ul>
+<li><p><code>&lt;html&gt;&lt;/html&gt;</code>:html文档</p>
+</li>
+<li><p><code>&lt;style&gt;&lt;/style&gt;</code>:存CSS风格样式<br> a. 放在head内或者body内（body内用于设置单个标签的属性，如<code>&lt;p style=&quot;...&quot;&gt;xxx&lt;/p&gt;</code>）都行</p>
+</li>
+<li><p><code>&lt;link&gt;&lt;/link&gt;</code>:<a href=#session1>链接外部样式表</a></p>
+</li>
+<li><p><code>&lt;script&gt;&lt;/script&gt;</code>:存客户端脚本，如javascript脚本</p>
+</li>
+<li><p><code>&lt;head&gt;&lt;/head&gt;</code>:头</p>
+</li>
+<li><p><code>&lt;body&gt;&lt;/body&gt;</code>：内容</p>
+</li>
+<li><p><code>&lt;p&gt;&lt;/p&gt;</code>：文本段落大小<br> a. p加<code>id</code>或<code>class</code>成为css的定位点</p>
+</li>
+<li><p><code>&lt;title&gt;&lt;/title&gt;</code>:标题</p>
+</li>
+<li><p><code>&lt;a&gt;&lt;/a&gt;</code>：放超链接，锚点</p>
+</li>
+<li><p><code>&lt;h1&gt;&lt;/h1&gt;</code>：标题大小</p>
+</li>
+<li><p><code>&lt;ul&gt;&lt;/ul&gt;</code>:无序标签</p>
+</li>
+<li><p><code>&lt;ol&gt;&lt;/ol&gt;</code>:有序列表</p>
+</li>
+<li><p><code>&lt;li&gt;&lt;/li&gt;</code>:列表中的子列表</p>
+</li>
+<li><p><code>&lt;div&gt;&lt;/div&gt;</code>：容器，什么都能装<br> a. div标签加<code>id</code>或<code>class</code>可以成为css代码的定位点</p>
+</li>
+<li><p><code>&lt;table&gt;&lt;/table&gt;</code>：表格</p>
+</li>
+<li><p><code>&lt;span&gt;&lt;/span&gt;</code>：行内元素标签<br> a. <font color=green>span和div的区别是：div只能一段一段的选择；span只能选择单个元素，如一个图，一个链接等等；不能将div标签放在span标签内。</font></p>
+</li>
+</ul>
+<h3>文档类型</h3>
+
+<ul>
+<li><code>&lt;!DOCTYPE&gt;</code>:位于文档最前端，不属于文档结构的一部分，但是它很重要，它定义的<code>Strict（严格）</code>&#x2F;<code>Transitional（过渡）</code>&#x2F;<code>Frameset（框架）</code>对网页甚至对CSS代码都有影响</li>
+</ul>
+<h3>内部样式表</h3>
+
+<ul>
+<li><code>&lt;!--与--&gt;</code>：为了防止一些浏览器不支持css，把css代码当普通文本显示出来<br> a. 写在<code>&lt;head&gt;&lt;/head&gt;</code>中，用<code>&lt;style&gt;&lt;/style&gt;</code>声明</li>
+</ul>
+<p><a name="session1"><h3>链接样式表</h3></a></p>
+<ul>
+<li><p><code>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;外部样式表的path&quot;&gt;</code>：用来分离html文件和css文件，方便用一个css文件控制多个html文件；靠link标签导入，外部样式表后缀只能是<code>.css</code>；这段标签放在head内。</p>
+</li>
+<li><p><code>@import url(外部样式表的path)</code>：和link的作用一样，只是引入方法不同，写法不一样</p>
+</li>
+</ul>
+<h3>块元素和行内元素</h3>
+
+<ul>
+<li><p>块元素：<code>&lt;div&gt;&lt;/div&gt;</code>，<code>&lt;hn&gt;&lt;/hn&gt;</code>，<code>&lt;p&gt;&lt;/p&gt;</code>，<code>&lt;from&gt;&lt;/from&gt;</code>，<code>&lt;ul&gt;&lt;/ul&gt;</code>，<code>&lt;li&gt;&lt;/li&gt;</code>等。</p>
+</li>
+<li><p>行内元素：<code>&lt;span&gt;&lt;/span&gt;</code>，<code>&lt;a&gt;&lt;/a&gt;</code>，<code>&lt;img/&gt;</code>，<code>&lt;input/&gt;</code>等。</p>
+</li>
+<li><p><font color=green>使用css为行内元素加上<code>display:block</code>属性将其转换为块元素。</font></p>
+</li>
+</ul>
+<h1>2. CSS常用设置</h1>
+
+<h3>文字样式常用属性</h3>
+
+<ul>
+<li><p><code>font-family</code>:设置字体<br> a. 宋体<br> b. 楷书<br> c. 隶书<br> d. …</p>
+</li>
+<li><p><code>font-size</code>：设置字号</p>
+</li>
+<li><p><code>font-style</code>:设置斜体<br> a. <code>normal</code>:正常显示<br> b. <code>italic</code>：斜体显示文字<br> c. <code>oblique</code>:比斜体更斜的斜体</p>
+</li>
+<li><p><code>font-weight</code>:设置加粗<br> a. <code>normal</code>:正常粗细<br> b. <code>bold</code>:粗体<br> c. <code>bolder</code>:加粗体<br> d. <code>lighter</code>:细体<br> e. <code>number</code>:100-900共九个级别，数字越大字数越粗</p>
+</li>
+<li><p><code>color</code>:设置颜色<br> a. rgb显示：rgb（255,0,0）<br> b. 十六进制数：#ff0000</p>
+</li>
+<li><p><code>font-variant</code>:设置变体<br> a. <code>normal</code>:正常字母<br> b. <code>small-caps</code>:小型大写字母</p>
+</li>
+<li><p><code>font</code>:组合设置字体属性<br> a. 比如<code>p&#123;font:italic bold small-caps 15pt 宋体&#125;</code></p>
+</li>
+</ul>
+<h3>段落和其他文字常用属性</h3>
+
+<ul>
+<li><p>元素的长度单位<br> a. 绝对长度：<code>in(英寸)</code>，<code>cm(厘米)</code>，<code>mm(毫米)</code>，<code>pt(印刷点数)</code>，<code>pc(1pc=12pt)</code><br> b. 相对长度：<code>px(像素)</code>，<code>%（字体默认大小的比例）</code>，<code>em(字体元素的倍数)</code></p>
+</li>
+<li><p><code>text-decoration</code>:修饰文字<br> a. <code>underline</code>：添加下划线<br> b. <code>overline</code>：添加上划线<br> C. <code>line-through</code>:添加删除线<br> d. <code>blink</code>:添加文字闪烁效果，多数浏览器不支持<br> c. <code>none</code>:没有修饰文字，常用于取消超链接的下划线</p>
+</li>
+<li><p><code>text-transform</code>:转换英文字母大小<br> a. <code>capitalize</code>:每个单词首字母大写<br> b. <code>uppercase</code>:所有字母大写<br> c. <code>lowercase</code>:所有字母小写<br> d. <code>none</code>:默认值</p>
+</li>
+<li><p><code>letter-spacing</code>:设置中文字符间距<br> a. <code>normal</code>：正常<br> b. <code>12px</code>:设置绝对数值<br> c. <code>2em</code>:字体高</p>
+</li>
+<li><p><code>word-spacing</code>：设置英文字符间距<br> a. <code>normal</code>：正常<br> b. <code>12px</code>:设置绝对数值<br> c. <code>2em</code>:字体高</p>
+</li>
+<li><p><code>text-align</code>:设置段落的水平对齐方式<br> a. <code>left</code>:文本左对齐<br> b. <code>right</code>:文本右对齐<br> c. <code>center</code>:文本居中<br> d. <code>justify</code>:文本两端对齐</p>
+</li>
+<li><p><code>text-indent</code>:设置段落缩进</p>
+</li>
+<li><p><code>line-height</code>:设置行高</p>
+</li>
+</ul>
+<h3>常用符号</h3>
+
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>html码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>“</td>
+<td><code>&amp;quot;</code></td>
+</tr>
+<tr>
+<td>‘</td>
+<td><code>&amp;qpos;</code></td>
+</tr>
+<tr>
+<td>&amp;</td>
+<td><code>&amp;amp;</code></td>
+</tr>
+<tr>
+<td>&lt;</td>
+<td><code>&amp;lt;</code></td>
+</tr>
+<tr>
+<td>&gt;</td>
+<td><code>&amp;gt;</code></td>
+</tr>
+<tr>
+<td>￥</td>
+<td><code>&amp;yen;</code></td>
+</tr>
+<tr>
+<td>&copy;</td>
+<td><code>&amp;copy;</code></td>
+</tr>
+<tr>
+<td>&reg;</td>
+<td><code>&amp;reg;</code></td>
+</tr>
+<tr>
+<td>空格</td>
+<td><code>&amp;nbsp;</code></td>
+</tr>
+</tbody></table>
+<h3>列表样式常用属性</h3>
+
+<ul>
+<li><p><code>list-style-type</code>:设置列表符号<br> a. <code>disc</code>:黑色圆点，默认设置<br> b. <code>circle</code>:空心圆圈<br> c. <code>square</code>:黑色正方形<br> d. <code>decimal或</code>l:数字<br> e. <code>lower-roman或i</code>:小写罗马文字<br> f. <code>upper-roman或I</code>:大写罗马文字<br> g. <code>lower-latin或a</code>：小写拉丁文<br> h. <code>upper-latin或A</code>：大写拉丁文<br> i. <code>none</code>:不显示任何符号</p>
+</li>
+<li><p><code>list-style-image</code>:使用图片符号<br> a. 基本语法：<code>list-style-image:url</code>,用来将图片作为列表符号，从而美化列表。</p>
+</li>
+<li><p><code>list-style-position</code>：调整列表位置<br> a. <code>outside</code>:默认值，列表符号不向内缩进<br> b. <code>inside</code>:列表符号向内缩进</p>
+</li>
+</ul>
+<h3>图片样式常用属性</h3>
+
+<ul>
+<li><p><code>border-style</code>：边框样式：属性自查</p>
+</li>
+<li><p><code>border-width</code>:边框宽度：属性自查</p>
+</li>
+<li><p><code>border-color</code>：边框颜色：属性自查</p>
+</li>
+<li><p><code>text-align</code>:图片水平对齐：属性自查</p>
+</li>
+<li><p><code>vertical-align</code>:图片垂直对齐：属性自查</p>
+</li>
+<li><p><code>float:right</code>：图片居于文字右边</p>
+</li>
+<li><p><code>float:left</code>:图片居于文字左边</p>
+</li>
+<li><p><code>background-color</code>:设置图片颜色，有<code>关键字</code>，<code>rgb</code>,<code>transparent</code></p>
+</li>
+<li><p>设置背景图片<br> a. <code>background-img:url</code>:插入背景图<br> b. <code>background-repeat</code>:设置重复方式：<code>repeat</code>,<code>repeat-x</code>,<code>repeat-y</code>,<code>no-repeat</code><br> c. <code>background-position</code>:设置图位置：属性自查<br> d. <code>background-attachment</code>:固定背景图：属性自查</p>
+</li>
+<li><p>图片背景样式综合设置：<br> a. 如<code>background:red url(p1.png) no-repeat fixed 5px 10px</code></p>
+</li>
+</ul>
+<h1>3. html整体框架</h1>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>XXX<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br><br>/*link或者@二选一*/<br><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;外部样式表的path&quot;</span>&gt;</span><br>@import url(外部样式表的path)<br><br><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;Content-Type&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;text/html;charset=gb2312&quot;</span>/&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span>&gt;</span><span class="language-css"></span><br><span class="language-css"></span><br><span class="language-css"><span class="hljs-comment">/*内部样式表*/</span></span><br><span class="language-css">&lt;!--</span><br><span class="language-css">selector1&#123;property:value;&#125;</span><br><span class="language-css">selector2&#123;property:value;&#125;</span><br><span class="language-css">selector3&#123;property:value;&#125;</span><br><span class="language-css">...</span><br><span class="language-css">--&gt;</span><br><span class="language-css"></span><br><span class="language-css"><span class="hljs-comment">/*选择器及选择器格式：property:value;*/</span></span><br><span class="language-css"><span class="hljs-comment">/*标签选择器*/</span></span><br><span class="language-css"><span class="hljs-comment">/*类选择器*/</span></span><br><span class="language-css"><span class="hljs-comment">/*id选择器*/</span></span><br><span class="language-css"><span class="hljs-comment">/*嵌套选择器*/</span></span><br><span class="language-css"><span class="hljs-comment">/*通用选择器*/</span></span><br><span class="language-css"><span class="hljs-comment">/*集体选择器*/</span></span><br><span class="language-css"><span class="hljs-comment">/*选择器优先级：行内样式表&gt;内嵌样式表&gt;链接样式表&gt;导入样式表*/</span></span><br><span class="language-css"><span class="hljs-selector-tag">body</span>&#123;</span><br><span class="language-css"><span class="hljs-attribute">font-size</span>:<span class="hljs-number">14px</span>;</span><br><span class="language-css"><span class="hljs-attribute">background</span>:<span class="hljs-number">#ffe5e5</span>;</span><br><span class="language-css">&#125;</span><br><span class="language-css"><span class="hljs-selector-tag">h1</span>&#123;</span><br><span class="language-css"><span class="hljs-attribute">text-align</span>:center;</span><br><span class="language-css"><span class="hljs-attribute">font-size</span>:<span class="hljs-number">42px</span>;</span><br><span class="language-css"><span class="hljs-attribute">color</span>:<span class="hljs-number">#9d3151</span>;</span><br><span class="language-css">&#125;</span><br><span class="language-css"><span class="hljs-selector-id">#link1</span>&#123;<span class="hljs-comment">/*id=link1的div容器css风格*/</span></span><br><span class="language-css"><span class="hljs-attribute">text-align</span>:center;</span><br><span class="language-css">&#125;</span><br><span class="language-css"><span class="hljs-selector-id">#link1</span> <span class="hljs-selector-tag">a</span>&#123;<span class="hljs-comment">/*id=link1的div容器中的&lt;a&gt;标签的css风格*/</span></span><br><span class="language-css"><span class="hljs-attribute">text-align</span>:center;</span><br><span class="language-css">&#125;</span><br><span class="language-css"><span class="hljs-selector-id">#bg</span> <span class="hljs-selector-tag">img</span>&#123;<span class="hljs-comment">/*id=bg的div容器中的img图片css风格（文字环绕）*/</span></span><br><span class="language-css"><span class="hljs-attribute">float</span><span class="hljs-selector-pseudo">:left</span>;</span><br><span class="language-css"><span class="hljs-attribute">margin</span>:<span class="hljs-number">10px</span>;</span><br><span class="language-css">&#125;</span><br><span class="language-css"><span class="hljs-selector-class">.p1</span>&#123;<span class="hljs-comment">/*class等于p1的css风格，类名前要加&quot;.&quot;*/</span></span><br><span class="language-css"><span class="hljs-attribute">text-align</span>:center;</span><br><span class="language-css"><span class="hljs-attribute">font-size</span>:<span class="hljs-number">42px</span>;</span><br><span class="language-css"><span class="hljs-attribute">color</span>:<span class="hljs-number">#9d3151</span>;</span><br><span class="language-css">&#125;</span><br><span class="language-css">*&#123;<span class="hljs-comment">/* &quot;*&quot;表示通配符 */</span></span><br><span class="language-css"><span class="hljs-attribute">text-align</span>:center;</span><br><span class="language-css"><span class="hljs-attribute">font-size</span>:<span class="hljs-number">42px</span>;</span><br><span class="language-css"><span class="hljs-attribute">color</span>:<span class="hljs-number">#9d3151</span>;</span><br><span class="language-css">&#125;</span><br><span class="language-css"><span class="hljs-selector-tag">h1</span>，<span class="hljs-selector-tag">h2</span>,<span class="hljs-selector-tag">h3</span>,<span class="hljs-selector-tag">h4</span>,<span class="hljs-selector-tag">h5</span>&#123;<span class="hljs-comment">/*集体选择*/</span></span><br><span class="language-css"><span class="hljs-attribute">text-align</span>:center;</span><br><span class="language-css"><span class="hljs-attribute">font-size</span>:<span class="hljs-number">42px</span>;</span><br><span class="language-css"><span class="hljs-attribute">color</span>:<span class="hljs-number">#9d3151</span>;</span><br><span class="language-css">&#125;</span><br><span class="language-css"></span><br><span class="language-css"></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br><br><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Front-end-application/" class="category-chain-item">Front-end application</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Front-end-application/basic-notes/" class="category-chain-item">basic notes</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/html/" class="print-no-link">#html</a>
+      
+        <a href="/tags/css/" class="print-no-link">#css</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>【笔记】html+css基础知识</div>
+      <div>http://example.com/2024/07/21/[笔记]html+css基础知识/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiao cuncun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年7月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/07/21/YOLO%20v8%20%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="YOLO v8 环境搭建">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">YOLO v8 环境搭建</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/07/21/%E5%88%B6%E4%BD%9C%E8%A1%A8%E6%A0%BC_%E8%A1%A8%E5%8D%95%E5%B9%B6%E7%94%A8CSS%E7%BE%8E%E5%8C%96/" title="制作表格_表单并用CSS美化">
+                        <span class="hidden-mobile">制作表格_表单并用CSS美化</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

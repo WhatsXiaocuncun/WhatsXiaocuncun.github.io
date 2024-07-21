@@ -1,0 +1,753 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiao cuncun">
+  <meta name="keywords" content="blog">
+  
+    <meta name="description" content="1. 基于C#的数据交互 A. S7，using S7.Net,后文读写数据时二次封装过S7协议，这里暂且不表，只列举S7协议最原始的应用。  new一个PLC对象 1234567        &#x2F;&#x2F;idenfy basic link params        private string plc_ip;        private CpuType plc_type;        priva">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C#与PLC变量在数据交互上的一些探索">
+<meta property="og:url" content="http://example.com/2024/07/21/C#%E4%B8%8EPLC%E5%8F%98%E9%87%8F%E5%9C%A8%E6%95%B0%E6%8D%AE%E4%BA%A4%E4%BA%92%E4%B8%8A%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%B4%A2/index.html">
+<meta property="og:site_name" content="Whatsxiaocuncun Personal website">
+<meta property="og:description" content="1. 基于C#的数据交互 A. S7，using S7.Net,后文读写数据时二次封装过S7协议，这里暂且不表，只列举S7协议最原始的应用。  new一个PLC对象 1234567        &#x2F;&#x2F;idenfy basic link params        private string plc_ip;        private CpuType plc_type;        priva">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240508100629433-1745040443.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240508100808076-1598016210.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240508103931415-41497659.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240508110520615-1195770345.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240508171815530-1967107112.png">
+<meta property="article:published_time" content="2024-07-21T06:44:39.264Z">
+<meta property="article:modified_time" content="2024-07-21T08:58:30.212Z">
+<meta property="article:author" content="xiao cuncun">
+<meta property="article:tag" content="c#">
+<meta property="article:tag" content="PLC">
+<meta property="article:tag" content="s7netplus">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/blog_page/3427087-20240508100629433-1745040443.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>C#与PLC变量在数据交互上的一些探索 - Whatsxiaocuncun Personal website</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>一位不愿透露姓名的小村村同学的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="C#与PLC变量在数据交互上的一些探索"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-21 14:44" pubdate>
+          2024年7月21日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">C#与PLC变量在数据交互上的一些探索</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-基于C-的数据交互"><a href="#1-基于C-的数据交互" class="headerlink" title="1. 基于C#的数据交互"></a>1. 基于C#的数据交互</h2><p> <font color=red>A. S7</font>，<code>using S7.Net</code>,后文读写数据时二次封装过S7协议，这里暂且不表，只列举S7协议最原始的应用。</p>
+<ul>
+<li><p>new一个PLC对象</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs csharp">        <span class="hljs-comment">//idenfy basic link params</span><br>        <span class="hljs-keyword">private</span> <span class="hljs-built_in">string</span> plc_ip;<br>        <span class="hljs-keyword">private</span> CpuType plc_type;<br>        <span class="hljs-keyword">private</span> <span class="hljs-built_in">short</span> plc_rack, plc_slot;<br>        <span class="hljs-keyword">public</span> Plc my_plc;<br><br>my_plc = <span class="hljs-keyword">new</span> Plc(plc_type, plc_ip, plc_rack, plc_slot);<br></code></pre></td></tr></table></figure></li>
+<li><p>连接和断开PLC</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//connect</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">connect_plc</span>()</span><br>&#123;<br>    <span class="hljs-keyword">try</span><br>    &#123;<br>        my_plc.Open();<br>    &#125;<br>    <span class="hljs-keyword">catch</span><br>    &#123;<br>        MessageBox.Show(<span class="hljs-string">&quot;plc can&#x27;t be connected,check params!&quot;</span>);<br>    &#125;<br>    <span class="hljs-keyword">if</span> (my_plc.IsConnected)<br>    &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br>    <span class="hljs-keyword">else</span><br>    &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">//disconnected</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">disconnect_plc</span>()</span><br>&#123;<br>    my_plc.Close();<br>    <span class="hljs-keyword">if</span> (my_plc.IsConnected)<br>    &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br>    <span class="hljs-keyword">else</span><br>    &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>读写数据，S7_registertype是PLC的寄存器地址类型，如DB,M,I,Q,T,C等。S7_datatype是自己提前封装好的bool,byte,word,int等等这一类基础数据类型</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">//写<span class="hljs-type">bool</span>，<span class="hljs-type">bool</span>由byte数组的位寻址而来，bit_address就是数组下标<br>my_plc.WriteBit(S7_registertype, iDB_num, iDB_start_byteadd, bit_address, (<span class="hljs-type">bool</span>)<span class="hljs-keyword">values</span>);<br>//写非<span class="hljs-type">bool</span><br>my_plc.<span class="hljs-keyword">Write</span>(S7_registertype, iDB_num, iDB_start_byteadd, <span class="hljs-keyword">values</span>);<br>//读，count是计数单位，一般写<span class="hljs-number">1</span>，以一个byte作为最小计算单位<br>my_plc.<span class="hljs-keyword">Read</span>(S7_registertype, iDB_num, iDB_start_byteadd, S7_datatyp, count);<br></code></pre></td></tr></table></figure>
+<p><font color=red>B. 用静态变量存储PLC的交互数据</font></p>
+</li>
+<li><p>UI和PLC变量如下：<br><img src="/img/blog_page/3427087-20240508100629433-1745040443.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240508100808076-1598016210.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>新建static</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs axapta"><span class="hljs-keyword">internal</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">data_yamltest_exchange</span><br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">byte</span> byte_var;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">short</span> word_var;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> bool bool_var;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>数据交互，这里的数据二次封装过的，但是是基于上面S7协议封装的，这里不深究</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs arcade"><span class="hljs-comment">//task1</span><br>Task.Run(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span><br>&#123;<br>    <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)<br>    &#123;<br>        <span class="hljs-keyword">if</span> (my_plc_status)<br>        &#123;<br>            <span class="hljs-comment">//read from plc</span><br>            data_yamltest_exchange.bool_var = my_s7.bool_rw_value(<span class="hljs-number">132</span>, my_plc_iDB, <span class="hljs-number">4</span>, <span class="hljs-string">&quot;r&quot;</span>, <span class="hljs-number">0</span>); ;<br><br>            <span class="hljs-comment">//write to plc </span><br>            my_s7.write_read_value(<span class="hljs-string">&quot;word&quot;</span>, <span class="hljs-number">132</span>, my_plc_iDB, <span class="hljs-number">2</span>, <span class="hljs-string">&quot;w&quot;</span>, data_yamltest_exchange.word_var, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>);<br>            my_s7.write_read_value(<span class="hljs-string">&quot;byte&quot;</span>, <span class="hljs-number">132</span>, my_plc_iDB, <span class="hljs-number">0</span>, <span class="hljs-string">&quot;w&quot;</span>, data_yamltest_exchange.byte_var, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>);<br>        &#125;<br>    &#125;<br>&#125;);<br></code></pre></td></tr></table></figure></li>
+<li><p>UI后端代码，这里用了两个委托来完成radioButton的显示</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> partial <span class="hljs-keyword">class</span> <span class="hljs-title class_">_6Yaml_test</span> : <span class="hljs-title class_">UserControl</span><br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">_6Yaml_test</span>(<span class="hljs-params"></span>)<br>    &#123;<br>        <span class="hljs-title class_">InitializeComponent</span>();<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">textBox1</span>.<span class="hljs-property">Text</span> = <span class="hljs-string">&quot;0&quot;</span>;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">textBox2</span>.<span class="hljs-property">Text</span> = <span class="hljs-string">&quot;0&quot;</span>;<br>    &#125;<br>    <span class="hljs-built_in">string</span> val = <span class="hljs-literal">null</span>;<br>    bool status = <span class="hljs-literal">false</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">_6Yaml_test_Load</span>(<span class="hljs-params"><span class="hljs-built_in">object</span> sender, <span class="hljs-title class_">EventArgs</span> e</span>)<br>    &#123;<br>        <span class="hljs-title class_">Task</span>.<span class="hljs-title class_">Run</span>(<span class="hljs-function">() =&gt;</span><br>        &#123;<br>            setTextCallBack sV = <span class="hljs-keyword">new</span> <span class="hljs-title function_">setTextCallBack</span>(setValue);<br>            setRadioCallBack rV = <span class="hljs-keyword">new</span> <span class="hljs-title function_">setRadioCallBack</span>(setStatus);<br>            <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)<br>            &#123;<br>                <span class="hljs-keyword">if</span> (data_yamltest_exchange.<span class="hljs-property">bool_var</span> == <span class="hljs-literal">true</span>)<br>                &#123;<br>                    status = <span class="hljs-literal">true</span>;<br>                    val = <span class="hljs-string">&quot;bool have been enabled&quot;</span>;<br>                    radioButton1.<span class="hljs-title class_">Invoke</span>(sV, val);<br>                    radioButton1.<span class="hljs-title class_">Invoke</span>(rV, status);<br>                &#125;<br>                <span class="hljs-keyword">else</span><br>                &#123;<br>                    status = <span class="hljs-literal">false</span>;<br>                    val = <span class="hljs-string">&quot;bool have been disabled&quot;</span>;<br>                    radioButton1.<span class="hljs-title class_">Invoke</span>(sV, val);<br>                    radioButton1.<span class="hljs-title class_">Invoke</span>(rV, status);<br>                &#125;<br>                <span class="hljs-keyword">try</span><br>                &#123;<br>                    data_yamltest_exchange.<span class="hljs-property">word_var</span> = <span class="hljs-title class_">Convert</span>.<span class="hljs-title class_">ToInt16</span>(textBox2.<span class="hljs-property">Text</span>.<span class="hljs-title class_">ToString</span>());<br>                    data_yamltest_exchange.<span class="hljs-property">byte_var</span> = <span class="hljs-title class_">Convert</span>.<span class="hljs-title class_">ToByte</span>(textBox1.<span class="hljs-property">Text</span>.<span class="hljs-title class_">ToString</span>());<br>                &#125;<br>                <span class="hljs-keyword">catch</span> &#123; <span class="hljs-keyword">break</span>; &#125;;<br>            &#125;<br>        &#125;);<br>    &#125;<br>    <span class="hljs-comment">//cross-thread delivery</span><br>    <span class="hljs-comment">//1.delegate type</span><br>    <span class="hljs-keyword">public</span> delegate <span class="hljs-built_in">void</span> <span class="hljs-title function_">setTextCallBack</span>(<span class="hljs-built_in">string</span> val);<br>    <span class="hljs-keyword">public</span> delegate <span class="hljs-built_in">void</span> <span class="hljs-title function_">setRadioCallBack</span>(bool status);<br>    <span class="hljs-comment">//2.delegate function</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">setValue</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> val</span>)<br>    &#123;<br>        radioButton1.<span class="hljs-property">Text</span>=val;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">setStatus</span>(<span class="hljs-params">bool status</span>)<br>    &#123; <br>    radioButton1.<span class="hljs-property">Checked</span> = status;<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>这个方法里，PLC读出的数据存储在自建的静态类里，要写入PLC变量的值也由自建的静态类给出，C#各个线程都可以访问该静态类，避免了各个线程和类之间传值的复杂和繁琐。</p>
+</li>
+</ul>
+<p><font color=red>C. 用yaml交互</font></p>
+<ul>
+<li><p>安装<code>YamlDoNet</code>库<br><img src="/img/blog_page/3427087-20240508103931415-41497659.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>引用命名空间</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-keyword">using</span> YamlDotNet.Serialization;<br></code></pre></td></tr></table></figure></li>
+<li><p>新建文件夹，新建<code>.yaml</code>文件，建立yaml结构<br><img src="/img/blog_page/3427087-20240508110520615-1195770345.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>读取yaml文件方法</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//yaml_read</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> T <span class="hljs-title">Yaml_read</span>&lt;<span class="hljs-title">T</span>&gt;(<span class="hljs-params"><span class="hljs-built_in">string</span> file_path</span>)</span><br>&#123; <br><span class="hljs-keyword">var</span> deserializer = <span class="hljs-keyword">new</span> DeserializerBuilder().Build();<br>    T my_yamlObject;<br>    <span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> reader = <span class="hljs-keyword">new</span> StreamReader(file_path))<br>    &#123; <br>    my_yamlObject=deserializer.Deserialize&lt;T&gt;(reader);<br>    &#125;<br>    <span class="hljs-keyword">return</span> my_yamlObject;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>写入yaml文件方法</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//yaml_write</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Yaml_write</span>(<span class="hljs-params"><span class="hljs-built_in">object</span> obj, <span class="hljs-built_in">string</span> file_path</span>)</span><br>&#123; <br><span class="hljs-keyword">var</span> serializer = <span class="hljs-keyword">new</span> SerializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build();<br>    <span class="hljs-keyword">var</span> my_yaml = serializer.Serialize(obj);<br>    File.WriteAllText(file_path, my_yaml);<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>建立和yaml结构一致的class结构<font color=red>，<strong>这是重点</strong></font></p>
+<ul>
+<li>用<code>[YamlMember(Alias)=&quot;&quot;]</code>来指定yaml文件中的结构名]</li>
+<li><code>[YamlIgnore]</code>用于在序列化或者反序列化的时候忽略掉它</li>
+<li><code>[YamlMember(Order = 1)]</code>用于指定序列化的顺序</li>
+<li><code>&#123;get;set;&#125;</code>用于设置yaml结构的属性，<code>公有属性</code>。yaml文件的结构本身就相当于被保护起来的一个<code>私有字段</code>。</li>
+<li><strong><font color=red>yaml文件中不要用table键缩进，会报错，缩进一般使用空格，敲两个或者四个空格</font></strong></li>
+<li><strong><font color=red>yaml内容的结构名，和实际程序里面必须一一对应，一字不差</font></strong></li>
+</ul>
+</li>
+<li><p>建立yaml文件需要的程序结构样例</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//yaml结构</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">yaml_data</span><br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">yaml_test_data1</span><br>    &#123;<br>        [<span class="hljs-meta">YamlMember(Alias = <span class="hljs-string">&quot;Byte_var&quot;</span>)</span>]<br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">byte</span> Byte_var &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; &#125;<br>        [<span class="hljs-meta">YamlMember(Alias = <span class="hljs-string">&quot;Word_var&quot;</span>)</span>]<br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">short</span> Word_var &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; &#125;<br>        [<span class="hljs-meta">YamlMember(Alias = <span class="hljs-string">&quot;Bool_var&quot;</span>)</span>]<br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> Bool_var &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; &#125;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">yaml_test_data2</span><br>    &#123;<br>        [<span class="hljs-meta">YamlMember(Alias = <span class="hljs-string">&quot;Int_var&quot;</span>)</span>]<br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> Int_var &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; &#125;<br>        [<span class="hljs-meta">YamlMember(Alias = <span class="hljs-string">&quot;Char_var&quot;</span>)</span>]<br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">char</span> Char_var &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; &#125;<br>    &#125;<br><br>    <span class="hljs-comment">// Class II</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">yamal_class_collection</span><br>    &#123;<br>        [<span class="hljs-meta">YamlMember(Alias = <span class="hljs-string">&quot;test_data1&quot;</span>)</span>]<br>        <span class="hljs-keyword">public</span> yaml_test_data1 test_data1 &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; &#125;<br><br>        [<span class="hljs-meta">YamlMember(Alias = <span class="hljs-string">&quot;test_data2&quot;</span>)</span>]<br>        <span class="hljs-keyword">public</span> yaml_test_data2 test_data2 &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; &#125;<br>    &#125;<br><br>    <span class="hljs-comment">//Class I</span><br>    [<span class="hljs-meta">YamlMember(Alias=<span class="hljs-string">&quot;data_collection&quot;</span>)</span>]<br>    <span class="hljs-keyword">public</span> yamal_class_collection data_collection &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>建立yaml文件内容，注意上下对应</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs angelscript">data_collection:  #Class I 一级<span class="hljs-keyword">class</span>名称，和程序对应<br>  <span class="hljs-symbol">test_data1:  </span>#<span class="hljs-symbol">Class</span> <span class="hljs-symbol">II</span> 二级<span class="hljs-symbol">class</span>名称，和程序对应<br>    <span class="hljs-symbol">Byte_var: <span class="hljs-symbol">0x10</span></span>  #各个字段<br>    <span class="hljs-symbol">Word_var: <span class="hljs-symbol">32</span></span><br>    <span class="hljs-symbol">Bool_var: <span class="hljs-symbol">false</span></span><br>    <br>  <span class="hljs-symbol">test_data2:  </span>#<span class="hljs-symbol">Class</span> <span class="hljs-symbol">II</span> 二级<span class="hljs-symbol">class</span>名称，和程序对应<br>    <span class="hljs-symbol">Int_var: <span class="hljs-symbol">99</span></span><br>    <span class="hljs-symbol">Char_var: </span>&#x27;<span class="hljs-symbol">a</span>&#x27;<br></code></pre></td></tr></table></figure></li>
+<li><p>示意如图：<br><img src="/img/blog_page/3427087-20240508171815530-1967107112.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>引用yaml，在load事件中读取yaml文件默认配置</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs abnf">yaml_data my_yaml_data <span class="hljs-operator">=</span> new yaml_data()<span class="hljs-comment">;</span><br>Config_yaml my_yaml<span class="hljs-operator">=</span> new Config_yaml()<span class="hljs-comment">;</span><br>my_yaml_data <span class="hljs-operator">=</span> my_yaml.Yaml_read&lt;yaml_data&gt;(<span class="hljs-string">&quot;C:\\Users\\testyaml.yaml&quot;</span>)<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/C-sharp/" class="category-chain-item">C sharp</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/C-sharp/C-and-PLC/" class="category-chain-item">C# and PLC</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/c/" class="print-no-link">#c#</a>
+      
+        <a href="/tags/PLC/" class="print-no-link">#PLC</a>
+      
+        <a href="/tags/s7netplus/" class="print-no-link">#s7netplus</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>C#与PLC变量在数据交互上的一些探索</div>
+      <div>http://example.com/2024/07/21/C#与PLC变量在数据交互上的一些探索/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiao cuncun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年7月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/07/21/%E7%94%A8WinForm%E5%AE%9E%E7%8E%B0%E8%BF%9B%E5%BA%A6%E6%9D%A1%E6%98%BE%E7%A4%BA/" title="用WinForm实现进度条显示">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">用WinForm实现进度条显示</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/07/21/WinForm%E4%B8%8B%E5%AE%9E%E7%8E%B0%E5%AD%90%E7%AA%97%E4%BD%93/" title="WinForm下实现子窗体">
+                        <span class="hidden-mobile">WinForm下实现子窗体</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

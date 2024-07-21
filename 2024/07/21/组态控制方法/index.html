@@ -1,0 +1,758 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiao cuncun">
+  <meta name="keywords" content="blog">
+  
+    <meta name="description" content="什么叫组态控制？  从应用场景上来看，如果现在集成了一个系统，它既包括了生产A要用的全部I&#x2F;O系统，又包括可生产B和C等等要用的全部I&#x2F;O系统。但是ABC的生产I&#x2F;O不一样（硬件组态不尽相同）。 这个时候我就想用一套程序（包括硬件组态）就能适配全部的ABC生产。另外我在切换硬件组态的时候还要要求不能停机。以上的案例就衍生出来了组态控制。它实现了一种只需要一套程序和硬件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="组态控制方法">
+<meta property="og:url" content="http://example.com/2024/07/21/%E7%BB%84%E6%80%81%E6%8E%A7%E5%88%B6%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="Whatsxiaocuncun Personal website">
+<meta property="og:description" content="什么叫组态控制？  从应用场景上来看，如果现在集成了一个系统，它既包括了生产A要用的全部I&#x2F;O系统，又包括可生产B和C等等要用的全部I&#x2F;O系统。但是ABC的生产I&#x2F;O不一样（硬件组态不尽相同）。 这个时候我就想用一套程序（包括硬件组态）就能适配全部的ABC生产。另外我在切换硬件组态的时候还要要求不能停机。以上的案例就衍生出来了组态控制。它实现了一种只需要一套程序和硬件">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240419152815011-1860432149.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240419153514489-385441592.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240419160509148-2016988708.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240419161829800-710284738.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240419162656488-1687126836.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240419163121466-871137239.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240419163539526-381599062.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240419163400282-248652718.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240419163439480-1811731726.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240419171334048-1237314838.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240419171325269-208943039.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240419193522865-239623283.png">
+<meta property="article:published_time" content="2024-07-21T06:44:39.299Z">
+<meta property="article:modified_time" content="2024-07-21T09:16:39.044Z">
+<meta property="article:author" content="xiao cuncun">
+<meta property="article:tag" content="PLC part">
+<meta property="article:tag" content="industrial control">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/blog_page/3427087-20240419152815011-1860432149.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>组态控制方法 - Whatsxiaocuncun Personal website</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>一位不愿透露姓名的小村村同学的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="组态控制方法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-21 14:44" pubdate>
+          2024年7月21日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">组态控制方法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>什么叫组态控制？</p>
+<ul>
+<li>从应用场景上来看，如果现在集成了一个系统，它既包括了生产A要用的全部I&#x2F;O系统，又包括可生产B和C等等要用的全部I&#x2F;O系统。但是ABC的生产I&#x2F;O不一样（硬件组态不尽相同）。</li>
+<li>这个时候我就想用一套程序（包括硬件组态）就能适配全部的ABC生产。另外我在切换硬件组态的时候还要要求不能停机。<br>以上的案例就衍生出来了<code>组态控制</code>。它实现了一种只需要一套程序和硬件组态，通过程序的方式（意味着可以通过HMI，WEB，上位机等更多方式）轻松的选择和设置相应的设备型号的方法。<br>如图：<br><img src="/img/blog_page/3427087-20240419152815011-1860432149.png" srcset="/img/loading.gif" lazyload><br><font color=red>如果想要现成的程序和实例，请直接访问<a target="_blank" rel="noopener" href="https://support.industry.siemens.com" title="西门子工业在线支持" >sios</a>,输入文档编号<u><font color=green>29430270</font></u>获取详细资料</font>。<strong>官网有详细的LCC库文件来实现用户的组态控制需求。</strong>本文是纯折腾用的，不想折腾就不用往下看了。</li>
+</ul>
+<h2 id="1-在1500中央机架上做组态控制"><a href="#1-在1500中央机架上做组态控制" class="headerlink" title="1. 在1500中央机架上做组态控制"></a>1. 在1500中央机架上做组态控制</h2><ul>
+<li><p>先来介绍一下硬件配置数据的记录格式（直接截图了，累了）：<br><img src="/img/blog_page/3427087-20240419153514489-385441592.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>块长度计算：[4bytes+(slot数量*(bytes in per slot))]，simtic1500系列每个slot占1个字节数量</li>
+<li>ID：DS196,它是组态控制专用DS</li>
+<li>版本：用来区分产品类别（ET200MP,ET200SP或者SIMATIC S71500中央机架），中央机架我们就填4；另外subversion子版本1500填0。</li>
+<li>组态slot0，值16#0表示正在使用，值16#FF表示此模块在实际安装系统中不存在</li>
+<li>slot1:表示CPU，因为CPU始终只能在插槽1里面，值16#1表示实际安装系统中正在使用</li>
+<li>slot2~n:表示对应模块在实际安装系统中的插槽号，16#FF表示不存在。（<u><font color=red>比如中央机架最大插槽数是31，那么结构可以到slot31去</font></u>）</li>
+<li><u><font color=red>实际没有的slot标记为16#FF，可以在组态里面把该插槽位忽略掉</font></u></li>
+</ul>
+</li>
+<li><p>操作方法<br> 1 .在硬件组态里面勾选<code>允许通过用户程序重新组态设备</code>：右键<code>PLC</code>&gt;选择<code>组态控制</code>&gt;<code>勾选</code>。</p>
+<ol start="2">
+<li>建立DS196数据结构如下（<font color=red>空缺运行的注释写错了，这里和<del>空缺运行</del>没有任何关系</font>）：<br><img src="/img/blog_page/3427087-20240419160509148-2016988708.png" srcset="/img/loading.gif" lazyload></li>
+<li>DS写入设备中，靠<code>WRREC</code>指令<figure class="highlight leaf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs leaf">//用repeat..until直到完全写入程序再往下跑<br>REPEAT  <br>    <span class="hljs-punctuation">#</span><span class="hljs-keyword">WRREC_Instance</span><span class="hljs-params">(<span class="hljs-variable">REQ</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&quot;_RD_WR&quot;</span>.<span class="hljs-variable">WR</span>.<span class="hljs-variable">I</span>.<span class="hljs-variable">REQ</span>,</span><br><span class="hljs-params">                    <span class="hljs-variable">ID</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&quot;_RD_WR&quot;</span>.<span class="hljs-variable">WR</span>.<span class="hljs-variable">I</span>.<span class="hljs-variable">ID</span>,<span class="hljs-operator">/</span><span class="hljs-operator">/</span>对于集中式设备，始终填写33（<span class="hljs-variable">Local</span>~<span class="hljs-variable">Configuration</span>）</span><br><span class="hljs-params">                    <span class="hljs-variable">INDEX</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&quot;_RD_WR&quot;</span>.<span class="hljs-variable">WR</span>.<span class="hljs-variable">I</span>.<span class="hljs-variable">INDEX</span>,</span><br><span class="hljs-params">                    <span class="hljs-variable">LEN</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&quot;_RD_WR&quot;</span>.<span class="hljs-variable">WR</span>.<span class="hljs-variable">I</span>.<span class="hljs-variable">LEN</span>, <span class="hljs-operator">/</span><span class="hljs-operator">/</span>给<span class="hljs-variable">byte0</span>中填写的字节数。</span><br><span class="hljs-params">                    <span class="hljs-variable">DONE</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_RD_WR&quot;</span>.<span class="hljs-variable">WR</span>.<span class="hljs-variable">O</span>.<span class="hljs-variable">DONE</span>,</span><br><span class="hljs-params">                    <span class="hljs-variable">BUSY</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_RD_WR&quot;</span>.<span class="hljs-variable">WR</span>.<span class="hljs-variable">O</span>.<span class="hljs-variable">BUSY</span>,</span><br><span class="hljs-params">                    <span class="hljs-variable">ERROR</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_RD_WR&quot;</span>.<span class="hljs-variable">WR</span>.<span class="hljs-variable">O</span>.<span class="hljs-variable">ERROR</span>,</span><br><span class="hljs-params">                    <span class="hljs-variable">STATUS</span> <span class="hljs-operator">=</span><span class="hljs-operator">&gt;</span> <span class="hljs-string">&quot;_RD_WR&quot;</span>.<span class="hljs-variable">WR</span>.<span class="hljs-variable">O</span>.<span class="hljs-variable">STATUS</span>,</span><br><span class="hljs-params">                    <span class="hljs-variable">RECORD</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&quot;_DS196&quot;</span>)</span>;<br>    //status memerary<br>    IF &quot;_RD_WR&quot;.WR.O.ERROR THEN<br>        <span class="hljs-punctuation">#</span><span class="hljs-keyword">memerary</span> := &quot;_RD_WR&quot;.WR.O.STATUS;<br>    END_IF;<br>    //configDown<br>    IF 16<span class="hljs-punctuation">#</span>0070_0200 = &quot;_RD_WR&quot;.WR.O.STATUS THEN<br>        <span class="hljs-punctuation">#</span><span class="hljs-keyword">ConfigDown</span> := TRUE;<br>        &quot;_RD_WR&quot;.WR.I.REQ := FALSE;<br>    END_IF;  <br>UNTIL <span class="hljs-punctuation">#</span><span class="hljs-keyword">ConfigDown</span> END_REPEAT;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>.实测过，配置组态控制之后<code>CPU启动速度</code>会变得极慢，但是最终还是要起起来的。</p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="2-在I-O上做组态控制"><a href="#2-在I-O上做组态控制" class="headerlink" title="2. 在I&#x2F;O上做组态控制"></a>2. 在I&#x2F;O上做组态控制</h2><ul>
+<li>在I&#x2F;O上做组态控制的场景如图：<br><img src="/img/blog_page/3427087-20240419161829800-710284738.png" srcset="/img/loading.gif" lazyload></li>
+<li>继续介绍IO系统的组态控制的数据格式<br><img src="/img/blog_page/3427087-20240419162656488-1687126836.png" srcset="/img/loading.gif" lazyload></li>
+<li>操作方法</li>
+</ul>
+<ol>
+<li>在<code>网络视图</code>的<code>IO通信</code>下面更改标签，使能<code>可选IO设备</code>，如图：<br><img src="/img/blog_page/3427087-20240419163121466-871137239.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240419163539526-381599062.png" srcset="/img/loading.gif" lazyload></li>
+<li>如果还需要通过程序重新定义端口互连的话，则还需要去设置以太网口端口的<code>伙伴端口连接选项</code>改为<code>伙伴由用户程序设置</code>，如图：<br><img src="/img/blog_page/3427087-20240419163400282-248652718.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240419163439480-1811731726.png" srcset="/img/loading.gif" lazyload></li>
+<li>数据记录：<br><img src="/img/blog_page/3427087-20240419171334048-1237314838.png" srcset="/img/loading.gif" lazyload></li>
+<li>调用<code>ReconfigIOSystem</code><figure class="highlight leaf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs leaf">//IO的组态控制<br><span class="hljs-punctuation">#</span><span class="hljs-keyword">ReconfigIOSystem_Instance</span><span class="hljs-params">(<span class="hljs-variable">REQ</span>:<span class="hljs-operator">=</span><span class="hljs-string">&quot;_RD_WR&quot;</span>.<span class="hljs-variable">WR</span>.<span class="hljs-variable">I</span>.<span class="hljs-variable">REQ</span>,</span><br><span class="hljs-params">                            <span class="hljs-variable">MODE</span>:<span class="hljs-operator">=</span>2,<span class="hljs-operator">/</span><span class="hljs-operator">/</span>本质调用<span class="hljs-variable">D_ACT_DP</span>，<span class="hljs-operator">=</span>1则禁用<span class="hljs-variable">IO</span>系统中的所有网络，<span class="hljs-operator">=</span>3启用<span class="hljs-variable">IO</span>系统中的所有网络，<span class="hljs-operator">=</span>2按照<span class="hljs-variable">CTRCREC</span>重新组态<span class="hljs-variable">IO</span>网络</span><br><span class="hljs-params">                           <span class="hljs-variable">LADDR</span>:<span class="hljs-operator">=</span>64,<span class="hljs-operator">/</span><span class="hljs-operator">/</span><span class="hljs-variable">CPU</span>的<span class="hljs-variable">PN</span>接口硬件标识符</span><br><span class="hljs-params">                           <span class="hljs-variable">CTRLREC</span>:<span class="hljs-operator">=</span><span class="hljs-string">&quot;resys_IO&quot;</span>.<span class="hljs-variable">my_ctrlrec</span>)</span>;//上面建立的resys_IO的数据结构的内容<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="3-1200系统中的组态控制"><a href="#3-1200系统中的组态控制" class="headerlink" title="3. 1200系统中的组态控制"></a>3. 1200系统中的组态控制</h2><p>如图：<br><img src="/img/blog_page/3427087-20240419171325269-208943039.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240419193522865-239623283.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>1200依旧使用<code>DS196</code>来完成组态控制</li>
+<li>实际没有的slot标记为16#FF，理解如上图</li>
+</ul>
+<h2 id="4-ET200MP-ET200SP-ET200PRO-ET200AL的控制组态"><a href="#4-ET200MP-ET200SP-ET200PRO-ET200AL的控制组态" class="headerlink" title="4. ET200MP_ET200SP_ET200PRO_ET200AL的控制组态"></a>4. ET200MP_ET200SP_ET200PRO_ET200AL的控制组态</h2><ul>
+<li>总体方法和SIMATIC 1500上差不多，但是细节和DS结构上会有一些差别，详情参考TIA博图帮助信息。</li>
+<li>ET200MP的version是3，ET200SP的version是2，AL和PRO也有自己的version</li>
+<li>ET200SP,ET200MP,AL,PRO除了使用DS196写入（<code>WRREC</code>）配置之外，都可以使用DS197回读（<code>RDREC</code>）配置</li>
+<li>ET200SP和ET200MP中<code>slot不存在用值127</code>表示。（ET200SP&#x2F;ET200MP支持。AL和PRO没了解）</li>
+<li>WRREC的ID填写<code>输入扩展名为“∼Head”的 IM 子模块的硬件标识符</code>。（ET200SP&#x2F;ET200MP支持。AL和PRO没了解）</li>
+<li>ET200SP在建立DS时除了需要slot之外，还有一个变量叫<code>info_slot</code>,<code>info_slot=1表示打开新的电位组</code>,DS197回读的时候结构需要注意一下。</li>
+<li><strong><u><font color=red>实际使用的时候请参见博图帮助，因为这一节是摘抄的帮助的相关信息，没有自己动手做。<font></u></strong></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/PLC-related/" class="category-chain-item">PLC related</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/PLC-related/1200-1500PLC/" class="category-chain-item">1200/1500PLC</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/PLC-part/" class="print-no-link">#PLC part</a>
+      
+        <a href="/tags/industrial-control/" class="print-no-link">#industrial control</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>组态控制方法</div>
+      <div>http://example.com/2024/07/21/组态控制方法/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiao cuncun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年7月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/07/21/%E4%B8%80%E4%BA%9B%E6%8F%90%E9%AB%98%E8%87%AA%E5%8A%A8%E5%8C%96%E7%8E%87%E7%9A%84%E6%8C%87%E4%BB%A4/" title="一些提高自动化率的指令">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">一些提高自动化率的指令</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/07/21/PROFINET%20IO%E5%BA%94%E7%94%A8%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="PROFINET IO应用层数据结构">
+                        <span class="hidden-mobile">PROFINET IO应用层数据结构</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
