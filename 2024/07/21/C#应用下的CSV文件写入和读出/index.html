@@ -194,7 +194,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/article_page_pic1.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -384,9 +384,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/07/21/C#%E4%B8%AD%E7%9A%84%E4%BB%BB%E5%8A%A1%E5%92%8C%E7%BA%BF%E7%A8%8B/" title="C#中的任务和线程">
+                      <a href="/2024/07/21/C#%E4%B8%AD%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/" title="C#中面向对象的一些基础概念">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">C#中的任务和线程</span>
+                        <span class="hidden-mobile">C#中面向对象的一些基础概念</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -410,6 +410,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"zR6N5hLjEd6gN7CjLFPqGPaT-gzGzoHsz","appKey":"lu0mprZ1u6vc3HDTenR4sR5m","path":"window.location.pathname","placeholder":"吐槽一下！！","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
