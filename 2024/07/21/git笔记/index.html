@@ -18,8 +18,8 @@
   
     <meta name="description" content="1. 安装 阿里云下载Git 选择安装目录时尽量不选在C盘 Git组件安装，一般默认即可 选择开始菜单文件夹，默认 选择Git默认编辑器，一般是vim。默认就行 选择默认分支名 选择环境变量，选第二个 选择SSH，默认 选择HTTPS，默认 配置尾行符，默认 配合git bash一起使用，默认 git pull行为，默认 凭证管理，选第一个 默认 默认 执行安装。 安装成功后，使用git bash">
 <meta property="og:type" content="article">
-<meta property="og:title" content="git基础笔记">
-<meta property="og:url" content="http://example.com/2024/07/21/git%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:title" content="git笔记">
+<meta property="og:url" content="http://example.com/2024/07/21/git%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="Whatsxiaocuncun Personal website">
 <meta property="og:description" content="1. 安装 阿里云下载Git 选择安装目录时尽量不选在C盘 Git组件安装，一般默认即可 选择开始菜单文件夹，默认 选择Git默认编辑器，一般是vim。默认就行 选择默认分支名 选择环境变量，选第二个 选择SSH，默认 选择HTTPS，默认 配置尾行符，默认 配合git bash一起使用，默认 git pull行为，默认 凭证管理，选第一个 默认 默认 执行安装。 安装成功后，使用git bash">
 <meta property="og:locale" content="zh_CN">
@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://example.com/img/blog_page/3427087-20240614162425012-823371522.png">
 <meta property="og:image" content="http://example.com/img/blog_page/3427087-20240614164512337-1267042527.png">
 <meta property="article:published_time" content="2024-07-21T06:44:39.217Z">
-<meta property="article:modified_time" content="2024-07-21T07:46:33.437Z">
+<meta property="article:modified_time" content="2024-07-22T11:24:35.075Z">
 <meta property="article:author" content="xiao cuncun">
 <meta property="article:tag" content="git">
 <meta name="twitter:card" content="summary_large_image">
@@ -43,7 +43,7 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>git基础笔记 - Whatsxiaocuncun Personal website</title>
+  <title>git笔记 - Whatsxiaocuncun Personal website</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -209,7 +209,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="git基础笔记"></span>
+            <span id="subtitle" data-typed-text="git笔记"></span>
           
         </div>
 
@@ -232,7 +232,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          283 字
+          2.1k 字
         
       </span>
     
@@ -243,7 +243,7 @@
         
         
         
-          3 分钟
+          18 分钟
         
       </span>
     
@@ -280,7 +280,7 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">git基础笔记</h1>
+            <h1 id="seo-header">git笔记</h1>
             
             
               <div class="markdown-body">
@@ -329,6 +329,100 @@
 </li>
 </ul>
 <p><img src="/img/blog_page/3427087-20240614164512337-1267042527.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="3-git应用"><a href="#3-git应用" class="headerlink" title="3. git应用"></a>3. git应用</h2><ul>
+<li><p>安装：</p>
+<ul>
+<li>在debian或者ubuntu下 ： <code>sudo apt-get install git</code></li>
+</ul>
+</li>
+<li><p>配置</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs lua">git <span class="hljs-built_in">config</span> <span class="hljs-comment">--global user.name</span><br>git <span class="hljs-built_in">config</span> <span class="hljs-comment">--global user.email</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>创建版本库并添加文件到仓库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 创建版本库文件夹</span><br> <span class="hljs-built_in">mkdir</span> learngit<br> <span class="hljs-built_in">cd</span> learngit<br> <span class="hljs-built_in">pwd</span> <span class="hljs-comment">#显示当前目录</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>把该文件夹变成可以管理的仓库：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-meta"># 会生成一个.git的文件，做版本管理用，git使用的前提是被.git管理起来；用ls-ah 查看该文件</span><br>git <span class="hljs-keyword">init</span><br></code></pre></td></tr></table></figure></li>
+<li><p>新建一个文本readme.txt，放到learngit下；把一个文件放到git仓库需要以下两步：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-comment"># 把文件添加到仓库,这一步是把文件添加到仓库暂存区</span><br>git <span class="hljs-built_in">add</span> readme.txt <br><br><span class="hljs-comment"># 真正把文件提交到仓库</span><br>git commit -m <span class="hljs-string">&quot;本次提交的说明&quot;</span> <br></code></pre></td></tr></table></figure>
+</li>
+<li><p>为什么需要add和commit两步的原因是：commit可以一次性提交很多文件，所以在commit之前可以多次add：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs routeros">git <span class="hljs-built_in">add</span> file1.txt<br>git <span class="hljs-built_in">add</span> file2.txt<br>git <span class="hljs-built_in">add</span> file3.txt<br>git commit -m <span class="hljs-string">&quot;一次性提交上面三个文件&quot;</span><br></code></pre></td></tr></table></figure></li>
+<li><p>添加某个文件时，必须先保证文件在当前目录下存在，用ls或者dir命令查看当前目录的文件是否存在或者名称是否正确</p>
+</li>
+<li><p>比较和追踪文件状态</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs sql"># 可以查看当前仓库的状态，比如仓库里的文件被修改了，但是还没有被<span class="hljs-keyword">add</span>到仓库暂存区<br>git status <br><br># 详细查看某个被修改的文件的不同（和<span class="hljs-keyword">commit</span>的文件相比）<br>git diff readme.txt <br><br># 比较完不同之后就可以放心添加到暂存区了，提交修改也是用<span class="hljs-keyword">add</span>，和提交新文件一样<br>git <span class="hljs-keyword">add</span> readme.txt <br><br># 在<span class="hljs-keyword">add</span>之后<span class="hljs-keyword">commit</span>之前再看一眼status，会告诉我们将要被提交的文件包括readme.txt（这时还存在暂存区）<br>git status <br><br>git <span class="hljs-keyword">commit</span> <span class="hljs-operator">-</span>m &quot;提交readme.txt的修改&quot;<br><br># 在<span class="hljs-keyword">commit</span>之后再看一眼状态，会告诉我们当前没有需要提交的修改，工作目录（working tree）是干净的<br>git status <br></code></pre></td></tr></table></figure>
+
+</li>
+<li><p>版本回退：</p>
+<ul>
+<li>我们之前的每一次commit就相当于是一次“快照”，所以找到之前的提交记录，就可以回退到某一次提交的版本。<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs applescript"><span class="hljs-comment"># 查看commit的历史记录，会输出所有被记录过的改动，这里会有个HEAD指针</span><br>git <span class="hljs-built_in">log</span> <br><br><span class="hljs-comment"># 一次提交记录占用一行输出（省略作者和日期那些不重要的信息，只保留SHA计算出来的值）</span><br>git <span class="hljs-built_in">log</span> <span class="hljs-comment">--pretty=oneline </span><br><br><span class="hljs-comment"># git中，HEAD指向的版本就表示当前版本。上一个版本是HEAD^;上上个版本是HEAD^^;往上100个版本是HEAD~100</span><br><br><span class="hljs-comment"># 退回到上一个版本</span><br>git reset <span class="hljs-comment">--hard HEAD^ </span><br><br><span class="hljs-comment"># 使用reset之后，查看状态发现最新的变成了上一次修改的版本了</span><br>git status <br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>如果回退之后，又想恢复。那么只要命令行窗口还没有被关掉，只要向上找到想要恢复那个版本的SHA号。执行如下指令：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs applescript"><span class="hljs-comment"># SHA号不用填完，可以填个4或者5位，git会自己去模糊搜索。</span><br>git reset <span class="hljs-comment">--hard &lt;sha&gt; </span><br><br><span class="hljs-comment"># HEAD指向哪个版本，当前版本就是哪个</span><br><br><span class="hljs-comment"># 如果SHA已经找不到了，如下方法可以恢复：</span><br><span class="hljs-comment"># 这条指令记录了使用者对git操作的每条命令，从这个指令的内容中找到已经回退掉的SHA和版本号</span><br>git reflog <br><br><span class="hljs-comment"># 找到之后就可以恢复了</span><br>git reset <span class="hljs-comment">--hard &lt;sha&gt; </span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>工作区和暂存区</p>
+<ul>
+<li>工作区：就是在电脑磁盘上就能看到的目录</li>
+<li>版本库：生成的.git其实就是一个版本库，他不算工作区。</li>
+<li>git的版本库里面存了很多东西，其中最重要的就是暂存区，称作<code>stage（或者index）</code>;git里面为我们自动创建的第一个分支叫做<code>master</code>;指向master的指针叫做<code>HEAD</code></li>
+<li><code>git add</code>就是把文件修改添加到了暂存区</li>
+<li><code>git commit</code>就是提交更改，实际上是把暂存区的内容提交到了当前的分支；注意<code>提交的只有暂存区里存在的东西</code>。</li>
+<li>在只有一个分支的情况，简单理解就是我们把所有的文件全部放到了暂存区，然后一<code>次性提交</code>了暂存区的所有修改</li>
+<li>一旦提交(commit)过后，如果你又没有对工作区做任何修改，那么<code>工作区就变得干净</code>了</li>
+<li>commit以后，<code>暂存区的内容就为空</code>了。</li>
+</ul>
+</li>
+<li><p>撤销：</p>
+<ul>
+<li>情况1，如果是在工作区的文件被修改了，但是还没有提交到暂存区，有两种解决方案：<ul>
+<li>a.手动删除掉。</li>
+<li>b.使用 <code>git checkout -- readme.txt</code> ，可以丢弃工作区的修改</li>
+<li>如果暂存区有该文件的上一个版本，则退回到当添加到暂存区时的状态</li>
+<li>如果暂存区内没有文件，则退回到上一次commit时的状态</li>
+<li><code>总之，就是让当前文件回到最近一次 git commit或者git add时的状态</code></li>
+<li>注意<code>checkout </code>后面如果不加 – file 的话，就变成了切换分支的命令</li>
+</ul>
+</li>
+<li>情况2，工作区的修改已经被提交到暂存区了：<ul>
+<li><code>git reset HEAD readme.txt</code> ：git reset既可以做版本回退，也可以用来把暂存区的东西撤销到工作区，撤销之后暂存区就是干净的了。</li>
+<li><code>git checkout -- readme.txt</code> ：丢弃工作区的内容</li>
+</ul>
+</li>
+<li>情况3，暂存区的内容已经被提交到仓库了：<ul>
+<li>本地仓库，用<code>git reset --hard HEAD^</code>退回版本</li>
+<li>远程仓库，完蛋</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>删除：</p>
+<ul>
+<li><code>rm test.txt</code> ：直接删除工作区的文件，但是如果提交了的话，仓库还有记录</li>
+<li><code>git status</code> ：直接告诉你工作区哪个文件被删除了</li>
+<li>如果正常删除，就<code>先add再commit，把变更同步到仓库</code></li>
+<li>如果删错了，因为版本库还有，所以用： <code>git checkout -- test.txt</code> 恢复。</li>
+<li>从这里看出来，git checkout – file 其实是<code>用版本库里的内容替换掉工作区中的内容</code>，如果版本库没有改文件，那就是丢弃工作区该文件的修改方式了。</li>
+</ul>
+</li>
+<li><p>远程仓库：</p>
+<ul>
+<li><code>git remote add origin &lt;远程仓库SSH地址&gt;</code> ：origin是远程仓库的名字，也可以换成其它名字；这一步是在关联远程仓库</li>
+<li><code>git push -u origin master</code> ：把本地的内容推送到远程，实际上是把当前分支master推到远程库，第一次用 -u,就把本地master和远程master管理，以后就可以不用加-u了。</li>
+<li><code>git push origin master</code></li>
+<li><code>git remote rm origin</code> ：解除本地和远程仓库的绑定，并没有删除远程仓库的内容</li>
+<li><code>git clone &lt;远程仓库SSH地址&gt;</code> ：把远程仓库在本地克隆一个一样的</li>
+</ul>
+</li>
+<li><p>分支管理：</p>
+<ul>
+<li>分支管理就是多人协作时，各自在自己的分支上干活，互不干扰</li>
+<li>直到开发完毕，一次性合并到原有分支上，高效又安全</li>
+<li>如果出现分支合并冲突的时候git就希望我们先手动解决冲突（人工确认更改需求），冲突解决后再合并<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment">#创建分支，然后切换分支</span><br>git <span class="hljs-keyword">branch </span>dev<br>git checkout dev <br><br><span class="hljs-comment">#用一句话代替上面两句话，创建并切换分支</span><br>git checkout -<span class="hljs-keyword">b </span>dev <br><br><span class="hljs-comment">#查看当前分支</span><br>git <span class="hljs-keyword">branch </span><br><br><span class="hljs-comment">#把dev分支的改动和当前所在分支合并</span><br>git merge dev <br><br><span class="hljs-comment">#合并之后，就可以放心删除没有用的dev分支了</span><br>git <span class="hljs-keyword">branch </span>-d dev <br><br><span class="hljs-comment"># 如果出现分支合并冲突的时候git就希望我们先手动解决冲突，冲突解决后再合并</span><br><br><span class="hljs-comment"># 可以查看分支合并图</span><br>git log --graph <br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
 
                 
               </div>
@@ -381,8 +475,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>git基础笔记</div>
-      <div>http://example.com/2024/07/21/git基础笔记/</div>
+      <div>git笔记</div>
+      <div>http://example.com/2024/07/21/git笔记/</div>
     </div>
     <div class="license-meta">
       
