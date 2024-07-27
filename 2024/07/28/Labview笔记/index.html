@@ -1,0 +1,806 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiao cuncun">
+  <meta name="keywords" content="blog">
+  
+    <meta name="description" content="1. 背景Labview这个软件，从大学到现在，装了卸载，卸载了又装。来来回回不下10次了，那本大学时的教材Labview 2010基础教程，一直没丢，但也一直没看过。最近又装回来了，准备简单的系统性倒腾一下，当是个了解。  一些杂项： 快捷键： Ctrl+N:创建一个Labview项目 Ctrl+E:切换前后面板 Ctrl+R:运行快捷键 Ctrl+S:保存 Ctrl+B:去掉所有断线   如何">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Labview笔记">
+<meta property="og:url" content="http://example.com/2024/07/28/Labview%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Whatsxiaocuncun Personal website">
+<meta property="og:description" content="1. 背景Labview这个软件，从大学到现在，装了卸载，卸载了又装。来来回回不下10次了，那本大学时的教材Labview 2010基础教程，一直没丢，但也一直没看过。最近又装回来了，准备简单的系统性倒腾一下，当是个了解。  一些杂项： 快捷键： Ctrl+N:创建一个Labview项目 Ctrl+E:切换前后面板 Ctrl+R:运行快捷键 Ctrl+S:保存 Ctrl+B:去掉所有断线   如何">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240727122309270-1923690820.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240727115414479-1724652147.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240727120136520-1338889532.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240727123233348-1491335368.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240727123502058-769845231.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240727124520532-1716134301.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240727153259942-2000409995.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240727153632100-800785960.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240727154025335-1451648777.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240727154355700-423786708.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240727154645490-886018184.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240727160315334-1768160805.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240727160502196-1535522715.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240727160640314-520780751.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240727161732625-1133756120.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240727230918880-1644996869.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240727231031180-567536975.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240728003234508-1338990970.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240728005629895-1750382292.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240728010050247-73183564.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240728010805550-864461462.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240728011000778-642049095.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240728011016163-463638386.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240728012324893-577894945.png">
+<meta property="article:published_time" content="2024-07-27T17:30:57.664Z">
+<meta property="article:modified_time" content="2024-07-27T17:36:02.187Z">
+<meta property="article:author" content="xiao cuncun">
+<meta property="article:tag" content="labview">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/blog_page/3427087-20240727122309270-1923690820.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Labview笔记 - Whatsxiaocuncun Personal website</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>一位不愿透露姓名的小村村同学的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/article_page_pic1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Labview笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-28 01:30" pubdate>
+          2024年7月28日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          16 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Labview笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><p>Labview这个软件，从大学到现在，装了卸载，卸载了又装。来来回回不下10次了，那本大学时的教材Labview 2010基础教程，一直没丢，但也一直没看过。最近又装回来了，准备简单的系统性倒腾一下，当是个了解。</p>
+<ul>
+<li>一些杂项：<ul>
+<li>快捷键：<ul>
+<li><code>Ctrl+N</code>:创建一个Labview项目</li>
+<li><code>Ctrl+E</code>:切换前后面板</li>
+<li><code>Ctrl+R</code>:运行快捷键</li>
+<li><code>Ctrl+S</code>:保存</li>
+<li><code>Ctrl+B</code>:去掉所有断线</li>
+</ul>
+</li>
+<li>如何打包vi程序给没有labview的地方使用。<a target="_blank" rel="noopener" href="https://www.cnblogs.com/einstein-2014731/p/4969052.html">参考Labveiw如何生成应用程序</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="2-顺序结构"><a href="#2-顺序结构" class="headerlink" title="2. 顺序结构"></a>2. 顺序结构</h2><ul>
+<li>如图，前面板和后面板是VI程序的两个部分，如果保存了工程文件再次打开只有前面板的话，可以按<code>Ctrl+E</code>切换到后面板。</li>
+<li><strong>平铺顺序结构</strong>就是从左向右依次执行的结构，右键<code>平铺式顺序结构</code>，在后面<code>添加帧</code>，即可增加一帧结构<br><img src="/img/blog_page/3427087-20240727122309270-1923690820.png" srcset="/img/loading.gif" lazyload></li>
+<li>如下图的工具栏，有一些比较高效的工具：<ul>
+<li><code>单箭头</code>：运行一个周期，前后面板效果一样</li>
+<li><code>循环箭头</code>：连续运行，前后面板效果一样</li>
+<li><code>红色六边形块</code>：停止运行</li>
+<li><code>||</code>：暂停</li>
+<li><code>灯泡</code>：查看数据流向，这个点击可以查看数据流，以及数据中断，用来分析程序。<code>vi的程序数据流动和摆放位置没有关系。</code></li>
+<li>后面还有<code>在平铺结构内的单步运行</code>，<code>跨过平铺结构的单步运行</code>等待</li>
+<li>后面是一些程序对齐快捷键</li>
+<li>最后<code>带个小扫把</code>：的图标是整理所选部分代码<br><img src="/img/blog_page/3427087-20240727115414479-1724652147.png" srcset="/img/loading.gif" lazyload></li>
+<li>下图右边的图标双击可以更换工程图标，左边的图标右键可以更换模式，暂时我也没理解这个模式有什么具体作用。<br><img src="/img/blog_page/3427087-20240727120136520-1338889532.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+<li>如图右键，可以把平铺式顺序结构变成<strong>层叠式顺序结构</strong>：<br><img src="/img/blog_page/3427087-20240727123233348-1491335368.png" srcset="/img/loading.gif" lazyload></li>
+<li>替换过后，后面板看起来会简洁一点，相当于于把原来平铺的帧打包成了一个数组，一次显示一个数组元素，可以<code>切换显示帧</code>和<code>设置当前帧</code>，不影响数据流向：<br><img src="/img/blog_page/3427087-20240727123502058-769845231.png" srcset="/img/loading.gif" lazyload></li>
+<li>插入一个<code>布尔量</code>以及<code>True</code>和<code>False</code>常量方法：<br><img src="/img/blog_page/3427087-20240727124520532-1716134301.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+<h2 id="3-循环结构"><a href="#3-循环结构" class="headerlink" title="3. 循环结构"></a>3. 循环结构</h2><ul>
+<li>嵌套在顺序结构中的<code>FOR</code>循环和嵌套在FOR循环中的<code>顺序结构</code>，如图：<br><img src="/img/blog_page/3427087-20240727153259942-2000409995.png" srcset="/img/loading.gif" lazyload><ul>
+<li>在上图中，顺序结构有4层，依次执行，每一层都加了一个定时器（单独的），右键定时器<code>创建常量</code>，即可快速为定时器设置常量，ms为单位：<br><img src="/img/blog_page/3427087-20240727153632100-800785960.png" srcset="/img/loading.gif" lazyload></li>
+<li>几乎每层都用到的字符串和布尔是<code>局部变量</code>，他是第三层和第四层的控件的中间变量，如图可创建一个控件的局部变量：<br><img src="/img/blog_page/3427087-20240727154025335-1451648777.png" srcset="/img/loading.gif" lazyload></li>
+<li>For循环中，<code>i</code>表示当前循环次数；<code>N</code>表示总循环次数（从0开始）；For循环里面嵌套的顺序结构里面含有定时器，那么表示一次for循环的实际需要时间包括定时器的执行完成时间：<br><img src="/img/blog_page/3427087-20240727154355700-423786708.png" srcset="/img/loading.gif" lazyload></li>
+<li>随机数生成器: 输入的两个常量是生成器设置的<code>上下限</code>，双击随机数生成器，可以看到它的默认设置值，但是此处用不到；<code>U64</code>表示无符号64位整型：<br><img src="/img/blog_page/3427087-20240727154645490-886018184.png" srcset="/img/loading.gif" lazyload></li>
+<li>labview的数据类型如下：<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs dns">SGL 单精度<span class="hljs-number">32</span>位<br>DBL 双精度<span class="hljs-number">64</span>位<br>EXT 扩展精度<span class="hljs-number">128</span>位<br>FXP 定点数据，一种二进制数据<br><br>I8  单字节整型       -<span class="hljs-number">128~127</span><br>I16 双字节整型       -<span class="hljs-number">32768~32767</span><br>I32 长整型           -<span class="hljs-number">2147483648</span>~<span class="hljs-number">2147483647</span><br>I64 <span class="hljs-number">64</span>位整型         -<span class="hljs-number">1e19~1e19</span><br><br>U8  无符号单字节整型  <span class="hljs-number">0</span>~<span class="hljs-number">255</span><br>U16 无符号双字节整型  <span class="hljs-number">0~65535</span><br>U32 无符号长整型      <span class="hljs-number">0</span>~<span class="hljs-number">4294967293</span><br>U64 无符号<span class="hljs-number">64</span>位整型    <span class="hljs-number">0</span>~<span class="hljs-number">2</span>e19<br><br>CSG  单精度复数    <span class="hljs-number">32</span>位单精的实数和虚数组成<br>CDB  双精度复数    <span class="hljs-number">64</span>位IEEE单精的实数和虚数组成<br>CXT  扩展精度复数  <span class="hljs-number">128</span>位    <br><br>在Labview中浮点数表示为橙色<br>在Labview中整数表示为蓝色<br>在Labview中复数跟浮点数一样表示为橙色<br>在Labview中布尔值表示为绿色，<span class="hljs-number">8</span>位二进制表示。<span class="hljs-number">8</span>位全为零表示FALSE，非零的值表示为TRUE<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>While循环，此处创建了一个<code>波形图表</code>用来显示随机数波形图：<br><img src="/img/blog_page/3427087-20240727160315334-1768160805.png" srcset="/img/loading.gif" lazyload><ul>
+<li>循环中的定时器的作用：增加单次循环的时候，以免刷新过快。</li>
+<li>停止按钮用<code>False</code>常量固定住了，目的是让它一直循环下去；<br><img src="/img/blog_page/3427087-20240727160502196-1535522715.png" srcset="/img/loading.gif" lazyload></li>
+<li>如果想手动停止，可以换成一个停止按钮。（如果想要<code>暂停</code>而不是停止循环，情况就要复杂一点，可以自己做程序来实现，这里就不试了）<br><img src="/img/blog_page/3427087-20240727160640314-520780751.png" srcset="/img/loading.gif" lazyload></li>
+<li>对于<code>For循环</code>而言，如果想要条件停止，可以右键For循环，勾选<code>条件接线端</code><br><img src="/img/blog_page/3427087-20240727161732625-1133756120.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+</ul>
+<h2 id="条件结构"><a href="#条件结构" class="headerlink" title="条件结构"></a>条件结构</h2><ul>
+<li>条件结构就类似与<code>Switch</code>，逻辑是<code>除了罗列出来的分支，其他分支一律按默认处理</code>。</li>
+<li>对着条件结构框右键，可以选择<code>增加一条分支</code>或者<code>删除一条分支</code>。</li>
+<li>条件分支<code>？</code>的左边输入如果是bool量，分支可以是真或者假，真假条件框内写各自的逻辑；左边输入如果是数值，可以填具体的数据，也可以填范围（“10..20”表示10到20的区间，“21..”表示&gt;&#x3D;21的区间）；左边输入如果是字符串，可以填字符串的值。</li>
+<li>案例1，比大小和比区间范围：<br><img src="/img/blog_page/3427087-20240727230918880-1644996869.png" srcset="/img/loading.gif" lazyload></li>
+<li>案例2，在while循环里面持续判断按钮的状态并反馈相应的字符串：<br><img src="/img/blog_page/3427087-20240727231031180-567536975.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+<h2 id="事件触发结构"><a href="#事件触发结构" class="headerlink" title="事件触发结构"></a>事件触发结构</h2><ul>
+<li>平时用过C# winform或者HMI的事件处理的，对这个触发方式应该不会陌生。</li>
+<li>下图写的一个按钮触发事件，打开按钮值改变的时候判断，如果灯的值是1，就变成0；反之如果灯的值是0，就变成1。</li>
+<li>事件触发结构最好放到<code>while</code>循环里面，不然只会被触发一次程序就结束了。</li>
+<li>步骤：<ul>
+<li>s1:拉出一个事件结构</li>
+<li>s2:拉出一个while循环，把事件结构丢循环里，在添加两按钮，一个指示灯，都放循环里；循环的<code>条件接线端</code>常置FALSE或者设置为其他触发条件，不然要报错。<br><img src="/img/blog_page/3427087-20240728003234508-1338990970.png" srcset="/img/loading.gif" lazyload></li>
+<li>s3:右键事件结构，找到添加事件分支，选择事件分支对应的控件，事件选择值改变<br><img src="/img/blog_page/3427087-20240728005629895-1750382292.png" srcset="/img/loading.gif" lazyload></li>
+<li>s4: 现在可以在对应的<code>触发事件</code>里面写逻辑了；这里的逻辑是每次值改变时取反灯的状态。我习惯引用按钮或者灯的<code>局部变量</code>到事件中去做控制或者改变值；局部变量刚拖出来的时候默认是<code>写入</code>，如图右键可以转换为<code>读取</code>，注意三角箭头的位置变化：<br><img src="/img/blog_page/3427087-20240728010050247-73183564.png" srcset="/img/loading.gif" lazyload></li>
+<li>s5:按需设置<code>超时</code>报警事件，小沙漏这里用来设置超时时间<br><img src="/img/blog_page/3427087-20240728010805550-864461462.png" srcset="/img/loading.gif" lazyload></li>
+<li>注意：此处while循环一次的过程是事件被触发一次，如果去抓取<code>i</code>的变化，就可以知道这个数据流过程。</li>
+</ul>
+</li>
+</ul>
+<h2 id="禁用结构"><a href="#禁用结构" class="headerlink" title="禁用结构"></a>禁用结构</h2><ul>
+<li>简单理解，就是注释；可以注释掉<code>禁用结构</code>框内的所有代码；</li>
+<li>禁用结构的设置值可以是<code>禁用</code>或者<code>启用</code>，方便在调试的时候选择禁用和启用一段代码<br><img src="/img/blog_page/3427087-20240728011000778-642049095.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240728011016163-463638386.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+<h2 id="数组和簇"><a href="#数组和簇" class="headerlink" title="数组和簇"></a>数组和簇</h2><ul>
+<li>数组，就是平时程序里使用的数组，有一维数组也有多维数组，注意下标</li>
+<li>簇，就是结构体</li>
+</ul>
+<h2 id="和西门子PLC通信"><a href="#和西门子PLC通信" class="headerlink" title="和西门子PLC通信"></a>和西门子PLC通信</h2><ul>
+<li>可以考虑走TCP&#x2F;IP协议，暂时没找到labview有支持S7协议。<br><img src="/img/blog_page/3427087-20240728012324893-577894945.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/labview/" class="category-chain-item">labview</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/labview/" class="print-no-link">#labview</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Labview笔记</div>
+      <div>http://example.com/2024/07/28/Labview笔记/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiao cuncun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年7月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/07/25/%E5%9F%BA%E4%BA%8EjQuery%E7%9A%84%E7%94%A8%E6%88%B7%E8%87%AA%E5%AE%9A%E4%B9%89%E9%A1%B5%E9%9D%A2/" title="基于jQuery的用户自定义页面">
+                        <span class="hidden-mobile">基于jQuery的用户自定义页面</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"zR6N5hLjEd6gN7CjLFPqGPaT-gzGzoHsz","appKey":"lu0mprZ1u6vc3HDTenR4sR5m","path":"window.location.pathname","placeholder":"吐槽一下！！","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
