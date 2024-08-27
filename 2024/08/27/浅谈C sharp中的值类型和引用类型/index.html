@@ -1,0 +1,751 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiao cuncun">
+  <meta name="keywords" content="blog">
+  
+    <meta name="description" content="1. 值类型 常见的值类型：int&#x2F;long&#x2F;short&#x2F;byte&#x2F;float&#x2F;double&#x2F;bool&#x2F;char&#x2F;Struct（用户建立的结构体通常是值类型的）&#x2F;Nullable Types(这是一个特殊的值类型，表示一个正常值或者空，比如int?) 值类型的例子：12345678910int a&#x3D;10;in">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈C sharp中的值类型和引用类型">
+<meta property="og:url" content="http://example.com/2024/08/27/%E6%B5%85%E8%B0%88C%20sharp%E4%B8%AD%E7%9A%84%E5%80%BC%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Whatsxiaocuncun Personal website">
+<meta property="og:description" content="1. 值类型 常见的值类型：int&#x2F;long&#x2F;short&#x2F;byte&#x2F;float&#x2F;double&#x2F;bool&#x2F;char&#x2F;Struct（用户建立的结构体通常是值类型的）&#x2F;Nullable Types(这是一个特殊的值类型，表示一个正常值或者空，比如int?) 值类型的例子：12345678910int a&#x3D;10;in">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240823153958631-735591647.png">
+<meta property="article:published_time" content="2024-08-27T13:54:32.808Z">
+<meta property="article:modified_time" content="2024-08-27T13:59:23.621Z">
+<meta property="article:author" content="xiao cuncun">
+<meta property="article:tag" content="c#">
+<meta property="article:tag" content="winform">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/blog_page/3427087-20240823153958631-735591647.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>浅谈C sharp中的值类型和引用类型 - Whatsxiaocuncun Personal website</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>一位不愿透露姓名的小村村同学的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/article_page_pic1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="浅谈C sharp中的值类型和引用类型"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-08-27 21:54" pubdate>
+          2024年8月27日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">浅谈C sharp中的值类型和引用类型</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-值类型"><a href="#1-值类型" class="headerlink" title="1. 值类型"></a>1. 值类型</h2><ul>
+<li>常见的值类型：int&#x2F;long&#x2F;short&#x2F;byte&#x2F;float&#x2F;double&#x2F;bool&#x2F;char&#x2F;Struct（用户建立的结构体通常是值类型的）&#x2F;Nullable Types(这是一个特殊的值类型，表示一个正常值或者空，比如<code>int?</code>)</li>
+<li>值类型的例子：<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-type">int</span> a=<span class="hljs-number">10</span>;<br><span class="hljs-type">int</span> b=a;<br><br><span class="hljs-built_in">Console</span>.<span class="hljs-built_in">WriteLine</span>($<span class="hljs-string">&quot;a:&#123;a&#125;&quot;</span>);<span class="hljs-comment">//a:10</span><br><span class="hljs-built_in">Console</span>.<span class="hljs-built_in">WriteLine</span>($<span class="hljs-string">&quot;b:&#123;b&#125;&quot;</span>);<span class="hljs-comment">//b:10</span><br><br>b=<span class="hljs-number">20</span>;<br><br><span class="hljs-built_in">Console</span>.<span class="hljs-built_in">WriteLine</span>($<span class="hljs-string">&quot;a:&#123;a&#125;&quot;</span>);<span class="hljs-comment">//a:10,原始值不受影响</span><br><span class="hljs-built_in">Console</span>.<span class="hljs-built_in">WriteLine</span>($<span class="hljs-string">&quot;b:&#123;b&#125;&quot;</span>);<span class="hljs-comment">//b:20，只有b的值改变了</span><br></code></pre></td></tr></table></figure></li>
+<li>值类型直接存储在内存（称之为栈（STACK），栈以LIFO访问，后进栈的数据先被访问，栈的大小是固定的，不是动态分配的，所以访问速度快）中，当把一个值赋值给另外一个变量时，其实是把变量的值<strong>复制</strong>给了新的变量，而不会改变原有值（<code>a=10;b=a;b=20;</code>这个例子中并不会因为b变成20了就反过来使a也变成20了，因为这个过程是复制，副本虽然变了，但是a&#x3D;10这个原始值一直没有被改变。）</li>
+<li><font color=grren>当一个方法传递值类型的参数时（包括结构体），会将参数的值复制到函数的参数中，对参数的修改不会影响到原始变量；</font></li>
+</ul>
+<h2 id="2-引用类型"><a href="#2-引用类型" class="headerlink" title="2. 引用类型"></a>2. 引用类型</h2><ul>
+<li>类，接口，委托，数组，字符串（字符串比较特殊，他可以像值类型一样用，但是它又具有<code>不可变性</code>。）</li>
+<li>用new动态分配内存，由GC（垃圾回收器）释放</li>
+<li>引用类型实际上操作的是地址。在C#中，你需要获取引用类型实例的地址只需要用<code>&amp;</code>，如下<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs axapta">string <span class="hljs-built_in">str</span> = <span class="hljs-string">&quot;Hi&quot;</span>；<br>IntPtr address = <span class="hljs-keyword">new</span> IntPtr(&amp;<span class="hljs-built_in">str</span>)<br></code></pre></td></tr></table></figure></li>
+<li>但是当想要在值类型实例上获得地址，就变得很困难，你可能需要先把该值类型封装在一个引用类型（比如元素是值类型的数组类型）中，然后再获取该引用类型的地址。</li>
+<li>在传参时使用<code>ref</code>，如下，ref实际上传入的不是值类型的值（副本），而是值类型的引用（地址）：<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ModifyValue</span>(<span class="hljs-params"><span class="hljs-keyword">ref</span> <span class="hljs-built_in">int</span> num</span>)</span><br>&#123;<br>  num = <span class="hljs-number">42</span>;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span>()</span><br>&#123;<br>  <span class="hljs-built_in">int</span> <span class="hljs-keyword">value</span> = <span class="hljs-number">10</span>;<br>  Console.WriteLine(Value);<span class="hljs-comment">// output 10</span><br><br>  ModifyValue(<span class="hljs-keyword">ref</span> <span class="hljs-keyword">value</span>);<br>  Console.WriteLine(<span class="hljs-keyword">value</span>);<span class="hljs-comment">// output 42</span><br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>引用类型存储在内存的<code>堆（Heap）</code>，动态分配，当在堆上分配了实例之后（new之后），访问该实例实际上是通过访问该实例的内存地址来访问该实例的。</li>
+</ul>
+<h2 id="3-由值类型和引用类型不同引发的问题案例"><a href="#3-由值类型和引用类型不同引发的问题案例" class="headerlink" title="3. 由值类型和引用类型不同引发的问题案例"></a>3. 由值类型和引用类型不同引发的问题案例</h2><ul>
+<li>如下，有一个方法，方法尝试把一个字符串切分后的值准确的赋值给结构体：<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs csharp">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> T <span class="hljs-title">ParseString2Struct</span>&lt;<span class="hljs-title">T</span>&gt;(<span class="hljs-params"><span class="hljs-built_in">string</span> in_str</span>) <span class="hljs-keyword">where</span> T : <span class="hljs-keyword">struct</span></span><br>    &#123;<br>        T result = <span class="hljs-literal">default</span>(T);<br>        <span class="hljs-comment">//Type type = result.GetType();</span><br>        <span class="hljs-comment">//object clone_result = Activator.CreateInstance(type);</span><br><br>        FieldInfo[] fields = <span class="hljs-keyword">typeof</span>(T).GetFields(BindingFlags.Instance | BindingFlags.Public);<br>        <span class="hljs-built_in">object</span> parsedValue;<br><br>        <span class="hljs-keyword">var</span> lines = in_str.Split(<span class="hljs-keyword">new</span>[] &#123; <span class="hljs-string">&quot;\n&quot;</span> &#125;, StringSplitOptions.RemoveEmptyEntries);<br>        <span class="hljs-keyword">if</span> (lines.Length != fields.Length)<br>        &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ArgumentException(<span class="hljs-string">&quot;richtextbox string length does not match the structer.&quot;</span>);<br>        &#125;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; fields.Length; i++)<br>        &#123;<br>            <span class="hljs-keyword">var</span> lineParts = lines[i].Split(<span class="hljs-string">&#x27;:&#x27;</span>);<br>            <span class="hljs-keyword">if</span> (lineParts.Length != <span class="hljs-number">2</span> || lineParts[<span class="hljs-number">0</span>].Trim() != fields[i].Name)<br>            &#123;<br>                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ArgumentException(<span class="hljs-string">&quot;richtextbox string format does not match the structer.&quot;</span>);<br>            &#125;<br>            <span class="hljs-keyword">var</span> <span class="hljs-keyword">value</span> = lineParts[<span class="hljs-number">1</span>].Trim();<br>            <span class="hljs-keyword">var</span> fieldType = fields[i].FieldType;<br><br>            <span class="hljs-keyword">try</span><br>            &#123;<br>                parsedValue = Convert.ChangeType(<span class="hljs-keyword">value</span>, fieldType);<br>            &#125;<br>            <span class="hljs-keyword">catch</span> (Exception)<br>            &#123;<br>                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ArgumentException(<span class="hljs-string">&quot;richtextbox string does not match the structer.&quot;</span>);<br>            &#125;<br>            <span class="hljs-keyword">if</span> (!fields[i].IsInitOnly)<br>            &#123;<br>                fields[i].SetValue(result, parsedValue);<br>            &#125;          <br>        &#125;<br>        <span class="hljs-comment">//result = (T)clone_result;</span><br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>在这个方法里，使用<code>T result = default(T);</code>初始化值类型，<font color=green>这里不管是使用<code>default(T)</code>还是<code>new T()</code>其实本质都是获取了一个全新的值类型副本，但是default和new之间有一些小区别：用default的时候不会去获取结构构造函数中的初始值，而是直接使用该字段的数据类型的默认初始值。用new的时候程序会去扫描并使用该结构体构造函数中的初始值</font></li>
+<li>下面这句话用于调用该方法：<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">Ds64_65 ds6465 <span class="hljs-operator">=</span> DataSet_lib.ParseString2Struct&lt;Ds64_65&gt;(str)<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure></li>
+<li><font color=red>实际调试中发现一个很奇怪的现象，不管parsedValue值是多少，result的字段无论怎样都不能被赋值：</font><ul>
+<li><code>FieldInfo[] fields = typeof(T).GetFields(BindingFlags.Instance | BindingFlags.Public);</code>用来设定结构体字段的public属性。</li>
+<li><code>fields[i].IsInitOnly</code>用来检查每个字段都没有设置只读属性。</li>
+<li>为了检查FieldInfo[]类中的方法是否适用，甚至通过修改结构体构造函数的初始值再用new T()创建一个新的初始结构体，然后使用GetValue()方法，可以正常获得初始化值。<br><img src="/img/blog_page/3427087-20240823153958631-735591647.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+<li>通过询问AI才知道SetValue()方法对于值类型的注意点：<ul>
+<li>1.值传递是传递的字段的副本，副本的改变对字段本身的值没有影响。</li>
+<li>2.<del>传递的值和字段类型是兼容的，不兼容会抛异常</del>，这一条上面的方法可以确保。</li>
+<li>3.<font color=red>对于结构体中的字段，SetValue()方法只会修改字段的副本，而不是原始结构体实例。意味着在使用SetValue()修改结构体之后，需要将修改后的副本重新赋值给原始结构体实例.</font></li>
+</ul>
+</li>
+<li>但SetValue()这个方法本身又没有包含<code>ref</code>类型的重载，所以不能靠ref。</li>
+<li>对于修改建议，AI建议是使用<code>SetValueDirect</code>:<ul>
+<li><code>__makeref()</code>：用于获取结构体字段的引用，底层特性，不建议直接使用<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">typeof</span><span class="hljs-params">(T)</span></span><span class="hljs-selector-class">.GetFields</span>()<span class="hljs-selector-attr">[i]</span><span class="hljs-selector-class">.SetValueDirect</span>(<span class="hljs-built_in">__makeref</span>(result),parsedValue)<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>通过GitHub上参考的代码， 找到一个更合适的解决方法，就是创建一个Clone，再把Clone赋值回去，如下：<ul>
+<li>注意此方法生成的<code>object clone_result</code>，它是一个object类型，引用类型。那就不存在上面值类型放进SetValue()里的那些问题。最后再强转回T，给到result输出。<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> T <span class="hljs-title">ParseString2Struct</span>&lt;<span class="hljs-title">T</span>&gt;(<span class="hljs-params"><span class="hljs-built_in">string</span> in_str</span>) <span class="hljs-keyword">where</span> T : <span class="hljs-keyword">struct</span></span><br>&#123;<br>    T result = <span class="hljs-literal">default</span>(T);<br>    Type type = result.GetType();<br>    <span class="hljs-built_in">object</span> clone_result = Activator.CreateInstance(type);<br><br>    FieldInfo[] fields = <span class="hljs-keyword">typeof</span>(T).GetFields(BindingFlags.Instance | BindingFlags.Public);<br>    <span class="hljs-built_in">object</span> parsedValue;<br><br>    <span class="hljs-keyword">var</span> lines = in_str.Split(<span class="hljs-keyword">new</span>[] &#123; <span class="hljs-string">&quot;\n&quot;</span> &#125;, StringSplitOptions.RemoveEmptyEntries);<br>    <span class="hljs-keyword">if</span> (lines.Length != fields.Length)<br>    &#123;<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ArgumentException(<span class="hljs-string">&quot;richtextbox string length does not match the structer.&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; fields.Length; i++)<br>    &#123;<br>        <span class="hljs-keyword">var</span> lineParts = lines[i].Split(<span class="hljs-string">&#x27;:&#x27;</span>);<br>        <span class="hljs-keyword">if</span> (lineParts.Length != <span class="hljs-number">2</span> || lineParts[<span class="hljs-number">0</span>].Trim() != fields[i].Name)<br>        &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ArgumentException(<span class="hljs-string">&quot;richtextbox string format does not match the structer.&quot;</span>);<br>        &#125;<br>        <span class="hljs-keyword">var</span> <span class="hljs-keyword">value</span> = lineParts[<span class="hljs-number">1</span>].Trim();<br>        <span class="hljs-keyword">var</span> fieldType = fields[i].FieldType;<br><br>        <span class="hljs-keyword">try</span><br>        &#123;<br>            parsedValue = Convert.ChangeType(<span class="hljs-keyword">value</span>, fieldType);<br>        &#125;<br>        <span class="hljs-keyword">catch</span> (Exception)<br>        &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ArgumentException(<span class="hljs-string">&quot;richtextbox string does not match the structer.&quot;</span>);<br>        &#125;<br>        <span class="hljs-keyword">if</span> (!fields[i].IsInitOnly)<br>        &#123;<br>            fields[i].SetValue(clone_result, parsedValue);<br>        &#125;          <br>    &#125;<br>    result = (T)clone_result;<br>    <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>Clone可以成功解决该问题。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/C-sharp/" class="category-chain-item">C sharp</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/C-sharp/basic-notes/" class="category-chain-item">basic notes</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/c/" class="print-no-link">#c#</a>
+      
+        <a href="/tags/winform/" class="print-no-link">#winform</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>浅谈C sharp中的值类型和引用类型</div>
+      <div>http://example.com/2024/08/27/浅谈C sharp中的值类型和引用类型/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiao cuncun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年8月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/08/20/C%20sharp%E4%B8%8D%E5%AE%8C%E5%85%A8%E6%8A%98%E8%85%BE%EF%BC%9A%E7%BB%93%E6%9E%84%E4%BD%93%EF%BC%8C%E5%80%BC%E7%B1%BB%E5%9E%8B%EF%BC%8C%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B%EF%BC%8C%E6%B3%9B%E5%9E%8B/" title="C sharp不完全折腾：结构体，值类型，引用类型，泛型">
+                        <span class="hidden-mobile">C sharp不完全折腾：结构体，值类型，引用类型，泛型</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"zR6N5hLjEd6gN7CjLFPqGPaT-gzGzoHsz","appKey":"lu0mprZ1u6vc3HDTenR4sR5m","path":"window.location.pathname","placeholder":"吐槽一下！！","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

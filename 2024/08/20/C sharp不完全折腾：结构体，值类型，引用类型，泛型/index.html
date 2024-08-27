@@ -1,0 +1,769 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiao cuncun">
+  <meta name="keywords" content="blog">
+  
+    <meta name="description" content="1. 背景 需要创建多个不同结构的结构体，依据输入的int数来选择并返回确定且唯一的结构体实例，并且实现把结构实例映射成一个字典（键值对）格式用来输出到richtextbox.  2. 结构体的初始化 一个最基本的结构体格式如下：1234567891011121314151617181920&#x2F;&#x2F;rwd im0public struct rwdim0&#123;    public ushort b">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C sharp不完全折腾：结构体，值类型，引用类型，泛型">
+<meta property="og:url" content="http://example.com/2024/08/20/C%20sharp%E4%B8%8D%E5%AE%8C%E5%85%A8%E6%8A%98%E8%85%BE%EF%BC%9A%E7%BB%93%E6%9E%84%E4%BD%93%EF%BC%8C%E5%80%BC%E7%B1%BB%E5%9E%8B%EF%BC%8C%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B%EF%BC%8C%E6%B3%9B%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Whatsxiaocuncun Personal website">
+<meta property="og:description" content="1. 背景 需要创建多个不同结构的结构体，依据输入的int数来选择并返回确定且唯一的结构体实例，并且实现把结构实例映射成一个字典（键值对）格式用来输出到richtextbox.  2. 结构体的初始化 一个最基本的结构体格式如下：1234567891011121314151617181920&#x2F;&#x2F;rwd im0public struct rwdim0&#123;    public ushort b">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-08-20T15:04:53.783Z">
+<meta property="article:modified_time" content="2024-08-27T13:57:27.696Z">
+<meta property="article:author" content="xiao cuncun">
+<meta property="article:tag" content="c#">
+<meta property="article:tag" content="winform">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>C sharp不完全折腾：结构体，值类型，引用类型，泛型 - Whatsxiaocuncun Personal website</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>一位不愿透露姓名的小村村同学的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/article_page_pic1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="C sharp不完全折腾：结构体，值类型，引用类型，泛型"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-08-20 23:04" pubdate>
+          2024年8月20日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">C sharp不完全折腾：结构体，值类型，引用类型，泛型</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><ul>
+<li>需要创建多个不同结构的结构体，依据输入的int数来选择并返回确定且唯一的结构体实例，并且实现把结构实例映射成一个字典（键值对）格式用来输出到richtextbox.</li>
+</ul>
+<h2 id="2-结构体的初始化"><a href="#2-结构体的初始化" class="headerlink" title="2. 结构体的初始化"></a>2. 结构体的初始化</h2><ul>
+<li>一个最基本的结构体格式如下：<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//rwd im0</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">struct</span> rwdim0<br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">ushort</span> blocktype;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">short</span> blocklen;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">ushort</span> blockversion;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">ushort</span> manufactureID;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">char</span>[] order_num;<span class="hljs-comment">//length 20</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">char</span>[] serial_num;<span class="hljs-comment">//length 16</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">short</span> hardware_revision;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">char</span> fw_profix;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">byte</span> fw_cartridge;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">byte</span> fw_bugfix;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">byte</span> fw_internal_change;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">short</span> revirsion_counter;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">short</span> profil_ID;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">short</span> profil_specific_type;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">ushort</span> im_version;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">ushort</span> im_supported;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>需要用这个结构体的时候，直接<code>rwdim0 my_im0 = new rwdim0()</code>（或者不使用new,使用手动初始化也是允许的），在这种情况下是没有办法在声明结构体时对数据进行初始化的， 如下：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">//rwd im0</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">rwdim0</span><br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">char</span>[] order_num;<span class="hljs-comment">//length 20</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">char</span>[] serial_num;<span class="hljs-comment">//length 16</span><br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>如果需要在结构体定义阶段就初始化长度，只需要<strong>在创建结构体的同时创建一个无参构造函数</strong>即可<ul>
+<li>可以把初始值写在构造函数里</li>
+<li>也可以把初始值写在结构体的字段里，此时该结构体必须包含一个空的构造函数</li>
+<li>如果省略空的构造函数却把初值给到结构体字段内：<font color=red>此时会出现错误：<code>CS8983:具有字段初始值设定项的结构必须包含显示声明的构造函数</code>。</font><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//初始化写在构造函数</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">struct</span> im0<br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">char</span>[] order_num;<span class="hljs-comment">//length 20</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">char</span>[] serial_num;<span class="hljs-comment">//length 16</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">byte</span> fw_bugfix;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">im0</span>()</span><br>    &#123;<br>        order_num = <span class="hljs-keyword">new</span> <span class="hljs-built_in">char</span>[<span class="hljs-number">20</span>];<span class="hljs-comment">//char是值类型，默认的值是\0 而不是null；</span><br>        serial_num = <span class="hljs-keyword">new</span> <span class="hljs-built_in">char</span>[<span class="hljs-number">16</span>];<br>        fw_bugfix = <span class="hljs-number">0</span>;<span class="hljs-comment">//byte是值类型，默认的值是0, 而不是null</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//初始化写在结构体字段内，此时有一个空的构造函数</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">struct</span> im0<br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">char</span>[] order_num = <span class="hljs-keyword">new</span> <span class="hljs-built_in">char</span>[<span class="hljs-number">20</span>];<span class="hljs-comment">//length 20</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">char</span>[] serial_num = <span class="hljs-keyword">new</span> <span class="hljs-built_in">char</span>[<span class="hljs-number">16</span>];<span class="hljs-comment">//length 16</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">byte</span> fw_bugfix = <span class="hljs-number">0</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">im0</span>()</span><br>    &#123;<br><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="3-实现返回多种结构的方法"><a href="#3-实现返回多种结构的方法" class="headerlink" title="3. 实现返回多种结构的方法"></a>3. 实现返回多种结构的方法</h2><ul>
+<li>这个实现看似很简单，好像用一个<code>switch..case</code>语句就能解决，但是在考虑如何接收返回值的时候，真正的难题才开始。</li>
+<li>如下：我首先考虑用object接收：<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//get struct</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">object</span> <span class="hljs-title">GetStructInstance</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> index_num</span>)</span><br>&#123;<br>    <span class="hljs-keyword">switch</span> (index_num)<br>    &#123;<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Ds0_1_2_3();<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">64</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">65</span>:<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Ds64_65();<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">128</span>:<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Ds128();<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">192</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">193</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">194</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">195</span>:<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Ds192_193_194_195();<br>        <span class="hljs-literal">default</span>:<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ArgumentOutOfRangeException(<span class="hljs-keyword">nameof</span>(index_num), <span class="hljs-string">&quot;invalid index number&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>调用语句如下，用一个object类型的results接收这个可变的结果：<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">//<span class="hljs-keyword">read</span> data<br><span class="hljs-keyword">object</span> results = DataSet_lib.GetStructInstance(Convert.ToInt16(DS_index_textbox.Text.ToString()));<br></code></pre></td></tr></table></figure></li>
+<li>看似接收没有问题，但是要把results用作后续<code>结构体示例变成字典实例</code>的时候却犯了难，如下:是<code>结构体实例变字典实例</code>的实现方法：<ul>
+<li>这里用到了泛型<code>&lt;T&gt;</code>，因为要求的输入是一个结构体，所以用了<code>where T : struct</code>来做约束</li>
+<li>在使用了<code>where T : struct</code>但是传入的参数却是一个object类型的时候，<font color=red>会出现一个很典型的错误：<code>CS0453: 类型object必须是不可为null值的类型，才能用作泛型类型或者方法...中的参数T</code></font>。这个错误表达了：<strong>因为object类型是引用类型，但是struct类型却是一个值类型，引用类型有null值，值类型没有null值，所以不能随意转换。</strong><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs csharp">    <span class="hljs-comment">//struct 2 dictionary</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">Dictionary</span>&lt;<span class="hljs-title">string</span>, <span class="hljs-title">object</span>&gt; <span class="hljs-title">Struct2Dictionary</span>&lt;<span class="hljs-title">T</span>&gt;(<span class="hljs-params">T struc</span>) <span class="hljs-keyword">where</span> T : <span class="hljs-keyword">struct</span></span><br>    &#123;<br>        <span class="hljs-comment">//正常执行</span><br>        Dictionary&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">object</span>&gt; dict = <span class="hljs-keyword">new</span> Dictionary&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">object</span>&gt;();<br>        <span class="hljs-keyword">var</span> fields = <span class="hljs-keyword">typeof</span>(T).GetFields();<br><br>        <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> field <span class="hljs-keyword">in</span> fields)<br>        &#123;<br>            dict.Add(field.Name, field.GetValue(struc));<br>        &#125;<br>        <span class="hljs-keyword">return</span> dict;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>为了解决<code>CSO453</code>的问题，我把<code>where T : struct</code>约束给删了，此时不报错了，但是运行的时候richtextbox一直拿不到值，也没有报错，百思不得其解，于是尝试用调试模式看一看。<ul>
+<li>选择方法所在的事件，选中该行并右键，选择<code>运行到光标处</code>，随后按<code>F11</code>一步一步看数据。</li>
+<li>在进入Struct2Dictionary方法之前，需要传入的result已经能得到值了（通过调试模式看到的值），但是在Struct2Dictionary方法中，<code>var fields = typeof(T).GetFields();</code>这条语句最后拿到的fields一直是空的，<font color=red>出现一个红色提示:<code>&#123;System.Reflction.FieldInfo[0]&#125;</code>,这表示反射出来的字段是空的。</font>（另外此处我用的<code>var 推断类型</code>，其实实际类型应该是<code>FieldInfo[]</code>,看反射出的类型就知道了。）</li>
+<li>为了解决这个问题，我先尝试在使用results之前先判断一下results里面的字段是不是公有的（否则有可能反射不出来），如下写了一个判断方法：</li>
+<li>方法结果是好的，可以正常判断数据是公共的，也能正常拿到返回值，但是正常的返回值一进Struct2Dictionary方法的<code>var fields = typeof(T).GetFields();</code>语句就只能得到<code>&#123;System.Reflction.FieldInfo[0]&#125;</code>；又开始卡住了。<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//object 2 public object</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">object</span> <span class="hljs-title">ConvertResults</span>(<span class="hljs-params"><span class="hljs-built_in">object</span> results</span>)</span><br>&#123;<br>    <span class="hljs-keyword">if</span> (results != <span class="hljs-literal">null</span>)<br>    &#123;<br>        Type resultsType = results.GetType();<br>        <span class="hljs-keyword">if</span> (resultsType.IsNotPublic)<br>        &#123;<br>            <span class="hljs-built_in">object</span> publicResults = Activator.CreateInstance(resultsType);<br>            <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> field <span class="hljs-keyword">in</span> resultsType.GetFields())<br>            &#123;<br>                field.SetValue(publicResults, field.GetValue(results));<br>            &#125;<br>            <span class="hljs-keyword">return</span> publicResults;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> results;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>为了解决<code>&#123;System.Reflction.FieldInfo[0]&#125;</code>，我甚至把<code>var fields = typeof(T).GetFields();</code>按照如下改动妄图扩大范围，结果依旧无济于事：<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs elm"><span class="hljs-title">var</span> fields = typeof(<span class="hljs-type">T</span>).<span class="hljs-type">GetFields</span>(<span class="hljs-type">BindingFlags</span>.<span class="hljs-type">Public</span> | <span class="hljs-type">BindingFlags</span>.<span class="hljs-type">NonPublic</span> | <span class="hljs-type">BindingFlags</span>.<span class="hljs-type">Instance</span>);<br></code></pre></td></tr></table></figure></li>
+<li>最终只能放弃从<code>object-&gt;struct-&gt;dictionary</code>的路线，**<font color=green>如果有大佬知道问题出在哪里的话，希望可以帮我解答一下,感激不尽</font>**</li>
+</ul>
+<h2 id="4-泛型，返回不同的结构体实例"><a href="#4-泛型，返回不同的结构体实例" class="headerlink" title="4. 泛型，返回不同的结构体实例"></a>4. 泛型，返回不同的结构体实例</h2><ul>
+<li>上面的坑踩了没走出来，于是舍弃返回object类型，如下，把GetStructInstance（）方法改为返回一个泛型实例：<ul>
+<li><code>return (T)(object)</code>是因为：<font color=green>结构体实例不能直接转换为泛型T，强转为object类的结构体也不能隐式转换为T，所以经过了两个显示转换</font>。另外，泛型T是值类型还是引用类型取决于实际参数。</li>
+<li>泛型在创建的时候不必指定其具体的类型，但是调用的时候必须明确当前的具体类型。<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//get struct</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> T <span class="hljs-title">GetStructInstance</span>&lt;<span class="hljs-title">T</span>&gt;(<span class="hljs-params"><span class="hljs-built_in">int</span> index_num</span>)</span><br>&#123;<br>    <span class="hljs-keyword">switch</span> (index_num)<br>    &#123;<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:<br>            <span class="hljs-keyword">return</span> (T)(<span class="hljs-built_in">object</span>)<span class="hljs-keyword">new</span> Ds0_1_2_3();<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">64</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">65</span>:<br>            <span class="hljs-keyword">return</span> (T)(<span class="hljs-built_in">object</span>)<span class="hljs-keyword">new</span> Ds64_65();<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">128</span>:<br>            <span class="hljs-keyword">return</span> (T)(<span class="hljs-built_in">object</span>)<span class="hljs-keyword">new</span> Ds128();<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">192</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">193</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">194</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">195</span>:<br>            <span class="hljs-keyword">return</span> (T)(<span class="hljs-built_in">object</span>)<span class="hljs-keyword">new</span> Ds192_193_194_195();<br>        <span class="hljs-literal">default</span>:<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ArgumentOutOfRangeException(<span class="hljs-keyword">nameof</span>(index_num), <span class="hljs-string">&quot;invalid index number&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>这种用法避免了直接返回object类型，返回的是已经确定好的<T>类型，缺点是调用上需要写的代码量增加，不够灵活，如下：<ul>
+<li>这种用法就能正确得到字典的值并输出到richtextbox上了。对于总是返回null的情况，考虑给结构体字段都加上<code>public</code>来允许反射。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//read data</span><br><span class="hljs-keyword">switch</span> (Convert.ToInt16(DS_index_textbox.Text.ToString()))<br>&#123;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:<br>        <span class="hljs-type">Ds0_1_2_3</span> <span class="hljs-variable">ds0_1_2_3</span> <span class="hljs-operator">=</span> DataSet_lib.GetStructInstance&lt;Ds0_1_2_3&gt;(Convert.ToInt16(DS_index_textbox.Text.ToString()));<br>        my_ds_dic = DataSet_lib.Struct2Dictionary(ds0_1_2_3);<br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">64</span>:<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">65</span>:<br>        <span class="hljs-type">Ds64_65</span> <span class="hljs-variable">ds6465</span> <span class="hljs-operator">=</span> DataSet_lib.GetStructInstance&lt;Ds64_65&gt;(Convert.ToInt16(DS_index_textbox.Text.ToString()));<br>        my_ds_dic = DataSet_lib.Struct2Dictionary(ds6465);<br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">128</span>:<br>        <span class="hljs-type">Ds128</span> <span class="hljs-variable">ds128</span> <span class="hljs-operator">=</span> DataSet_lib.GetStructInstance&lt;Ds128&gt;(Convert.ToInt16(DS_index_textbox.Text.ToString()));<br>        my_ds_dic = DataSet_lib.Struct2Dictionary(ds128);<br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">192</span>:<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">193</span>:<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">194</span>:<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">195</span>:<br>        <span class="hljs-type">Ds192_193_194_195</span> <span class="hljs-variable">ds192_195</span> <span class="hljs-operator">=</span> DataSet_lib.GetStructInstance&lt;Ds192_193_194_195&gt;(Convert.ToInt16(DS_index_textbox.Text.ToString()));<br>        my_ds_dic = DataSet_lib.Struct2Dictionary(ds192_195);<br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">default</span>:<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArgumentOutOfRangeException</span>(<span class="hljs-string">&quot;invalid index number&quot;</span>);<br>&#125;<br>foreach (<span class="hljs-keyword">var</span> ds in my_ds_dic)<br>&#123;<br>    readdata_richtextbox.AppendText($<span class="hljs-string">&quot;&#123;ds.Key&#125;:&#123;ds.Value&#125;\n&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><ul>
+<li>折腾了一天，总结一下哪些有用的<ul>
+<li>结构体的初始化方法</li>
+<li>object类型的使用，var类型的使用</li>
+<li>泛型的使用</li>
+<li>用<code>运行到光标处</code>和<code>F11</code>调试程序</li>
+<li>用<code>where T : xxx</code>约束泛型</li>
+<li>值类型和引用类型中间转换出现的错误及原因</li>
+</ul>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/C-sharp/" class="category-chain-item">C sharp</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/C-sharp/basic-notes/" class="category-chain-item">basic notes</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/c/" class="print-no-link">#c#</a>
+      
+        <a href="/tags/winform/" class="print-no-link">#winform</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>C sharp不完全折腾：结构体，值类型，引用类型，泛型</div>
+      <div>http://example.com/2024/08/20/C sharp不完全折腾：结构体，值类型，引用类型，泛型/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiao cuncun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年8月20日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/08/27/%E6%B5%85%E8%B0%88C%20sharp%E4%B8%AD%E7%9A%84%E5%80%BC%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B/" title="浅谈C sharp中的值类型和引用类型">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">浅谈C sharp中的值类型和引用类型</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/07/28/Labview%E7%AC%94%E8%AE%B0/" title="Labview笔记">
+                        <span class="hidden-mobile">Labview笔记</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"zR6N5hLjEd6gN7CjLFPqGPaT-gzGzoHsz","appKey":"lu0mprZ1u6vc3HDTenR4sR5m","path":"window.location.pathname","placeholder":"吐槽一下！！","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
