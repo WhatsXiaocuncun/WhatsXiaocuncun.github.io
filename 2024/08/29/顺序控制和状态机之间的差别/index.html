@@ -1,0 +1,797 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiao cuncun">
+  <meta name="keywords" content="blog">
+  
+    <meta name="description" content="1. 背景 在PLC里一直以来的工程经验里面。如果想要做一个顺序控制（业务逻辑）： 用Graph实现 用Csae..Of分支跳转语句 用int数的变化切换不同的执行语句   下面一种一种的来看，先看看使用int数切换实现一个顺序控制的案例： 在这个案例（代码片段）里面，程序扫描currrent_step的值的不同，从而选择执行不同的程序段的内容，根据条件是否满足则可以做到在一个程序段里实现往下顺序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="顺序控制和状态机之间的差别">
+<meta property="og:url" content="http://example.com/2024/08/29/%E9%A1%BA%E5%BA%8F%E6%8E%A7%E5%88%B6%E5%92%8C%E7%8A%B6%E6%80%81%E6%9C%BA%E4%B9%8B%E9%97%B4%E7%9A%84%E5%B7%AE%E5%88%AB/index.html">
+<meta property="og:site_name" content="Whatsxiaocuncun Personal website">
+<meta property="og:description" content="1. 背景 在PLC里一直以来的工程经验里面。如果想要做一个顺序控制（业务逻辑）： 用Graph实现 用Csae..Of分支跳转语句 用int数的变化切换不同的执行语句   下面一种一种的来看，先看看使用int数切换实现一个顺序控制的案例： 在这个案例（代码片段）里面，程序扫描currrent_step的值的不同，从而选择执行不同的程序段的内容，根据条件是否满足则可以做到在一个程序段里实现往下顺序">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240829155813955-1669092130.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240829155835114-619708698.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240829162242315-2016803991.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240829214043733-552530810.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240829220728103-902838421.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240829220904386-524263508.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240829222105609-467268070.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240829222232573-1852540186.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240829225218408-1916005099.png">
+<meta property="article:published_time" content="2024-08-29T15:13:08.006Z">
+<meta property="article:modified_time" content="2024-08-29T15:14:53.655Z">
+<meta property="article:author" content="xiao cuncun">
+<meta property="article:tag" content="PLC">
+<meta property="article:tag" content="c#">
+<meta property="article:tag" content="上位机">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/blog_page/3427087-20240829155813955-1669092130.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>顺序控制和状态机之间的差别 - Whatsxiaocuncun Personal website</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>一位不愿透露姓名的小村村同学的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/article_page_pic1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="顺序控制和状态机之间的差别"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-08-29 23:13" pubdate>
+          2024年8月29日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          22 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">顺序控制和状态机之间的差别</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><ul>
+<li>在PLC里一直以来的工程经验里面。如果想要做一个顺序控制（业务逻辑）：<ul>
+<li>用Graph实现</li>
+<li>用Csae..Of分支跳转语句</li>
+<li>用int数的变化切换不同的执行语句</li>
+</ul>
+</li>
+<li>下面一种一种的来看，先看看使用int数切换实现一个顺序控制的案例：<br><img src="/img/blog_page/3427087-20240829155813955-1669092130.png" srcset="/img/loading.gif" lazyload><br><img src="/img/blog_page/3427087-20240829155835114-619708698.png" srcset="/img/loading.gif" lazyload><ul>
+<li>在这个案例（代码片段）里面，程序扫描currrent_step的值的不同，从而选择执行不同的程序段的内容，根据条件是否满足则可以做到在一个程序段里实现往下顺序执行，或者往上循环回跳直到满足跳出循环的条件。或者定点跳到指定步。<font color=red>这种方法的缺点是：1.可读性差；2.新增顺序控制的时候难以直接在原程序之间差入程序而不引入老程序逻辑的修改；3.在当前步执行的过程中，不知道前序步是从哪儿过来的，因为也许有好几个前序步在同时指向当前步；4. 本质还是IF判断，意味着每个循环内所有条件都被判断了一遍。</font>好处就是简单好写，顺序编写，只管满足条件就跳转，不用过多考虑逻辑判断的冲突。</li>
+</ul>
+</li>
+<li>如果用Case..Of来写，情况又会好一点：<ul>
+<li>Step_int用在了Switch语句里面，指定哪个分支就跳到那个分支，效率提高。</li>
+<li><font color=red>但是缺点依旧，复杂程序步序很多，Step_int在分支语句中被重新赋值，但是不知道前序是哪里来的，也很难在不去改变Step_int值的情况下插入新的逻辑代码</font><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>step<br>CASE <span class="hljs-comment">#step_int OF</span><br>   <br>    <span class="hljs-number">20</span>:<br>       <br>        IF <span class="hljs-string">&quot;enable_cycle&quot;</span> THEN<br><br>            ;<span class="hljs-regexp">//</span>logic<br>            <span class="hljs-comment">#step_int := 21;</span><br>            <br>        END_IF;<br><br>    <span class="hljs-number">21</span>:<br>      ;<span class="hljs-regexp">//</span><span class="hljs-keyword">do</span> logic<br>      <span class="hljs-comment">#step_int := 22;</span><br>            <br>    <span class="hljs-number">22</span>:<br>       IF condition1 THEN<br>          <span class="hljs-comment">#step_int := 30;</span><br>      ELSIF condition2 THEN<br>         ;<span class="hljs-regexp">//</span>logic<br>         <span class="hljs-comment">#step_int := 30;</span><br>      END_IF;<br>                   <br>    <span class="hljs-number">30</span>:<br>        ;<span class="hljs-regexp">//</span>logic<br>        IF conidtion THEN<br>            <span class="hljs-comment">#step_int := 40;</span><br>        END_IF;<br>    <br>    END_CASE;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>在这种Case..Of的情况下，有方法可以做到记录跳转前序：<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><span class="hljs-comment">//1. 把Step_Int表达成一个Current_Step加上一个nextStep</span><br><span class="hljs-comment">//2. case依靠nextStep转换，步序转换赋值给currentStep</span><br><span class="hljs-comment">//3. 新建一个方法，方法在每个扫描周期都会被调用，方法作用是当发现currentStep和nextStep值不同时，把新的currentStep的值重新赋值给nextStep</span><br><span class="hljs-comment">//4. 这种方法还可以灵活的在转换间隔加上延时以控制延时时间，或者加入一些暂停，取消，终止，手动等等很多步序控制的新功能。</span><br></code></pre></td></tr></table></figure></li>
+<li>西门子PLC其实提供了更好的做顺序控制的方法，如图：<ul>
+<li>这是Graph,他有<code>Step</code>，也有<code>Trans</code></li>
+<li>用户不用再去考虑分支转换的问题，只要在当前步，满足条件就可去到下一步或者指定步。</li>
+<li>有很多状态点可以知道程序的现在位置，和上一个位置，以及下一个位置</li>
+<li>状态图形化，直观。<br><img src="/img/blog_page/3427087-20240829162242315-2016803991.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+</ul>
+<h2 id="2-什么是状态机"><a href="#2-什么是状态机" class="headerlink" title="2. 什么是状态机"></a>2. 什么是状态机</h2><ul>
+<li>网上有很多关于状态机的介绍和描述，有<code>有限状态机</code>，有<code>层次状态机</code>，也有<code>Mealy和Moore状态机</code>。分类具体的细节我作为刚接触状态机的人也解释不清楚。所以下面所有关于状态机的陈述都是基于我自己的理解和使用总结，有很多我没用到的，或者没见过的当然就不会提及，也不会有太多抽象的理论。仅仅只是站在个人浅薄认知的角度，从顺控和状态机的差异之间做一个简单的比较和理解，力求一个印象加深。</li>
+<li>上面提到的都是关于顺序控制的，也就是说上面的控制一定是<strong>逐过程</strong>的。当新写一段Graph程序的时候，设计者通常考虑的都是：<font color=green>初始化状态是什么， 第一步要干什么，满足第一步条件之后要跳到哪一步去，下一步又要干嘛，结束和恢复状态条件是什么</font>。这种更是一种边做边写的过程。步序从头到尾以满足使用需要。</li>
+<li>状态机和顺控有类似，但是他们出发点其实不一样。比如西门子的Graph可以理解为一种状态机，这是一种“从进到出的”顺序，它一定有前序，每一步的执行或多或少是和一些前序步和前置条件绑定的。但是Graph在使用的时候我们通常也没有把<strong>系统状态</strong>抽象出来，并且给出详尽的状态图，再通过状态图来设计。</li>
+<li>个人理解状态机的思想是：<font color=green>更少的关注过程变化，更多的状态对象，每一种可以被<em><strong>模块化</strong></em>的行为或者动作就是一个状态。</font>这个时候可以尽量的把有限的状态给汇总起来。当写程序之前，首先画状态图，考虑当前状态要进入的条件，或者当前状态要出去的条件，注意的是，<strong>这种情况下我们其实仅仅在关注当前状态的前后条件。</strong>然后我们用Switch..Case把所有状态枚举出来。通过管理状态的切换来决定下一步怎么走。</li>
+<li>一个状态机的全周期，其实就可以理解为一个产品的全部功能。</li>
+</ul>
+<h2 id="3-尝试自己完成一个状态机"><a href="#3-尝试自己完成一个状态机" class="headerlink" title="3. 尝试自己完成一个状态机"></a>3. 尝试自己完成一个状态机</h2><ul>
+<li>先统计系统存在多少种状态，（那种一进一出没有分支的状态，其实就可以合并在一起写，形成一个统一的状态。），以及状态关系：<ul>
+<li>这是自己随便画的，正式使用时状态图应该有专门的工具来做，而且状态图需要随着状态机一起保存在代码里，更新状态机的时候就要更新状态图，不然维护代码的时候不方便。<br><img src="/img/blog_page/3427087-20240829214043733-552530810.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+<li>创建一个状态机的简单框架：<ul>
+<li>1.枚举所有状态</li>
+<li>2.把该状态种的所有动作和行为囊括在该状态命名下的方法中</li>
+<li>3.写一个Process（）方法，新建一个线程，在循环中调用各个方法<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">using</span> System;<br><span class="hljs-keyword">using</span> System.Collections.Generic;<br><span class="hljs-keyword">using</span> System.Linq;<br><span class="hljs-keyword">using</span> System.Text;<br><span class="hljs-keyword">using</span> System.Threading.Tasks;<br><br><span class="hljs-keyword">namespace</span> <span class="hljs-title">new_test</span><br>&#123;<br>    <span class="hljs-comment">//枚举状态</span><br>    <span class="hljs-built_in">enum</span> State<br>    &#123; <br>    Init,<br>    get_recipe,<br>    pre_write_ds,<br>    calc_value,<br>    calc_time,<br>    write_ds,<br>    read_back_ds_display,<br>    catch_exception,<br>    cancel,<br>    terminal,<br>    reduce_step,<br>    display_write_confirm,<br>    fill_value,<br>    wait_idle<br>    &#125;<br><br>    <span class="hljs-comment">//状态机类</span><br>    <span class="hljs-keyword">internal</span> <span class="hljs-keyword">class</span> <span class="hljs-title">StateMachine</span><br>    &#123;<br>        State nextState;<br><br>       <span class="hljs-comment">//状态标志位</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> Init_ok;<br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> get_recipe_ok;<br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> pre_write_ds_ok;<br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> calc_value_ok;<br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> calc_time_ok;<br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> write_ds_ok;<br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> read_back_ds_ok;<br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> catch_exception_ok;<br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> cancel_ok;<br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> terminal_ok;<br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> reduce_step_ok;<br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> display_write_confirm_ok;<br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> fill_value_ok;<br>        <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> wait_idle_ok;<br><br>        <span class="hljs-comment">//状态构造函数</span><br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">StateMachine</span>()</span> <br>        &#123;<br>            nextState = State.wait_idle;<br>        &#125;<br><br>        <span class="hljs-comment">//循环触发方法</span><br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Process</span>()</span><br>        &#123;<br>            <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) <br>            &#123;<br>                Task.Run(() =&gt; <br>                &#123;<br>                    <span class="hljs-comment">//循环等待状态的切换</span><br>                    <span class="hljs-keyword">switch</span> (nextState)<br>                    &#123;<br>                        <span class="hljs-keyword">case</span> State.Init:<br>                            Init(<span class="hljs-keyword">out</span> Init_ok);<br>                            <span class="hljs-keyword">break</span>;<br>                        <span class="hljs-keyword">case</span> State.get_recipe:<br>                            GetRecipe(<span class="hljs-keyword">out</span> get_recipe_ok);<br>                            <span class="hljs-keyword">break</span>;<br>                        <span class="hljs-keyword">case</span> State.pre_write_ds:<br>                            PreWriteDs(<span class="hljs-keyword">out</span> pre_write_ds_ok);<br>                            <span class="hljs-keyword">break</span>;<br>                        <span class="hljs-keyword">case</span> State.calc_value:<br>                            CalcValue(<span class="hljs-keyword">out</span> calc_value_ok);<br>                            <span class="hljs-keyword">break</span>;<br>                        <span class="hljs-keyword">case</span> State.calc_time:<br>                            CalcTime(<span class="hljs-keyword">out</span> calc_time_ok);<br>                            <span class="hljs-keyword">break</span>;<br>                        <span class="hljs-keyword">case</span> State.write_ds:<br>                            WriteDs(<span class="hljs-keyword">out</span> write_ds_ok);<br>                            <span class="hljs-keyword">break</span>;<br>                        <span class="hljs-keyword">case</span> State.read_back_ds_display:<br>                            ReadBackandDisplay(<span class="hljs-keyword">out</span> read_back_ds_ok);<br>                            <span class="hljs-keyword">break</span>;<br>                        <span class="hljs-keyword">case</span> State.catch_exception:<br>                            CatchException(<span class="hljs-keyword">out</span> catch_exception_ok);<br>                            <span class="hljs-keyword">break</span>;<br>                        <span class="hljs-keyword">case</span> State.cancel:<br>                            Cancel(<span class="hljs-keyword">out</span> cancel_ok);<br>                            <span class="hljs-keyword">break</span>;<br>                        <span class="hljs-keyword">case</span> State.terminal:<br>                            Terminal(<span class="hljs-keyword">out</span> terminal_ok);<br>                            <span class="hljs-keyword">break</span>;<br>                        <span class="hljs-keyword">case</span> State.reduce_step:<br>                            ReduceStep(<span class="hljs-keyword">out</span> reduce_step_ok);<br>                            <span class="hljs-keyword">break</span>;<br>                        <span class="hljs-keyword">case</span> State.display_write_confirm:<br>                            DisplayandWriteConfirm(<span class="hljs-keyword">out</span> display_write_confirm_ok);<br>                            <span class="hljs-keyword">break</span>;<br>                        <span class="hljs-keyword">case</span> State.fill_value:<br>                            FillValue(<span class="hljs-keyword">out</span> fill_value_ok);<br>                            <span class="hljs-keyword">break</span>;<br>                        <span class="hljs-keyword">case</span> State.wait_idle:<br>                            WaitIdle(<span class="hljs-keyword">out</span> wait_idle_ok);<br>                            <span class="hljs-keyword">break</span>;<br>                    &#125;<br>                &#125;);<br>                Thread.Sleep(<span class="hljs-number">500</span>);<br>            &#125;      <br>        &#125;<br>       <br>        <span class="hljs-comment">//状态转换，里面可以灵活的写一些切换功能</span><br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">TransferTo</span>(<span class="hljs-params">State currentState</span>)</span><br>        &#123;<br>            nextState = currentState;<br>        &#125;<br><br>        <span class="hljs-comment">//各个状态的具体实现内容</span><br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Init</span>(<span class="hljs-params"><span class="hljs-keyword">out</span> <span class="hljs-built_in">bool</span> status</span>)</span><br>        &#123;<br>            status = <span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">GetRecipe</span>(<span class="hljs-params"><span class="hljs-keyword">out</span> <span class="hljs-built_in">bool</span> status</span>)</span><br>        &#123;<br>            status = <span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">PreWriteDs</span>(<span class="hljs-params"><span class="hljs-keyword">out</span> <span class="hljs-built_in">bool</span> status</span>)</span><br>        &#123;<br>            status = <span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">CalcValue</span>(<span class="hljs-params"><span class="hljs-keyword">out</span> <span class="hljs-built_in">bool</span> status</span>)</span><br>        &#123;<br>            status = <span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">CalcTime</span>(<span class="hljs-params"><span class="hljs-keyword">out</span> <span class="hljs-built_in">bool</span> status</span>)</span><br>        &#123;<br>            status = <span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">WriteDs</span>(<span class="hljs-params"><span class="hljs-keyword">out</span> <span class="hljs-built_in">bool</span> status</span>)</span><br>        &#123;<br>            status = <span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ReadBackandDisplay</span>(<span class="hljs-params"><span class="hljs-keyword">out</span> <span class="hljs-built_in">bool</span> status</span>)</span><br>        &#123;<br>            status = <span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">CatchException</span>(<span class="hljs-params"><span class="hljs-keyword">out</span> <span class="hljs-built_in">bool</span> status</span>)</span><br>        &#123;<br>            status = <span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Cancel</span>(<span class="hljs-params"><span class="hljs-keyword">out</span> <span class="hljs-built_in">bool</span> status</span>)</span><br>        &#123;<br>            status = <span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Terminal</span>(<span class="hljs-params"><span class="hljs-keyword">out</span> <span class="hljs-built_in">bool</span> status</span>)</span><br>        &#123;<br>            status = <span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ReduceStep</span>(<span class="hljs-params"><span class="hljs-keyword">out</span> <span class="hljs-built_in">bool</span> status</span>)</span><br>        &#123;<br>            status = <span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">DisplayandWriteConfirm</span>(<span class="hljs-params"><span class="hljs-keyword">out</span> <span class="hljs-built_in">bool</span> status</span>)</span><br>        &#123;<br>            status = <span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">FillValue</span>(<span class="hljs-params"><span class="hljs-keyword">out</span> <span class="hljs-built_in">bool</span> status</span>)</span><br>        &#123;<br>            status = <span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">WaitIdle</span>(<span class="hljs-params"><span class="hljs-keyword">out</span> <span class="hljs-built_in">bool</span> status</span>)</span><br>        &#123;<br>            status = <span class="hljs-literal">true</span>;<br>        &#125;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>框架建立好了，现在关键的内容是如何实现各个状态的转换（转换条件如状态图所示）：<ul>
+<li>1.把转换条件写在各个方法的具体实现里面（<strong>这种情况不用管状态怎么进来的，只用管怎么出去的</strong>），比如当正在PreWriteDs状态下的时候，要跳出该状态的条件：<br><img src="/img/blog_page/3427087-20240829220728103-902838421.png" srcset="/img/loading.gif" lazyload><br>或者放这儿，效果一样：<br><img src="/img/blog_page/3427087-20240829220904386-524263508.png" srcset="/img/loading.gif" lazyload></li>
+<li>2.把转换条件写在Idle(闲时状态)里，思路是每次当前状态执行一个循环后，总会回到闲时状态中，由闲时状态管理和分配下一个状态应该怎么去。这种思路需要利用到状态的标志位。&#x3D;1表示在当前状态中。以PreWriteDs状态下为例，思路如下：<br><img src="/img/blog_page/3427087-20240829222105609-467268070.png" srcset="/img/loading.gif" lazyload><br>这种写法需要在每次循环结束的时候都先回到Idle状态下去：<br><img src="/img/blog_page/3427087-20240829222232573-1852540186.png" srcset="/img/loading.gif" lazyload></li>
+<li>3.比较两种方法：<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><span class="hljs-comment">//1. 第一种方法其实更适合顺序控制类的，因为每一次往下跳转的时候当前步都是确定的，逻辑会简单一些。</span><br><span class="hljs-comment">//2. 第二种方法管理起来很集中，但是每次都需要回闲时状态转一圈，写起来要复杂一些。感觉这种方法适用于一些事件触发类的状态机（对先后顺序要求不高），比如按钮按下就做某件事，做完就回到等待位等待下一次的指令。</span><br><span class="hljs-comment">//3. 有些大佬会把状态写成一个二维数组（状态表），利用查表的方式去指向下一个状态，这种复杂的情况我没能接触。</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="4-顺控和状态机之间的差别"><a href="#4-顺控和状态机之间的差别" class="headerlink" title="4. 顺控和状态机之间的差别"></a>4. 顺控和状态机之间的差别</h2><ul>
+<li>状态机的框架已经在上面展示了，下面用顺控的思想把这个案例随便写个代码片段，主要表达编程逻辑，以做对比：<br><img src="/img/blog_page/3427087-20240829225218408-1916005099.png" srcset="/img/loading.gif" lazyload><ul>
+<li><ol>
+<li>顺控的步序靠Switch来转换，这和状态机一样</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>顺控从一步到下一步会比较清晰，有些时候甚至不需要太多判断逻辑，这一步做完就直接往下一步跳转。</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>顺控在写的时候其实可以不用先画状态图，从开始到结束，做好步序衔接就行。</li>
+</ol>
+</li>
+<li><ol start="4">
+<li>简单逻辑用顺序控制其实会更方便。</li>
+</ol>
+</li>
+<li><ol start="5">
+<li>在PLC的应用中，顺控的思想随处可见，这也和PLC的应用场景有关，但是状态机的原理如果清晰了，其实也可以在PLC上实现状态机。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>两种方法都尝试过以后，其实也是各有好处，状态机写起来不够直接，但好在一个容易拓展。结构清晰。实际使用上，也不是非选哪个才行，根据实际情况实现自己想要的逻辑就可以了。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/C-sharp/" class="category-chain-item">C sharp</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/C-sharp/C-and-PLC/" class="category-chain-item">C# and PLC</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/PLC/" class="print-no-link">#PLC</a>
+      
+        <a href="/tags/c/" class="print-no-link">#c#</a>
+      
+        <a href="/tags/%E4%B8%8A%E4%BD%8D%E6%9C%BA/" class="print-no-link">#上位机</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>顺序控制和状态机之间的差别</div>
+      <div>http://example.com/2024/08/29/顺序控制和状态机之间的差别/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiao cuncun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年8月29日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/08/27/%E6%B5%85%E8%B0%88C%20sharp%E4%B8%AD%E7%9A%84%E5%80%BC%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B/" title="浅谈C sharp中的值类型和引用类型">
+                        <span class="hidden-mobile">浅谈C sharp中的值类型和引用类型</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"zR6N5hLjEd6gN7CjLFPqGPaT-gzGzoHsz","appKey":"lu0mprZ1u6vc3HDTenR4sR5m","path":"window.location.pathname","placeholder":"吐槽一下！！","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
