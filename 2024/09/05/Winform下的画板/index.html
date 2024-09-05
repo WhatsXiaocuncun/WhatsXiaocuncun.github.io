@@ -16,25 +16,29 @@
   <meta name="author" content="xiao cuncun">
   <meta name="keywords" content="blog">
   
-    <meta name="description" content="1. 用AI4ST做的模板，使用AI4前两个通道值，一个通道值占用一个IW，共占用2个word。2. RD_ADDR读出地址起始位12&#x2F;&#x2F;get iw by hw_io #tempAIw :&#x3D; RD_ADDR(LADDR :&#x3D; #AI4ST_Control.ai_hwio, PIADDR &#x3D;&gt; #AI_rdaddr.piadder, PICount &#x3D;&gt; #AI_rdaddr.pico">
+    <meta name="description" content="1. Winform如何实现简单绘图 如果想要自己画一个圆，矩形或者其他图形，可以使用控件或窗体自带的Paint事件，在事件中引用Graphics对象； 也可以使用某个窗体或者控件的CreateGraphics方法 需要引用using System.Drawing.Drawing2D;（要画3D就用DirectX）  2. 使用Form1窗体Paint事件  步骤： 先画一个画板 Graphics">
 <meta property="og:type" content="article">
-<meta property="og:title" content="通过硬件标识符获取过程映像输入">
-<meta property="og:url" content="http://example.com/2024/07/21/%E9%80%9A%E8%BF%87%E7%A1%AC%E4%BB%B6%E6%A0%87%E8%AF%86%E7%AC%A6%E8%8E%B7%E5%8F%96%E8%BF%87%E7%A8%8B%E6%98%A0%E5%83%8F%E8%BE%93%E5%85%A5/index.html">
+<meta property="og:title" content="Csharp winform实现基本绘图">
+<meta property="og:url" content="http://example.com/2024/09/05/Winform%E4%B8%8B%E7%9A%84%E7%94%BB%E6%9D%BF/index.html">
 <meta property="og:site_name" content="Whatsxiaocuncun Personal website">
-<meta property="og:description" content="1. 用AI4ST做的模板，使用AI4前两个通道值，一个通道值占用一个IW，共占用2个word。2. RD_ADDR读出地址起始位12&#x2F;&#x2F;get iw by hw_io #tempAIw :&#x3D; RD_ADDR(LADDR :&#x3D; #AI4ST_Control.ai_hwio, PIADDR &#x3D;&gt; #AI_rdaddr.piadder, PICount &#x3D;&gt; #AI_rdaddr.pico">
+<meta property="og:description" content="1. Winform如何实现简单绘图 如果想要自己画一个圆，矩形或者其他图形，可以使用控件或窗体自带的Paint事件，在事件中引用Graphics对象； 也可以使用某个窗体或者控件的CreateGraphics方法 需要引用using System.Drawing.Drawing2D;（要画3D就用DirectX）  2. 使用Form1窗体Paint事件  步骤： 先画一个画板 Graphics">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-07-21T06:44:39.278Z">
-<meta property="article:modified_time" content="2024-07-21T09:15:49.742Z">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240905224034905-1632839043.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240905224300225-698916917.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240905224712551-834940366.png">
+<meta property="article:published_time" content="2024-09-05T15:00:51.709Z">
+<meta property="article:modified_time" content="2024-09-05T15:06:05.652Z">
 <meta property="article:author" content="xiao cuncun">
-<meta property="article:tag" content="PLC part">
-<meta property="article:tag" content="industrial control">
+<meta property="article:tag" content="c#">
+<meta property="article:tag" content="winform">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/blog_page/3427087-20240905224034905-1632839043.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>通过硬件标识符获取过程映像输入 - Whatsxiaocuncun Personal website</title>
+  <title>Csharp winform实现基本绘图 - Whatsxiaocuncun Personal website</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +204,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="通过硬件标识符获取过程映像输入"></span>
+            <span id="subtitle" data-typed-text="Csharp winform实现基本绘图"></span>
           
         </div>
 
@@ -211,8 +215,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-07-21 14:44" pubdate>
-          2024年7月21日 下午
+        <time datetime="2024-09-05 23:00" pubdate>
+          2024年9月5日 晚上
         </time>
       </span>
     
@@ -223,7 +227,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          370 字
+          556 字
         
       </span>
     
@@ -234,7 +238,7 @@
         
         
         
-          4 分钟
+          5 分钟
         
       </span>
     
@@ -271,20 +275,29 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">通过硬件标识符获取过程映像输入</h1>
+            <h1 id="seo-header">Csharp winform实现基本绘图</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="1-用AI4ST做的模板，使用AI4前两个通道值，一个通道值占用一个IW，共占用2个word。"><a href="#1-用AI4ST做的模板，使用AI4前两个通道值，一个通道值占用一个IW，共占用2个word。" class="headerlink" title="1. 用AI4ST做的模板，使用AI4前两个通道值，一个通道值占用一个IW，共占用2个word。"></a>1. 用AI4ST做的模板，使用AI4前两个通道值，一个通道值占用一个<code>IW</code>，共占用2个word。</h2><h2 id="2-RD-ADDR读出地址起始位"><a href="#2-RD-ADDR读出地址起始位" class="headerlink" title="2. RD_ADDR读出地址起始位"></a>2. <code>RD_ADDR</code>读出地址起始位</h2><figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs clean"><span class="hljs-comment">//get iw by hw_io </span><br>#tempAIw := RD_ADDR(LADDR := #AI4ST_Control.ai_hwio, PIADDR =&gt; #AI_rdaddr.piadder, PICount =&gt; #AI_rdaddr.picount, PQADDR =&gt; #AI_rdaddr.temppiadder, PQCount =&gt; #AI_rdaddr.temppicount);<br></code></pre></td></tr></table></figure>
-
-<h2 id="3-PEEK地址对应得值给出来"><a href="#3-PEEK地址对应得值给出来" class="headerlink" title="3. PEEK地址对应得值给出来"></a>3. <code>PEEK</code>地址对应得值给出来</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs go">#AI4ST_Control.Ch0_Dig_Value := PEEK_WORD(area := <span class="hljs-number">16</span>#<span class="hljs-number">81</span>, dbNumber := <span class="hljs-number">0</span>, byteOffset := #AI_rdaddr.piadder);<br>#AI4ST_Control.Ch1_Dig_Value := PEEK_WORD(area := <span class="hljs-number">16</span>#<span class="hljs-number">81</span>, dbNumber := <span class="hljs-number">0</span>, byteOffset := (#AI_rdaddr.piadder + <span class="hljs-number">2</span>));<br></code></pre></td></tr></table></figure>
-
-<h2 id="4-用SCALE把数字值变换为实际物理值"><a href="#4-用SCALE把数字值变换为实际物理值" class="headerlink" title="4. 用SCALE把数字值变换为实际物理值"></a>4. 用<code>SCALE</code>把数字值变换为实际物理值</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">//value word to real</span><br><span class="hljs-comment">//16#01是表征通道类型为电压的一个前序条件，在这里没有太多实际意义</span><br><span class="hljs-comment">//16#02是表征通道类型为电流的一个前序条件，在这里没有太多实际意义</span><br>IF #pre_write.measure_mode = <span class="hljs-number">16</span>#<span class="hljs-number">01</span> THEN<br>    #tempScaleWord := SCALE(IN := WORD_TO_INT(#AI4ST_Control.Ch0_Dig_Value), HI_LIM := <span class="hljs-number">10.0</span>, LO_LIM := <span class="hljs-number">-10.0</span>, BIPOLAR := <span class="hljs-number">1</span>, OUT =&gt; #AI4ST_Control.Ch0_Ana_Value);<br>    #tempScaleWord := SCALE(IN := WORD_TO_INT(#AI4ST_Control.Ch1_Dig_Value), HI_LIM := <span class="hljs-number">10.0</span>, LO_LIM := <span class="hljs-number">-10.0</span>, BIPOLAR := <span class="hljs-number">1</span>, OUT =&gt; #AI4ST_Control.Ch1_Ana_Value);<br>ELSIF #pre_write.measure_mode = <span class="hljs-number">16</span>#<span class="hljs-number">02</span> THEN<br>    #tempScaleWord := SCALE(IN := WORD_TO_INT(#AI4ST_Control.Ch0_Dig_Value), HI_LIM := <span class="hljs-number">20.0</span>, LO_LIM := <span class="hljs-number">-20.0</span>, BIPOLAR := <span class="hljs-number">1</span>, OUT =&gt; #AI4ST_Control.Ch0_Ana_Value);<br>    #tempScaleWord := SCALE(IN := WORD_TO_INT(#AI4ST_Control.Ch1_Dig_Value), HI_LIM := <span class="hljs-number">20.0</span>, LO_LIM := <span class="hljs-number">-20.0</span>, BIPOLAR := <span class="hljs-number">1</span>, OUT =&gt; #AI4ST_Control.Ch1_Ana_Value);<br>END_IF;<br></code></pre></td></tr></table></figure>
-
-<h2 id="5-关于TEMP接口区的一个注意点："><a href="#5-关于TEMP接口区的一个注意点：" class="headerlink" title="5. 关于TEMP接口区的一个注意点："></a>5. 关于<code>TEMP</code>接口区的一个注意点：</h2><ul>
-<li>如上述code中用于接收函数返回值的<code>#tempScaleWord</code>，因为不会对这个返回值作任何二次利用，故都用一个变量接收。</li>
-<li>对于<code>TEMP</code>的拓展：<font color=red><strong>temp只在函数调用时生效，函数执行完毕后立即被释放，下次写入的那一刻再被赋值，故如果是需要二次处理的中间值，最好不要用temp。</strong></font></li>
+                <h2 id="1-Winform如何实现简单绘图"><a href="#1-Winform如何实现简单绘图" class="headerlink" title="1. Winform如何实现简单绘图"></a>1. Winform如何实现简单绘图</h2><ul>
+<li>如果想要自己画一个圆，矩形或者其他图形，可以使用控件或窗体自带的<code>Paint</code>事件，在事件中引用<code>Graphics</code>对象；</li>
+<li>也可以使用某个窗体或者控件的<code>CreateGraphics</code>方法</li>
+<li>需要引用<code>using System.Drawing.Drawing2D;</code>（要画3D就用DirectX）</li>
+</ul>
+<h2 id="2-使用Form1窗体Paint事件"><a href="#2-使用Form1窗体Paint事件" class="headerlink" title="2. 使用Form1窗体Paint事件"></a>2. 使用Form1窗体Paint事件</h2><p><img src="/img/blog_page/3427087-20240905224034905-1632839043.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>步骤：<ul>
+<li>先画一个画板<code> Graphics g = e.Graphics;</code></li>
+<li>再拿一支笔<code>Pen p = new Pen(Color.Blue, 2);</code></li>
+<li>然后就可以开始画画了，代码及效果如下：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">Form1_Paint</span><span class="hljs-params">(object sender, PaintEventArgs e)</span><br>       &#123;<br>           <span class="hljs-comment">//创建一个winform提供的画板</span><br>           <span class="hljs-type">Graphics</span> <span class="hljs-variable">g</span> <span class="hljs-operator">=</span> e.Graphics;<br><br>           <span class="hljs-comment">//需要一支笔</span><br>           <span class="hljs-type">Pen</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Pen</span>(Color.Blue, <span class="hljs-number">2</span>);<br><br>           <span class="hljs-comment">//开始画画</span><br>           g.DrawLine(p, <span class="hljs-number">10</span>, <span class="hljs-number">10</span>, <span class="hljs-number">100</span>, <span class="hljs-number">100</span>);<span class="hljs-comment">//在画板上画直线,起始坐标为(10,10),终点坐标为(100,100)</span><br>           g.DrawRectangle(p, <span class="hljs-number">10</span>, <span class="hljs-number">10</span>, <span class="hljs-number">100</span>, <span class="hljs-number">100</span>);<span class="hljs-comment">//在画板上画矩形,起始坐标为(10,10),宽为100,高为100</span><br>           g.DrawEllipse(p, <span class="hljs-number">10</span>, <span class="hljs-number">10</span>, <span class="hljs-number">100</span>, <span class="hljs-number">100</span>);<span class="hljs-comment">//在画板上画圆,起始坐标为(10,10),外接矩形的宽为100,高为100</span><br>       &#125;<br></code></pre></td></tr></table></figure>
+<img src="/img/blog_page/3427087-20240905224300225-698916917.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+</ul>
+<h2 id="3-使用CreateGraphics方法"><a href="#3-使用CreateGraphics方法" class="headerlink" title="3.使用CreateGraphics方法"></a>3.使用<code>CreateGraphics</code>方法</h2><ul>
+<li>在按钮的Click事件中做一个画板，使用<code>CreateGraphics</code>方法，代码及效果如下：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">button1_Click</span><span class="hljs-params">(object sender, EventArgs e)</span><br>       &#123;<br>           <span class="hljs-type">Pen</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Pen</span>(Color.Blue, <span class="hljs-number">5</span>);<span class="hljs-comment">//设置笔的粗细为,颜色为蓝色</span><br>           <span class="hljs-type">Graphics</span> <span class="hljs-variable">g</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>.CreateGraphics();<br><br>           <span class="hljs-comment">//画虚线</span><br>           p.DashStyle = DashStyle.Dot;<span class="hljs-comment">//定义虚线的样式为点</span><br>           g.DrawLine(p, <span class="hljs-number">10</span>, <span class="hljs-number">200</span>, <span class="hljs-number">200</span>, <span class="hljs-number">200</span>);<br><br>           <span class="hljs-comment">//自定义虚线</span><br>           p.DashPattern = <span class="hljs-keyword">new</span> <span class="hljs-title class_">float</span>[] &#123; <span class="hljs-number">2</span>, <span class="hljs-number">1</span> &#125;;<span class="hljs-comment">//设置短划线和空白部分的数组</span><br>           g.DrawLine(p, <span class="hljs-number">10</span>, <span class="hljs-number">210</span>, <span class="hljs-number">200</span>, <span class="hljs-number">210</span>);<br><br>           <span class="hljs-comment">//画箭头,只对不封闭曲线有用</span><br>           p.DashStyle = DashStyle.Solid;<span class="hljs-comment">//恢复实线</span><br>           p.EndCap = LineCap.ArrowAnchor;<span class="hljs-comment">//定义线尾的样式为箭头</span><br>           g.DrawLine(p, <span class="hljs-number">10</span>, <span class="hljs-number">220</span>, <span class="hljs-number">200</span>, <span class="hljs-number">220</span>);<br><br>           <span class="hljs-comment">//g.Dispose();</span><br>           <span class="hljs-comment">//p.Dispose();</span><br><br>           <span class="hljs-type">Rectangle</span> <span class="hljs-variable">rect</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Rectangle</span>(<span class="hljs-number">300</span>, <span class="hljs-number">10</span>, <span class="hljs-number">50</span>, <span class="hljs-number">50</span>);<span class="hljs-comment">//定义矩形,参数为起点横纵坐标以及其长和宽</span><br>           <span class="hljs-comment">//单色填充</span><br>           <span class="hljs-type">SolidBrush</span> <span class="hljs-variable">b1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SolidBrush</span>(Color.Blue);<span class="hljs-comment">//定义单色画刷          </span><br>           g.FillRectangle(b1, rect);<span class="hljs-comment">//填充这个矩形</span><br><br>           <span class="hljs-comment">//字符串</span><br>           g.DrawString(<span class="hljs-string">&quot;字符串&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Font</span>(<span class="hljs-string">&quot;宋体&quot;</span>, <span class="hljs-number">10</span>), b1, <span class="hljs-keyword">new</span> <span class="hljs-title class_">PointF</span>(<span class="hljs-number">390</span>, <span class="hljs-number">10</span>));<br><br>           <span class="hljs-comment">//用图片填充</span><br>           <span class="hljs-type">TextureBrush</span> <span class="hljs-variable">b2</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TextureBrush</span>(Image.FromFile(@<span class="hljs-string">&quot;C:\Users\xiaocuncun\Desktop\屏幕截图 2024-09-05 222652.png&quot;</span>));<br>           rect.Location = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Point</span>(<span class="hljs-number">300</span>, <span class="hljs-number">70</span>);<span class="hljs-comment">//更改这个矩形的起点坐标</span><br>           rect.Width = <span class="hljs-number">200</span>;<span class="hljs-comment">//更改这个矩形的宽来</span><br>           rect.Height = <span class="hljs-number">200</span>;<span class="hljs-comment">//更改这个矩形的高</span><br>           g.FillRectangle(b2, rect);<br><br>           <span class="hljs-comment">//用渐变色填充</span><br>           rect.Location = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Point</span>(<span class="hljs-number">300</span>, <span class="hljs-number">290</span>);<br>           <span class="hljs-type">LinearGradientBrush</span> <span class="hljs-variable">b3</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">LinearGradientBrush</span>(rect, Color.Yellow, Color.Black, LinearGradientMode.Horizontal);<br>           g.FillRectangle(b3, rect);<br>       &#125;<br></code></pre></td></tr></table></figure>
+<img src="/img/blog_page/3427087-20240905224712551-834940366.png" srcset="/img/loading.gif" lazyload></li>
 </ul>
 
                 
@@ -304,12 +317,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/PLC-related/" class="category-chain-item">PLC related</a>
+  <a href="/categories/C-sharp/" class="category-chain-item">C sharp</a>
   
   
     <span>></span>
     
-  <a href="/categories/PLC-related/1200-1500PLC/" class="category-chain-item">1200/1500PLC</a>
+  <a href="/categories/C-sharp/basic-notes/" class="category-chain-item">basic notes</a>
   
   
 
@@ -326,9 +339,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/PLC-part/" class="print-no-link">#PLC part</a>
+        <a href="/tags/c/" class="print-no-link">#c#</a>
       
-        <a href="/tags/industrial-control/" class="print-no-link">#industrial control</a>
+        <a href="/tags/winform/" class="print-no-link">#winform</a>
       
     </div>
   
@@ -340,8 +353,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>通过硬件标识符获取过程映像输入</div>
-      <div>http://example.com/2024/07/21/通过硬件标识符获取过程映像输入/</div>
+      <div>Csharp winform实现基本绘图</div>
+      <div>http://example.com/2024/09/05/Winform下的画板/</div>
     </div>
     <div class="license-meta">
       
@@ -353,7 +366,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年7月21日</div>
+          <div>2024年9月5日</div>
         </div>
       
       
@@ -385,18 +398,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/07/21/%E5%9C%A8html%E4%B8%AD%E5%BA%94%E7%94%A8JavaScript/" title="在html中应用JavaScript">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">在html中应用JavaScript</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/07/21/C%20sharp%E5%BA%94%E7%94%A8%E4%B8%8B%E7%9A%84CSV%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E5%92%8C%E8%AF%BB%E5%87%BA/" title="C sharp应用下的CSV文件写入和读出">
-                        <span class="hidden-mobile">C sharp应用下的CSV文件写入和读出</span>
+                      <a href="/2024/09/03/%E7%B1%BB%E5%9B%BE%E5%90%84%E4%B8%AA%E7%AE%AD%E5%A4%B4%E5%92%8C%E7%AC%A6%E5%8F%B7%E7%9A%84%E5%90%AB%E4%B9%89/" title="类图各个箭头和符号的含义">
+                        <span class="hidden-mobile">类图各个箭头和符号的含义</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
