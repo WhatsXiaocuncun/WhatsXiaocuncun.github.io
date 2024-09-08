@@ -229,6 +229,76 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
+        <a href="/2024/07/21/%E5%9C%A8PLC%E7%9A%84%E6%89%AB%E6%8F%8F%E7%89%B9%E6%80%A7%E4%B8%8B%EF%BC%8CFOR%E5%BE%AA%E7%8E%AF%E9%87%8C%E9%9D%A2%E5%A5%97IF%E6%88%96%E8%80%85%E5%AE%9A%E6%97%B6%E5%99%A8%E4%BC%9A%E5%8F%91%E7%94%9F%E4%BB%80%E4%B9%88%EF%BC%9F/" target="_self">
+          在PLC的扫描特性下，FOR循环里面套IF或者定时器会发生什么？
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/07/21/%E5%9C%A8PLC%E7%9A%84%E6%89%AB%E6%8F%8F%E7%89%B9%E6%80%A7%E4%B8%8B%EF%BC%8CFOR%E5%BE%AA%E7%8E%AF%E9%87%8C%E9%9D%A2%E5%A5%97IF%E6%88%96%E8%80%85%E5%AE%9A%E6%97%B6%E5%99%A8%E4%BC%9A%E5%8F%91%E7%94%9F%E4%BB%80%E4%B9%88%EF%BC%9F/" target="_self">
+        <div>
+          1. 为什么会提出这个题目 在PLC指令的执行过程中，FOR循环会在每个扫描周期执行完一个循环，然后程序才会接着往下扫描 在PLC指令的执行过程中，IF判断会在每次扫描中判断一次条件，满足则进入执行体，不满足则跳出IF 把IF放在FOR循环里面，会导致循环体执行时间过长，或者其他问题吗？（答案是不会）毕竟每个循环周期for循环的变量都要从起始值到最大值循环一遍。 在FOR循环里面嵌入定时器，会导致
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-07-21 14:44" pubdate>
+              2024-07-21
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/PLC-related/" class="category-chain-item">PLC related</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/PLC-related/1200-1500PLC/" class="category-chain-item">1200/1500PLC</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/PLC-part/">#PLC part</a>
+            
+              <a href="/tags/industrial-control/">#industrial control</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
         <a href="/2024/07/21/%E8%BF%94%E5%9B%9Etxt%E6%96%87%E6%A1%A3%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F/" target="_self">
           返回txt文档编码格式
         </a>
@@ -794,76 +864,6 @@
       <a class="index-excerpt index-excerpt__noimg" href="/2024/07/21/%E5%88%A9%E7%94%A8%E8%A5%BF%E9%97%A8%E5%AD%90DQ%E6%A8%A1%E5%9D%97%E6%8E%A7%E5%88%B6%E7%A7%BB%E4%BD%8D%E5%AF%84%E5%AD%98%E5%99%A8%EF%BC%8C%E6%A8%A1%E6%8B%9F%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1/" target="_self">
         <div>
           1. 背景 以前了解过串行通信的方法但是没有详细了解过具体实现。趁着手上有的一堆破铜烂铁尝试自己去实现一个最简单的串行控制。目的是通过移位寄存器的不同位的表达，达到2*2&#x3D;4个的继电器管断组合，达到切换矩阵的目的。这里只记录一下程序实现，不记录硬件电路。  2. 材料 移位寄存器：SN74AHC594 固态继电器：4个 电源模块及外围器件，若干 CPU1500+DQ16  3. 原理 选
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-07-21 14:44" pubdate>
-              2024-07-21
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/PLC-related/" class="category-chain-item">PLC related</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/PLC-related/1200-1500PLC/" class="category-chain-item">1200/1500PLC</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/PLC-part/">#PLC part</a>
-            
-              <a href="/tags/industrial-control/">#industrial control</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/07/21/%E5%A6%82%E4%BD%95%E5%AF%BC%E5%87%BAPLC%E7%9A%84%E6%9C%8D%E5%8A%A1%E6%95%B0%E6%8D%AE/" target="_self">
-          如何导出PLC的服务数据
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/07/21/%E5%A6%82%E4%BD%95%E5%AF%BC%E5%87%BAPLC%E7%9A%84%E6%9C%8D%E5%8A%A1%E6%95%B0%E6%8D%AE/" target="_self">
-        <div>
-          1. 什么叫服务数据 服务数据，service data：除了诊断缓冲区的内容外，服务数据还包含有关CPU内部状态的更多信息。如果CPU发生故障且无法通过其他方法解决的时候，则用户可以导出服务数据发送给西门子服务与支持团队，便于服务与支持人员快速分析问题原因  2. 如何读取服务数据 MFCT工具读取，MultifiedBus tool download  SIMATIC存储卡读取，采用该方式很复
         </div>
       </a>
 

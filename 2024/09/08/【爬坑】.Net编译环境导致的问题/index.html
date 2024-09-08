@@ -16,28 +16,28 @@
   <meta name="author" content="xiao cuncun">
   <meta name="keywords" content="blog">
   
-    <meta name="description" content="1. 安装系统镜像 – debian IOT镜像地址下载及镜像版本说明  Win32 disk Imager下载，用于SD卡安装镜像文件  使用win32磁盘映像工具镜像操作如下：   如果需要把SD卡中的镜像写入到eMMC卡：  将烧录好的SD卡插入设备，修改SD卡启动顺序为默认启动设备。 如果已经存在emmc系统，则先格式化emmc：mkfs.ext4 &#x2F;dev&#x2F;mmcblk1 将SD卡挂载至">
+    <meta name="description" content="1. 背景： 项目中遇到一个串口设备，通过调用它自带的.dll动态链接库通信，最开始在.net framework4.7.2的框架下设备能返回数据（正常通信）。但是换到.net 6.0的框架后，可以运行（没有报错），但是不能得到设备返回的数据了。  2. 错误的解决思路： 当时觉得是框架的问题，反编译可以看到该.dll的反射，但是没有源码不能修改。 如果尝试用.net upgrade assist">
 <meta property="og:type" content="article">
-<meta property="og:title" content="IOT2050基本使用和指令集">
-<meta property="og:url" content="http://example.com/2024/07/21/IOT2050%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E5%92%8C%E6%8C%87%E4%BB%A4%E9%9B%86/index.html">
+<meta property="og:title" content="【爬坑】.Net编译环境导致的问题">
+<meta property="og:url" content="http://example.com/2024/09/08/%E3%80%90%E7%88%AC%E5%9D%91%E3%80%91.Net%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83%E5%AF%BC%E8%87%B4%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="Whatsxiaocuncun Personal website">
-<meta property="og:description" content="1. 安装系统镜像 – debian IOT镜像地址下载及镜像版本说明  Win32 disk Imager下载，用于SD卡安装镜像文件  使用win32磁盘映像工具镜像操作如下：   如果需要把SD卡中的镜像写入到eMMC卡：  将烧录好的SD卡插入设备，修改SD卡启动顺序为默认启动设备。 如果已经存在emmc系统，则先格式化emmc：mkfs.ext4 &#x2F;dev&#x2F;mmcblk1 将SD卡挂载至">
+<meta property="og:description" content="1. 背景： 项目中遇到一个串口设备，通过调用它自带的.dll动态链接库通信，最开始在.net framework4.7.2的框架下设备能返回数据（正常通信）。但是换到.net 6.0的框架后，可以运行（没有报错），但是不能得到设备返回的数据了。  2. 错误的解决思路： 当时觉得是框架的问题，反编译可以看到该.dll的反射，但是没有源码不能修改。 如果尝试用.net upgrade assist">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240701150553142-637545214.png">
-<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240703224846899-93259640.png">
-<meta property="article:published_time" content="2024-07-21T06:44:39.207Z">
-<meta property="article:modified_time" content="2024-07-21T09:00:39.493Z">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240906131729281-560377608.png">
+<meta property="og:image" content="http://example.com/img/blog_page/3427087-20240906132609360-1027465825.png">
+<meta property="article:published_time" content="2024-09-08T09:59:17.023Z">
+<meta property="article:modified_time" content="2024-09-08T10:00:59.292Z">
 <meta property="article:author" content="xiao cuncun">
-<meta property="article:tag" content="debian">
-<meta property="article:tag" content="linux">
+<meta property="article:tag" content="c#">
+<meta property="article:tag" content="winform">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/img/blog_page/3427087-20240701150553142-637545214.png">
+<meta name="twitter:image" content="http://example.com/img/blog_page/3427087-20240906131729281-560377608.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>IOT2050基本使用和指令集 - Whatsxiaocuncun Personal website</title>
+  <title>【爬坑】.Net编译环境导致的问题 - Whatsxiaocuncun Personal website</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -203,7 +203,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="IOT2050基本使用和指令集"></span>
+            <span id="subtitle" data-typed-text="【爬坑】.Net编译环境导致的问题"></span>
           
         </div>
 
@@ -214,8 +214,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-07-21 14:44" pubdate>
-          2024年7月21日 下午
+        <time datetime="2024-09-08 17:59" pubdate>
+          2024年9月8日 下午
         </time>
       </span>
     
@@ -226,7 +226,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.3k 字
+          535 字
         
       </span>
     
@@ -237,7 +237,7 @@
         
         
         
-          12 分钟
+          5 分钟
         
       </span>
     
@@ -274,153 +274,51 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">IOT2050基本使用和指令集</h1>
+            <h1 id="seo-header">【爬坑】.Net编译环境导致的问题</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="1-安装系统镜像-–-debian"><a href="#1-安装系统镜像-–-debian" class="headerlink" title="1. 安装系统镜像 – debian"></a>1. 安装系统镜像 – debian</h2><ul>
-<li><p><a herf="https://support.industry.siemens.com/cs/document/109741799/simatic-iot20x0-%E4%B8%8B%E8%BD%BD?dti=0&lc=zh-CN">IOT镜像地址下载及镜像版本说明</a></p>
+                <h2 id="1-背景："><a href="#1-背景：" class="headerlink" title="1. 背景："></a>1. 背景：</h2><ul>
+<li>项目中遇到一个串口设备，通过调用它自带的<code>.dll</code>动态链接库通信，最开始在.net framework4.7.2的框架下设备能返回数据（正常通信）。但是换到.net 6.0的框架后，可以运行（没有报错），但是不能得到设备返回的数据了。</li>
+</ul>
+<h2 id="2-错误的解决思路："><a href="#2-错误的解决思路：" class="headerlink" title="2. 错误的解决思路："></a>2. 错误的解决思路：</h2><ul>
+<li>当时觉得是框架的问题，反编译可以看到该.dll的反射，但是没有源码不能修改。</li>
+<li>如果尝试用<code>.net upgrade assistant</code>强行升级框架，该.dll文件只会出现提示<code>Cannot add reference &quot;xxx.dll&quot; to project &quot;xxx&quot; because their target framework are incompatible </code>,没有任何实际作用。</li>
+</ul>
+<h2 id="3-正确的解决思路："><a href="#3-正确的解决思路：" class="headerlink" title="3. 正确的解决思路："></a>3. 正确的解决思路：</h2><ul>
+<li>不管是.net framework 4.7.2 还是 .net 6.0，当时都是默认的<code>Any CPU</code>,这个环境造成了这个问题。</li>
+<li><font color=green>该串口设备在运行的时候环境是基于x86的，所以在.net 6.0的框架下，把CPU类型选成x86就行了。</font></li>
+</ul>
+<h2 id="4-获得的经验："><a href="#4-获得的经验：" class="headerlink" title="4. 获得的经验："></a>4. 获得的经验：</h2><ul>
+<li><ol>
+<li><code>.net upgrade assistant</code>作为一个升级框架的官方免费工具，还是很好用的。用到visual stiduo的拓展工具下载它，如果发现下载很慢的话，右键打开WLAN网络属性，把<code>ipv6</code>给关了，会好的多。</li>
+</ol>
 </li>
-<li><p><a herf="https://sourceforge.net/projects/win32diskimager/">Win32 disk Imager下载，用于SD卡安装镜像文件</a></p>
+<li><ol start="2">
+<li>在.net framework下使用AnyCPU能正常的原因如下图，.net framework 4.5以上默认<code>首选32位</code>：<br><img src="/img/blog_page/3427087-20240906131729281-560377608.png" srcset="/img/loading.gif" lazyload></li>
+</ol>
 <ul>
-<li>使用win32磁盘映像工具镜像操作如下：<br><img src="/img/blog_page/3427087-20240701150553142-637545214.png" srcset="/img/loading.gif" lazyload></li>
+<li>在32位系统下，运行32位程序</li>
+<li>在64位系统下，运行32位程序，但是可以获得4G内存</li>
+<li>在ARM下，运行32位程序</li>
+<li>那么AnyCPU(Prefer 32-bit) 和x86有什么区别？实际上在ARM系统，只能使用 AnyCPU(Prefer 32-bit) 运行32位程序，如果选择x86就无法运行。</li>
+<li>为什么需要在64位的设备使用 AnyCPU(Prefer 32-bit)，因为如果存在一些库只能在32位程序运行，那么就需要运行的程序是32位，所以需要使用这个方法。</li>
+<li>ARM32&#x2F;ARM64是ARM CPU下的32位或者64位系统；</li>
 </ul>
 </li>
-<li><p>如果需要把SD卡中的镜像写入到eMMC卡：</p>
-<ul>
-<li>将烧录好的SD卡插入设备，修改SD卡启动顺序为默认启动设备。</li>
-<li>如果已经存在emmc系统，则先格式化emmc：<code>mkfs.ext4 /dev/mmcblk1</code></li>
-<li>将SD卡挂载至文件系统：<code>mkdir /mnt/USB</code>,<code>mount/dev/sdb1/mnt/USB</code></li>
-<li>通常SD卡是&#x2F;dev&#x2F;sda1设备，U盘是&#x2F;dev&#x2F;sdb1设备，在操作前使用<code>fdisk -l</code>来确认</li>
-<li>将U盘中的Example Image文件烧录到EMMC，<code>dd if=/mnt/USB/IOT2050_Example_Image_V1.0.2.image of=/dev/mmcblk1 bs=100M conv=fsync status=progress</code>,&#x2F;mnt&#x2F;USB&#x2F;IOT2050_Example_Image_V1.0.2.image是image在U盘中的默认路径，修改为实际路径就可。</li>
-<li>修改回EMMC启动方式，重启。</li>
-</ul>
+<li><ol start="3">
+<li>在.net 环境下没有这个默认选项，在64位的电脑上用AnyCPU表示<code>用anycpu编译的可执行文件将在64位CLR上执行。</code></li>
+</ol>
 </li>
-<li><p>跳过eMMC启动</p>
-<ul>
-<li>插入SD卡或者USB等装有系统的启动盘</li>
-<li>上电前按住user button</li>
-<li>上电，直到STAT灯变为橙色，然后松开user button</li>
-</ul>
+<li><ol start="4">
+<li>手动改为x86就行，如图：<br><img src="/img/blog_page/3427087-20240906132609360-1027465825.png" srcset="/img/loading.gif" lazyload></li>
+</ol>
 </li>
-<li><p>更改和查看默认启动顺序</p>
-<ul>
-<li>设置默认启动顺序<code>fw_setenv boot targets usb0 usb1 mmc0 mmc1</code>或<code>fw_setenv boot targets &quot;usb0 usb1 mmc0 mmc1&quot;</code>。其中mmc0是SD卡，mmc1是eMMC，usbx是USB设备。</li>
-<li>查看默认启动顺序：<code>fw_printenv boot_targets</code></li>
-</ul>
+<li><ol start="5">
+<li>Visual stiduo 引入的.dll文件默认在<code>bin</code>文件下</li>
+</ol>
 </li>
-</ul>
-<h2 id="2-Putty"><a href="#2-Putty" class="headerlink" title="2. Putty"></a>2. Putty</h2><ul>
-<li><a herf="https://www.putty.org/">PuTTY下载</a></li>
-<li>IOT20X0有两个以太网口，P1X是固定IP，默认地址为192.168.200.1。P2X为DHCP动态协议，可以自动获取IP。</li>
-<li>PuTTY用SSH方式连接，填入相应IP，端口填22（默认）</li>
-</ul>
-<h2 id="3-4G和wifi"><a href="#3-4G和wifi" class="headerlink" title="3. 4G和wifi"></a>3. 4G和wifi</h2><ul>
-<li>4G<ul>
-<li>安装好硬件，插好设备（SIM卡）</li>
-<li>执行<code>ifconfig</code>，在列表中看到ppp0</li>
-<li>ping测试网络</li>
-</ul>
-</li>
-<li>Wifi<ul>
-<li>插入无线网卡，输入<code>iot2050setup</code></li>
-<li>选择<code>Networking</code></li>
-<li>选择<code>Edit a connect</code></li>
-<li>选择<code>Add</code></li>
-<li>选择WIFI,并设置相应参数</li>
-<li>完成</li>
-</ul>
-</li>
-</ul>
-<p><del>4. 默认账号root，默认密码root，修改后密码IOT2050 &#x2F; P2口IP已改为192.168.0.100</del></p>
-<h2 id="5-nodered-192-168-200-1：1880"><a href="#5-nodered-192-168-200-1：1880" class="headerlink" title="5. nodered:192.168.200.1：1880"></a>5. nodered:192.168.200.1：1880</h2><ul>
-<li>node-red升级：<ul>
-<li>查看当前node版本<code>node -v</code></li>
-<li>清除缓存<code>npm cache clean -f</code></li>
-<li>下载node安装包<code>npm install -g n</code></li>
-<li>升级到最新的稳定版本<code>n stable</code></li>
-<li>再次查看node版本<code>node -v</code></li>
-<li>更新node-red<code>npm install -g --unsafe-perm node-red</code></li>
-<li>重启<code>reboot</code></li>
-</ul>
-</li>
-<li>使用node-red<ul>
-<li><code>cd /</code></li>
-<li><code>node /usr/lib/node_modules/node-red/red &amp;</code></li>
-</ul>
-</li>
-<li>node-red界的“hello world”<ul>
-<li>选择<code>时间戳</code>节点，选择<code>触发器</code>节点，选择<code>iot2050gpio</code>,控制用户led为橘色，5秒后设置为0。<br><img src="/img/blog_page/3427087-20240703224846899-93259640.png" srcset="/img/loading.gif" lazyload></li>
-<li>点击部署后，每一次手动触发（注入）一下时间戳，iot2050的led就会橘色触发5秒。</li>
-</ul>
-</li>
-</ul>
-<h2 id="6-iot2050setup-修改IPC信息小工具"><a href="#6-iot2050setup-修改IPC信息小工具" class="headerlink" title="6. iot2050setup:修改IPC信息小工具"></a>6. iot2050setup:修改IPC信息小工具</h2><h2 id="7-常用指令"><a href="#7-常用指令" class="headerlink" title="7. 常用指令"></a>7. 常用指令</h2><ul>
-<li>call 执行任意远程shell指令</li>
-<li>cd 改变远程工作目录</li>
-<li>chmod 改变远程文件权限</li>
-<li>close 关闭会话</li>
-<li>exit 关闭所有回话并结束程序</li>
-<li>get 从远程目录下载文件到本地目录</li>
-<li>help 显示帮助</li>
-<li>keepuptodate 在一个远程目录连续反映本地目录的改变</li>
-<li>lcd 改变本地工作目录</li>
-<li>lls 列出本地目录的内容</li>
-<li>ln 新建远程符号链接</li>
-<li>lpwd 显示本地工作目录</li>
-<li>ls 列出远程目录内容</li>
-<li>mkdir 新建远程目录</li>
-<li>mv 移动或者重命名远程文件</li>
-<li>open　连接到服务器</li>
-<li>option 设置或者显示脚本选项的值</li>
-<li>put 从本地目录上传文件到远程目录</li>
-<li>pwd 显示远程工作目录</li>
-<li>rm 删除远程文件</li>
-<li>rmdir 删除远程目录</li>
-<li>session 列出连接的会话或者选择活动会话</li>
-<li>synchronize 用一个本地目录同步远程目录</li>
-<li>VIM&#x2F;VI 编辑器</li>
-</ul>
-<h2 id="8-操作"><a href="#8-操作" class="headerlink" title="8. 操作"></a>8. 操作</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs routeros">fw_printenv boot_targets: 检查当前启动顺序<br>fw_setenv boot_targets: 改变启动顺序<br>reboot: 重启<br>cat/etc/os-release: 检查版本和其他信息<br>mount: 检查当前设备用的哪个启动项<br>dd <span class="hljs-attribute">if</span>=./xxx.wic.img <span class="hljs-attribute">of</span>=/dev/&lt;emmc device&gt;<span class="hljs-attribute">bs</span>=100M <span class="hljs-attribute">oflag</span>=direct <span class="hljs-attribute">status</span>=progress 复制image到emmc<br>logout: 退出root模式<br>fw_printenv vendor: 打印供应商设定的值<br>mount/dev/mmcblk0p2/mnt: 在文件系统中挂在SD<br>umount/mnt: 取消挂载，退出目录<br></code></pre></td></tr></table></figure>
-
-<h2 id="9-另外一些常用指令"><a href="#9-另外一些常用指令" class="headerlink" title="9. 另外一些常用指令"></a>9. 另外一些常用指令</h2><ul>
-<li>touch test.txt: 在文件系统中建立一个txt文件</li>
-<li>vi test.txt: 在vim中编辑txt 文件<br>(要输入<code>：</code>才能执行以下指令)<ul>
-<li>q: quit</li>
-<li>w: save</li>
-<li>wq: save and quit</li>
-<li>ql：quit without save</li>
-<li>q!: force to quit<br>fdisk -l: find disk（df -h:以阅读方式查看磁盘）<br>ls XXX: 查看XXX文件下的所有文件列表<br>Passwd: 修改密码<br>ls： 检查文件和当前目录<br>cd &#x2F;XXX： 改变当前文件<br>adduser XXX: 添加用户<br>sudo fdisk -l: 寻找SD卡文件名<br>iot2050-firmware-update: uboot升级工具<br>rm -f XXX: 删除指定文件<br>rm -rf XXX: 删除XXX文件夹以及下面的所有文件<br>scp -ooo xxx yyy: 把文件xxx复制到yyy, 不同操作系统内传输。 -ooo： -r递归复制路径下的所有文件夹内容<br>cp xxx yyy：文件xxx复制到yyy<br>ip a:查看IP地址<br>chmod 777 xxxx:指定文件拥有最高权限<br>gcc led test.c -o led -lmraa -lcunit:执行.c文件并生成记录-lcunit -o后面加生成的可执行文件的文件名之后直接.&#x2F;文件名打开执行内容<br>nmtui: 网络配置工具</li>
-</ul>
-</li>
-<li>hwclock xxx yyy:硬件时钟<ul>
-<li>xxx: -r读取时间，-w把系统时间写入硬件</li>
-</ul>
-</li>
-<li>date xxx yyy :系统时间<ul>
-<li>xxx: -s设置系统时间</li>
-</ul>
-</li>
-<li>data &amp;&amp; hwclock：同步硬件时间和系统时间</li>
-<li>ifconfig: 通讯连接查询</li>
-<li>.&#x2F;xxx.sh </li>
-<li>lsblk 查看磁盘结构</li>
-<li>dd if&#x3D;&#x2F;dev&#x2F;zero of&#x3D;test bs&#x3D;1M count&#x3D;1000 生成1G大文件到test文件夹</li>
-<li>sudo apt-get install libcunit l-dev 安装Cunit</li>
-<li>Bash xxx:运行保存过的shell程序</li>
-<li>包管理工具：<ul>
-<li>dpkg –get-selections</li>
-<li>apt list –installed</li>
-</ul>
-</li>
-</ul>
-<h2 id="10-linux常用命令"><a href="#10-linux常用命令" class="headerlink" title="10. linux常用命令"></a>10. linux常用命令</h2><ul>
-<li><code>which</code>: <code>which vi</code>会返回vi的路径，敲入vi路径可以直接启动vi编辑器</li>
-<li><code>find</code>:<code>find -type f -name test.py</code>:找到类型为文件的，名字为test.py的文件，会返回一个地址。</li>
-<li><code>./</code>：表示当前路径下</li>
-<li><code>vim test.py</code>:直接用vi打开py文件，没有则新建一个</li>
-<li><code>wq:</code>保存和退出VI</li>
 </ul>
 
                 
@@ -440,12 +338,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
+  <a href="/categories/C-sharp/" class="category-chain-item">C sharp</a>
   
   
     <span>></span>
     
-  <a href="/categories/Linux/IOT-2050/" class="category-chain-item">IOT 2050</a>
+  <a href="/categories/C-sharp/basic-notes/" class="category-chain-item">basic notes</a>
   
   
 
@@ -462,9 +360,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/debian/" class="print-no-link">#debian</a>
+        <a href="/tags/c/" class="print-no-link">#c#</a>
       
-        <a href="/tags/linux/" class="print-no-link">#linux</a>
+        <a href="/tags/winform/" class="print-no-link">#winform</a>
       
     </div>
   
@@ -476,8 +374,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>IOT2050基本使用和指令集</div>
-      <div>http://example.com/2024/07/21/IOT2050基本使用和指令集/</div>
+      <div>【爬坑】.Net编译环境导致的问题</div>
+      <div>http://example.com/2024/09/08/【爬坑】.Net编译环境导致的问题/</div>
     </div>
     <div class="license-meta">
       
@@ -489,7 +387,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年7月21日</div>
+          <div>2024年9月8日</div>
         </div>
       
       
@@ -521,18 +419,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/07/21/git%E9%85%8D%E7%BD%AE%E8%BF%9E%E6%8E%A5github/" title="git配置连接github">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">git配置连接github</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/07/21/LOGO!%E8%87%AA%E5%B8%A6%E6%98%BE%E7%A4%BA%E5%B1%8F%E6%98%BE%E7%A4%BA%E6%96%87%E6%9C%AC%E5%92%8C%E5%8F%98%E9%87%8F%E5%80%BC/" title="LOGO!自带显示屏显示文本和变量值">
-                        <span class="hidden-mobile">LOGO!自带显示屏显示文本和变量值</span>
+                      <a href="/2024/09/05/Winform%E4%B8%8B%E7%9A%84%E7%94%BB%E6%9D%BF/" title="Csharp winform实现基本绘图">
+                        <span class="hidden-mobile">Csharp winform实现基本绘图</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
